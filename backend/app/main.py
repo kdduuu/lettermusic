@@ -14,9 +14,12 @@ def verificar_saude():
 
 
 @app.get("/catalogo/buscar")
-def buscar_obras(termo: str = Query(min_length=2, max_length=100)):
+def buscar_obras(
+    termo: str = Query(min_length=2, max_length=100),
+    artista: str | None = Query(default=None, min_length=2, max_length=100)
+):
     try:
-        obras = pesquisar_obras(termo)
+        obras = pesquisar_obras(termo, artista)
 
     except httpx.HTTPError as erro:
         raise HTTPException(

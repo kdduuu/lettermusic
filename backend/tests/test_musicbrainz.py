@@ -30,3 +30,19 @@ def test_pesquisa_identifica_artistas():
 
     assert obras[0]["artista"] == "Radiohead"
     assert obras[1]["artista"] == "Artista A & Artista B"
+
+
+def test_pesquisa_filtra_por_artista():
+    with patch("backend.app.musicbrainz.httpx.get") as requisicao:
+        requisicao.return_value.json.return_value = {
+            "release-groups": []
+        }
+
+        pesquisar_obras("OK Computer", "Radiohead")
+
+    parametros = requisicao.call_args.kwargs["params"]
+
+    assert parametros["query"] == (
+        'releasegroup:"OK Computer" AND artist:"Radiohead"'
+    )
+    assert parametros["dismax"] == "false"
