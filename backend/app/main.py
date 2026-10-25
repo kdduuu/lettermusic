@@ -1,4 +1,3 @@
-
 import httpx
 
 from fastapi import Depends, FastAPI, HTTPException, Path, Query
@@ -62,6 +61,7 @@ def consultar_catalogo(sessao: Session = Depends(obter_sessao)):
                 "id": obra.id,
                 "id_musicbrainz": obra.id_musicbrainz,
                 "titulo": obra.titulo,
+                "artista": obra.artista,
                 "tipo": obra.tipo,
                 "data_lancamento": obra.data_lancamento
             }

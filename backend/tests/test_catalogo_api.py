@@ -1,4 +1,3 @@
-
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
@@ -23,6 +22,7 @@ def test_catalogo_lista_obras_salvas():
             Obra(
                 id_musicbrainz="teste-123",
                 titulo="OK Computer",
+                artista="Radiohead",
                 tipo="Album",
                 data_lancamento="1997-05-21"
             )
@@ -43,6 +43,7 @@ def test_catalogo_lista_obras_salvas():
         assert resposta.status_code == 200
         assert len(resposta.json()["resultados"]) == 1
         assert resposta.json()["resultados"][0]["titulo"] == "OK Computer"
+        assert resposta.json()["resultados"][0]["artista"] == "Radiohead"
 
     finally:
         app.dependency_overrides.pop(obter_sessao, None)

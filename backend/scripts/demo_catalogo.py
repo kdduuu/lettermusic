@@ -1,4 +1,3 @@
-
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -15,20 +14,24 @@ def main():
 
     try:
         with Session(motor) as sessao:
-            obra = registrar_obra(
-                sessao,
-                ID_OBRA,
-                "OK Computer",
-                "Album",
-                "1997-05-21"
-            )
+            with sessao.begin():
+                obra = registrar_obra(
+                    sessao,
+                    ID_OBRA,
+                    "OK Computer",
+                    "Album",
+                    "1997-05-21",
+                    artista="Radiohead"
+                )
+                identificador = obra.id
 
+            # A transacao foi confirmada ao sair de sessao.begin().
             encontrada = sessao.scalar(
                 select(Obra).where(Obra.id_musicbrainz == ID_OBRA)
             )
-
-            print(f"Obra salva: ID {obra.id}")
+            print(f"Obra salva: ID {identificador}")
             print(f"Obra consultada: {encontrada.titulo}")
+            print(f"Artista: {encontrada.artista}")
     finally:
         motor.dispose()
 

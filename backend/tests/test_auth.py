@@ -1,4 +1,6 @@
+from datetime import datetime, timedelta, timezone
 
+import jwt
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
@@ -79,6 +81,37 @@ def test_login_e_usuario_autenticado(monkeypatch):
                 }
             )
             assert senha_errada.status_code == 401
+
+            # Um token sem expiracao nao deve autenticar ninguem.
+            chave_teste = "chave-ficticia-exclusiva-para-testes-123456789"
+            id_usuario = cadastro.json()["id"]
+            sem_exp = jwt.encode(
+                {"sub": str(id_usuario)}, chave_teste, algorithm="HS256"
+            )
+            assert cliente.get(
+                "/auth/me", headers={"Authorization": f"Bearer {sem_exp}"}
+            ).status_code == 401
+
+            expirado = jwt.encode(
+                {
+                    "sub": str(id_usuario),
+                    "exp": datetime.now(timezone.utc) - timedelta(minutes=1)
+                },
+                chave_teste,
+                algorithm="HS256"
+            )
+            assert cliente.get(
+                "/auth/me", headers={"Authorization": f"Bearer {expirado}"}
+            ).status_code == 401
+
+            sem_sub = jwt.encode(
+                {"exp": datetime.now(timezone.utc) + timedelta(minutes=5)},
+                chave_teste,
+                algorithm="HS256"
+            )
+            assert cliente.get(
+                "/auth/me", headers={"Authorization": f"Bearer {sem_sub}"}
+            ).status_code == 401
 
     finally:
         app.dependency_overrides.pop(obter_sessao, None)

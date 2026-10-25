@@ -1,4 +1,3 @@
-
 from datetime import datetime, timezone
 
 from sqlalchemy import DateTime, String
@@ -17,6 +16,7 @@ class Obra(Base):
         String(36), unique=True
     )
     titulo: Mapped[str] = mapped_column(String(255))
+    artista: Mapped[str | None] = mapped_column(String(255))
     tipo: Mapped[str | None] = mapped_column(String(30))
     data_lancamento: Mapped[str | None] = mapped_column(String(10))
 

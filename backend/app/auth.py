@@ -1,4 +1,3 @@
-
 import os
 from datetime import datetime, timedelta, timezone
 
@@ -82,9 +81,12 @@ def obter_usuario_atual(
         dados = jwt.decode(
             credenciais.credentials,
             obter_chave(),
-            algorithms=["HS256"]
+            algorithms=["HS256"],
+            options={"require": ["sub", "exp"]}
         )
         usuario_id = int(dados["sub"])
+        if usuario_id <= 0:
+            raise ValueError("Identificador de usuario invalido")
 
     except (InvalidTokenError, KeyError, ValueError, TypeError):
         raise erro_autenticacao() from None
