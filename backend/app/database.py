@@ -1,13 +1,14 @@
 
 import os
+from functools import lru_cache
 from pathlib import Path
 
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
+from sqlalchemy.orm import Session
 
 
-# Localiza o arquivo .env na raiz do projeto.
 RAIZ_PROJETO = Path(__file__).resolve().parents[2]
 load_dotenv(RAIZ_PROJETO / ".env")
 
@@ -30,3 +31,13 @@ def criar_motor():
     )
 
     return create_engine(endereco)
+
+
+@lru_cache(maxsize=1)
+def obter_motor():
+    return criar_motor()
+
+
+def obter_sessao():
+    with Session(obter_motor()) as sessao:
+        yield sessao

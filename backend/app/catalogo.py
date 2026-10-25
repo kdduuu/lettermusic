@@ -12,7 +12,6 @@ def registrar_obra(
     tipo: str | None = None,
     data_lancamento: str | None = None
 ) -> Obra:
-    # Procura a obra antes de cadastrar.
     obra = sessao.scalar(
         select(Obra).where(Obra.id_musicbrainz == id_musicbrainz)
     )
@@ -32,3 +31,9 @@ def registrar_obra(
     sessao.refresh(obra)
 
     return obra
+
+
+def listar_obras(sessao: Session) -> list[Obra]:
+    consulta = select(Obra).order_by(Obra.id).limit(20)
+
+    return list(sessao.scalars(consulta))
