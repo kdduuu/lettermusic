@@ -4,10 +4,21 @@ import httpx
 from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlalchemy.orm import Session
 
+from backend.app.auth import (
+    autenticar_usuario,
+    criar_token,
+    obter_usuario_atual
+)
 from backend.app.catalogo import listar_obras
 from backend.app.database import obter_sessao
+from backend.app.models import Usuario
 from backend.app.musicbrainz import pesquisar_obras
-from backend.app.schemas import UsuarioCriar, UsuarioPublico
+from backend.app.schemas import (
+    CredenciaisLogin,
+    TokenAcesso,
+    UsuarioCriar,
+    UsuarioPublico
+)
 from backend.app.usuarios import UsuarioJaExiste, cadastrar_usuario
 
 
@@ -67,3 +78,25 @@ def criar_usuario(
             status_code=409,
             detail="Username ou e-mail indisponivel."
         ) from None
+
+
+@app.post("/auth/login", response_model=TokenAcesso)
+def fazer_login(
+    dados: CredenciaisLogin,
+    sessao: Session = Depends(obter_sessao)
+):
+    usuario = autenticar_usuario(
+        sessao,
+        dados.identificador,
+        dados.senha
+    )
+
+    return {
+        "access_token": criar_token(usuario.id),
+        "token_type": "bearer"
+    }
+
+
+@app.get("/auth/me", response_model=UsuarioPublico)
+def minha_conta(usuario: Usuario = Depends(obter_usuario_atual)):
+    return usuario
