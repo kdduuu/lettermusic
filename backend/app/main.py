@@ -1,7 +1,7 @@
 
 import httpx
 
-from fastapi import Depends, FastAPI, HTTPException, Query
+from fastapi import Depends, FastAPI, HTTPException, Path, Query
 from sqlalchemy.orm import Session
 
 from backend.app.auth import (
@@ -19,7 +19,11 @@ from backend.app.schemas import (
     UsuarioCriar,
     UsuarioPublico
 )
-from backend.app.usuarios import UsuarioJaExiste, cadastrar_usuario
+from backend.app.usuarios import (
+    UsuarioJaExiste,
+    buscar_usuario_por_username,
+    cadastrar_usuario
+)
 
 
 app = FastAPI(title="Lettermusic API")
@@ -78,6 +82,26 @@ def criar_usuario(
             status_code=409,
             detail="Username ou e-mail indisponivel."
         ) from None
+
+
+@app.get("/usuarios/{username}", response_model=UsuarioPublico)
+def consultar_perfil(
+    username: str = Path(
+        min_length=3,
+        max_length=30,
+        pattern=r"^[a-zA-Z0-9_]+$"
+    ),
+    sessao: Session = Depends(obter_sessao)
+):
+    usuario = buscar_usuario_por_username(sessao, username)
+
+    if usuario is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Usuario nao encontrado."
+        )
+
+    return usuario
 
 
 @app.post("/auth/login", response_model=TokenAcesso)

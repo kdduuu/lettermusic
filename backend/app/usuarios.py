@@ -51,3 +51,14 @@ def cadastrar_usuario(
 
     sessao.refresh(usuario)
     return usuario
+
+
+def buscar_usuario_por_username(
+    sessao: Session,
+    username: str
+) -> Usuario | None:
+    consulta = select(Usuario).where(
+        Usuario.username == username.lower()
+    )
+
+    return sessao.scalar(consulta)
