@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from backend.app.catalogo import listar_obras
 from backend.app.database import obter_sessao
 from backend.app.musicbrainz import pesquisar_obras
+from backend.app.schemas import UsuarioCriar, UsuarioPublico
+from backend.app.usuarios import UsuarioJaExiste, cadastrar_usuario
 
 
 app = FastAPI(title="Lettermusic API")
@@ -51,3 +53,17 @@ def consultar_catalogo(sessao: Session = Depends(obter_sessao)):
             for obra in obras
         ]
     }
+
+
+@app.post("/usuarios", response_model=UsuarioPublico, status_code=201)
+def criar_usuario(
+    dados: UsuarioCriar,
+    sessao: Session = Depends(obter_sessao)
+):
+    try:
+        return cadastrar_usuario(sessao, dados)
+    except UsuarioJaExiste:
+        raise HTTPException(
+            status_code=409,
+            detail="Username ou e-mail indisponivel."
+        ) from None
