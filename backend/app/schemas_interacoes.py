@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 
@@ -36,3 +37,39 @@ class EscutaPublica(BaseModel):
     obra_id: int
     ouvida_em: datetime
     registrada_em: datetime
+
+
+# -----------------------------------------
+# SPRINT 03 - AVALIACOES
+# -----------------------------------------
+
+
+class AvaliacaoCriarEntrada(BaseModel):
+    obra: ObraInteracao
+    nota: Decimal = Field(
+        ge=Decimal("0.5"),
+        le=Decimal("5.0"),
+        multiple_of=Decimal("0.5"),
+    )
+
+
+class AvaliacaoEditarEntrada(BaseModel):
+    nota: Decimal = Field(
+        ge=Decimal("0.5"),
+        le=Decimal("5.0"),
+        multiple_of=Decimal("0.5"),
+    )
+
+
+class AvaliacaoPublica(BaseModel):
+    id: int
+    obra_id: int
+    nota: float
+    criada_em: datetime
+    atualizada_em: datetime | None
+
+
+class AvaliacaoMediaPublica(BaseModel):
+    obra_id: int
+    media: float | None
+    quantidade: int

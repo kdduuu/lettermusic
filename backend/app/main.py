@@ -9,6 +9,15 @@ from backend.app.auth import (
     criar_token,
     obter_usuario_atual,
 )
+from backend.app.avaliacoes import (
+    AvaliacaoJaExiste,
+    AvaliacaoNaoEncontrada,
+    ObraNaoEncontrada,
+    calcular_media_avaliacoes,
+    criar_avaliacao,
+    editar_avaliacao,
+    listar_avaliacoes,
+)
 from backend.app.catalogo import listar_obras
 from backend.app.database import obter_sessao
 from backend.app.interacoes import (
@@ -26,6 +35,10 @@ from backend.app.schemas import (
     UsuarioPublico,
 )
 from backend.app.schemas_interacoes import (
+    AvaliacaoCriarEntrada,
+    AvaliacaoEditarEntrada,
+    AvaliacaoMediaPublica,
+    AvaliacaoPublica,
     EscutaPublica,
     MarcarOuvidaEntrada,
     ObraOuvidaPublica,
@@ -208,3 +221,89 @@ def consultar_historico_escutas(
         sessao,
         usuario.id,
     )
+
+
+# --------------------------------------------------
+# SPRINT 03 - AVALIACOES
+# --------------------------------------------------
+
+
+@app.post(
+    "/interacoes/avaliacoes",
+    response_model=AvaliacaoPublica,
+    status_code=201,
+)
+def registrar_avaliacao(
+    dados: AvaliacaoCriarEntrada,
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return criar_avaliacao(
+            sessao,
+            usuario.id,
+            dados,
+        )
+    except AvaliacaoJaExiste:
+        raise HTTPException(
+            status_code=409,
+            detail="Voce ja avaliou esta obra.",
+        ) from None
+
+
+@app.get(
+    "/interacoes/avaliacoes",
+    response_model=list[AvaliacaoPublica],
+)
+def consultar_minhas_avaliacoes(
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    return listar_avaliacoes(
+        sessao,
+        usuario.id,
+    )
+
+
+@app.patch(
+    "/interacoes/avaliacoes/{obra_id}",
+    response_model=AvaliacaoPublica,
+)
+def atualizar_minha_avaliacao(
+    dados: AvaliacaoEditarEntrada,
+    obra_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return editar_avaliacao(
+            sessao,
+            usuario.id,
+            obra_id,
+            dados,
+        )
+    except AvaliacaoNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Avaliacao nao encontrada.",
+        ) from None
+
+
+@app.get(
+    "/interacoes/avaliacoes/{obra_id}/media",
+    response_model=AvaliacaoMediaPublica,
+)
+def consultar_media_avaliacoes(
+    obra_id: int = Path(gt=0),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return calcular_media_avaliacoes(
+            sessao,
+            obra_id,
+        )
+    except ObraNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Obra nao encontrada.",
+        ) from None
