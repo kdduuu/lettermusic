@@ -2,7 +2,18 @@
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+)
+
+
+# -----------------------------------------
+# OBRAS E ESCUTAS
+# -----------------------------------------
 
 
 class ObraInteracao(BaseModel):
@@ -40,7 +51,7 @@ class EscutaPublica(BaseModel):
 
 
 # -----------------------------------------
-# SPRINT 03 - AVALIACOES
+# AVALIACOES
 # -----------------------------------------
 
 
@@ -73,3 +84,39 @@ class AvaliacaoMediaPublica(BaseModel):
     obra_id: int
     media: float | None
     quantidade: int
+
+
+# -----------------------------------------
+# REVIEWS
+# -----------------------------------------
+
+
+class ReviewEditarEntrada(BaseModel):
+    texto: str = Field(min_length=1, max_length=5000)
+
+    @field_validator("texto")
+    @classmethod
+    def validar_texto(cls, valor: str) -> str:
+        texto = valor.strip()
+
+        if not texto:
+            raise ValueError(
+                "A review nao pode ficar vazia."
+            )
+
+        return texto
+
+
+class ReviewCriarEntrada(ReviewEditarEntrada):
+    obra: ObraInteracao
+
+
+class ReviewPublica(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    usuario_id: int
+    obra_id: int
+    texto: str
+    criada_em: datetime
+    atualizada_em: datetime | None

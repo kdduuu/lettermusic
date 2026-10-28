@@ -28,6 +28,16 @@ from backend.app.interacoes import (
 )
 from backend.app.models import Usuario
 from backend.app.musicbrainz import pesquisar_obras
+from backend.app.reviews import (
+    ObraDeReviewNaoEncontrada,
+    ReviewJaExiste,
+    ReviewNaoEncontrada,
+    criar_review,
+    editar_review,
+    excluir_review,
+    listar_minhas_reviews,
+    listar_reviews_da_obra,
+)
 from backend.app.schemas import (
     CredenciaisLogin,
     TokenAcesso,
@@ -43,6 +53,9 @@ from backend.app.schemas_interacoes import (
     MarcarOuvidaEntrada,
     ObraOuvidaPublica,
     RegistrarEscutaEntrada,
+    ReviewCriarEntrada,
+    ReviewEditarEntrada,
+    ReviewPublica,
 )
 from backend.app.usuarios import (
     UsuarioJaExiste,
@@ -54,10 +67,19 @@ from backend.app.usuarios import (
 app = FastAPI(title="Lettermusic API")
 
 
+# --------------------------------------------------
+# SAUDE DA API
+# --------------------------------------------------
+
+
 @app.get("/health")
 def verificar_saude():
-    """Confirma que a API esta respondendo."""
     return {"status": "ok"}
+
+
+# --------------------------------------------------
+# CATALOGO MUSICAL
+# --------------------------------------------------
 
 
 @app.get("/catalogo/buscar")
@@ -78,7 +100,9 @@ def buscar_obras(
 
 
 @app.get("/catalogo/obras")
-def consultar_catalogo(sessao: Session = Depends(obter_sessao)):
+def consultar_catalogo(
+    sessao: Session = Depends(obter_sessao),
+):
     obras = listar_obras(sessao)
 
     return {
@@ -96,13 +120,23 @@ def consultar_catalogo(sessao: Session = Depends(obter_sessao)):
     }
 
 
-@app.post("/usuarios", response_model=UsuarioPublico, status_code=201)
+# --------------------------------------------------
+# USUARIOS E PERFIS
+# --------------------------------------------------
+
+
+@app.post(
+    "/usuarios",
+    response_model=UsuarioPublico,
+    status_code=201,
+)
 def criar_usuario(
     dados: UsuarioCriar,
     sessao: Session = Depends(obter_sessao),
 ):
     try:
         return cadastrar_usuario(sessao, dados)
+
     except UsuarioJaExiste:
         raise HTTPException(
             status_code=409,
@@ -110,7 +144,10 @@ def criar_usuario(
         ) from None
 
 
-@app.get("/usuarios/{username}", response_model=UsuarioPublico)
+@app.get(
+    "/usuarios/{username}",
+    response_model=UsuarioPublico,
+)
 def consultar_perfil(
     username: str = Path(
         min_length=3,
@@ -130,7 +167,15 @@ def consultar_perfil(
     return usuario
 
 
-@app.post("/auth/login", response_model=TokenAcesso)
+# --------------------------------------------------
+# AUTENTICACAO
+# --------------------------------------------------
+
+
+@app.post(
+    "/auth/login",
+    response_model=TokenAcesso,
+)
 def fazer_login(
     dados: CredenciaisLogin,
     sessao: Session = Depends(obter_sessao),
@@ -147,13 +192,18 @@ def fazer_login(
     }
 
 
-@app.get("/auth/me", response_model=UsuarioPublico)
-def minha_conta(usuario: Usuario = Depends(obter_usuario_atual)):
+@app.get(
+    "/auth/me",
+    response_model=UsuarioPublico,
+)
+def minha_conta(
+    usuario: Usuario = Depends(obter_usuario_atual),
+):
     return usuario
 
 
 # --------------------------------------------------
-# SPRINT 03 - OBRAS OUVIDAS
+# OBRAS OUVIDAS
 # --------------------------------------------------
 
 
@@ -188,7 +238,7 @@ def consultar_obras_ouvidas(
 
 
 # --------------------------------------------------
-# SPRINT 03 - HISTORICO DE ESCUTAS
+# HISTORICO DE ESCUTAS
 # --------------------------------------------------
 
 
@@ -224,7 +274,7 @@ def consultar_historico_escutas(
 
 
 # --------------------------------------------------
-# SPRINT 03 - AVALIACOES
+# AVALIACOES
 # --------------------------------------------------
 
 
@@ -244,6 +294,7 @@ def registrar_avaliacao(
             usuario.id,
             dados,
         )
+
     except AvaliacaoJaExiste:
         raise HTTPException(
             status_code=409,
@@ -282,6 +333,7 @@ def atualizar_minha_avaliacao(
             obra_id,
             dados,
         )
+
     except AvaliacaoNaoEncontrada:
         raise HTTPException(
             status_code=404,
@@ -302,8 +354,121 @@ def consultar_media_avaliacoes(
             sessao,
             obra_id,
         )
+
     except ObraNaoEncontrada:
         raise HTTPException(
             status_code=404,
             detail="Obra nao encontrada.",
+        ) from None
+
+
+# --------------------------------------------------
+# REVIEWS
+# --------------------------------------------------
+
+
+@app.post(
+    "/interacoes/reviews",
+    response_model=ReviewPublica,
+    status_code=201,
+)
+def publicar_review(
+    dados: ReviewCriarEntrada,
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return criar_review(
+            sessao,
+            usuario.id,
+            dados,
+        )
+
+    except ReviewJaExiste:
+        raise HTTPException(
+            status_code=409,
+            detail="Voce ja publicou uma review desta obra.",
+        ) from None
+
+
+@app.get(
+    "/interacoes/reviews",
+    response_model=list[ReviewPublica],
+)
+def consultar_minhas_reviews(
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    return listar_minhas_reviews(
+        sessao,
+        usuario.id,
+    )
+
+
+@app.get(
+    "/interacoes/reviews/obra/{obra_id}",
+    response_model=list[ReviewPublica],
+)
+def consultar_reviews_publicas(
+    obra_id: int = Path(gt=0),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return listar_reviews_da_obra(
+            sessao,
+            obra_id,
+        )
+
+    except ObraDeReviewNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Obra nao encontrada.",
+        ) from None
+
+
+@app.patch(
+    "/interacoes/reviews/{obra_id}",
+    response_model=ReviewPublica,
+)
+def atualizar_minha_review(
+    dados: ReviewEditarEntrada,
+    obra_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return editar_review(
+            sessao,
+            usuario.id,
+            obra_id,
+            dados,
+        )
+
+    except ReviewNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Review nao encontrada.",
+        ) from None
+
+
+@app.delete(
+    "/interacoes/reviews/{obra_id}",
+    status_code=204,
+)
+def remover_minha_review(
+    obra_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        excluir_review(
+            sessao,
+            usuario.id,
+            obra_id,
+        )
+
+    except ReviewNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Review nao encontrada.",
         ) from None
