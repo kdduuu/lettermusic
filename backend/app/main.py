@@ -18,6 +18,16 @@ from backend.app.avaliacoes import (
     editar_avaliacao,
     listar_avaliacoes,
 )
+from backend.app.biblioteca import (
+    ItemJaExiste,
+    ItemNaoEncontrado,
+    adicionar_favorito,
+    adicionar_quero_ouvir,
+    listar_favoritos,
+    listar_quero_ouvir,
+    remover_favorito,
+    remover_quero_ouvir,
+)
 from backend.app.catalogo import listar_obras
 from backend.app.database import obter_sessao
 from backend.app.interacoes import (
@@ -45,11 +55,13 @@ from backend.app.schemas import (
     UsuarioPublico,
 )
 from backend.app.schemas_interacoes import (
+    AdicionarItemBibliotecaEntrada,
     AvaliacaoCriarEntrada,
     AvaliacaoEditarEntrada,
     AvaliacaoMediaPublica,
     AvaliacaoPublica,
     EscutaPublica,
+    ItemBibliotecaPublico,
     MarcarOuvidaEntrada,
     ObraOuvidaPublica,
     RegistrarEscutaEntrada,
@@ -67,9 +79,9 @@ from backend.app.usuarios import (
 app = FastAPI(title="Lettermusic API")
 
 
-# --------------------------------------------------
+# -----------------------------------------
 # SAUDE DA API
-# --------------------------------------------------
+# -----------------------------------------
 
 
 @app.get("/health")
@@ -77,15 +89,19 @@ def verificar_saude():
     return {"status": "ok"}
 
 
-# --------------------------------------------------
+# -----------------------------------------
 # CATALOGO MUSICAL
-# --------------------------------------------------
+# -----------------------------------------
 
 
 @app.get("/catalogo/buscar")
 def buscar_obras(
     termo: str = Query(min_length=2, max_length=100),
-    artista: str | None = Query(default=None, min_length=2, max_length=100),
+    artista: str | None = Query(
+        default=None,
+        min_length=2,
+        max_length=100,
+    ),
 ):
     try:
         obras = pesquisar_obras(termo, artista)
@@ -120,9 +136,9 @@ def consultar_catalogo(
     }
 
 
-# --------------------------------------------------
+# -----------------------------------------
 # USUARIOS E PERFIS
-# --------------------------------------------------
+# -----------------------------------------
 
 
 @app.post(
@@ -156,7 +172,10 @@ def consultar_perfil(
     ),
     sessao: Session = Depends(obter_sessao),
 ):
-    usuario = buscar_usuario_por_username(sessao, username)
+    usuario = buscar_usuario_por_username(
+        sessao,
+        username,
+    )
 
     if usuario is None:
         raise HTTPException(
@@ -167,9 +186,9 @@ def consultar_perfil(
     return usuario
 
 
-# --------------------------------------------------
+# -----------------------------------------
 # AUTENTICACAO
-# --------------------------------------------------
+# -----------------------------------------
 
 
 @app.post(
@@ -202,9 +221,9 @@ def minha_conta(
     return usuario
 
 
-# --------------------------------------------------
+# -----------------------------------------
 # OBRAS OUVIDAS
-# --------------------------------------------------
+# -----------------------------------------
 
 
 @app.post(
@@ -237,9 +256,9 @@ def consultar_obras_ouvidas(
     )
 
 
-# --------------------------------------------------
+# -----------------------------------------
 # HISTORICO DE ESCUTAS
-# --------------------------------------------------
+# -----------------------------------------
 
 
 @app.post(
@@ -273,9 +292,9 @@ def consultar_historico_escutas(
     )
 
 
-# --------------------------------------------------
+# -----------------------------------------
 # AVALIACOES
-# --------------------------------------------------
+# -----------------------------------------
 
 
 @app.post(
@@ -362,9 +381,9 @@ def consultar_media_avaliacoes(
         ) from None
 
 
-# --------------------------------------------------
+# -----------------------------------------
 # REVIEWS
-# --------------------------------------------------
+# -----------------------------------------
 
 
 @app.post(
@@ -471,4 +490,142 @@ def remover_minha_review(
         raise HTTPException(
             status_code=404,
             detail="Review nao encontrada.",
+        ) from None
+
+
+# -----------------------------------------
+# SPRINT 04 - FAVORITOS
+# -----------------------------------------
+
+
+@app.post(
+    "/biblioteca/favoritos",
+    response_model=ItemBibliotecaPublico,
+    status_code=201,
+    tags=["Biblioteca Musical"],
+)
+def criar_favorito(
+    dados: AdicionarItemBibliotecaEntrada,
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return adicionar_favorito(
+            sessao,
+            usuario.id,
+            dados.obra,
+        )
+
+    except ItemJaExiste:
+        raise HTTPException(
+            status_code=409,
+            detail="Esta obra ja esta nos seus favoritos.",
+        ) from None
+
+
+@app.get(
+    "/biblioteca/favoritos",
+    response_model=list[ItemBibliotecaPublico],
+    tags=["Biblioteca Musical"],
+)
+def consultar_favoritos(
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    return listar_favoritos(
+        sessao,
+        usuario.id,
+    )
+
+
+@app.delete(
+    "/biblioteca/favoritos/{obra_id}",
+    status_code=204,
+    tags=["Biblioteca Musical"],
+)
+def excluir_favorito(
+    obra_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        remover_favorito(
+            sessao,
+            usuario.id,
+            obra_id,
+        )
+
+    except ItemNaoEncontrado:
+        raise HTTPException(
+            status_code=404,
+            detail="Favorito nao encontrado.",
+        ) from None
+
+
+# -----------------------------------------
+# SPRINT 04 - QUERO OUVIR
+# -----------------------------------------
+
+
+@app.post(
+    "/biblioteca/quero-ouvir",
+    response_model=ItemBibliotecaPublico,
+    status_code=201,
+    tags=["Biblioteca Musical"],
+)
+def criar_quero_ouvir(
+    dados: AdicionarItemBibliotecaEntrada,
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return adicionar_quero_ouvir(
+            sessao,
+            usuario.id,
+            dados.obra,
+        )
+
+    except ItemJaExiste:
+        raise HTTPException(
+            status_code=409,
+            detail="Esta obra ja esta na sua lista Quero ouvir.",
+        ) from None
+
+
+@app.get(
+    "/biblioteca/quero-ouvir",
+    response_model=list[ItemBibliotecaPublico],
+    tags=["Biblioteca Musical"],
+)
+def consultar_quero_ouvir(
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    return listar_quero_ouvir(
+        sessao,
+        usuario.id,
+    )
+
+
+@app.delete(
+    "/biblioteca/quero-ouvir/{obra_id}",
+    status_code=204,
+    tags=["Biblioteca Musical"],
+)
+def excluir_quero_ouvir(
+    obra_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        remover_quero_ouvir(
+            sessao,
+            usuario.id,
+            obra_id,
+        )
+
+    except ItemNaoEncontrado:
+        raise HTTPException(
+            status_code=404,
+            detail="Item nao encontrado na lista Quero ouvir.",
         ) from None

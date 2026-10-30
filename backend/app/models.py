@@ -47,12 +47,11 @@ class Usuario(Base):
 
 
 class ObraOuvida(Base):
-    """Marca 'Ja ouvi' sem exigir uma escuta com data."""
-
     __tablename__ = "obras_ouvidas"
     __table_args__ = (
         UniqueConstraint(
-            "usuario_id", "obra_id", name="uq_obras_ouvidas_usuario_obra"
+            "usuario_id", "obra_id",
+            name="uq_obras_ouvidas_usuario_obra"
         ),
     )
 
@@ -69,8 +68,6 @@ class ObraOuvida(Base):
 
 
 class Escuta(Base):
-    """Historico: permite varias escutas da mesma obra pelo usuario."""
-
     __tablename__ = "escutas"
     __table_args__ = (
         Index("ix_escutas_usuario_ouvida_em", "usuario_id", "ouvida_em"),
@@ -92,15 +89,15 @@ class Escuta(Base):
 
 
 class Avaliacao(Base):
-    """Uma nota atual por usuario/obra; 1..10 equivale a 0,5..5."""
-
     __tablename__ = "avaliacoes"
     __table_args__ = (
         UniqueConstraint(
-            "usuario_id", "obra_id", name="uq_avaliacoes_usuario_obra"
+            "usuario_id", "obra_id",
+            name="uq_avaliacoes_usuario_obra"
         ),
         CheckConstraint(
-            "nota_passos BETWEEN 1 AND 10", name="ck_avaliacoes_nota_passos"
+            "nota_passos BETWEEN 1 AND 10",
+            name="ck_avaliacoes_nota_passos"
         ),
     )
 
@@ -121,15 +118,15 @@ class Avaliacao(Base):
 
 
 class Review(Base):
-    """Uma review atual por usuario/obra, editavel pelo autor."""
-
     __tablename__ = "reviews"
     __table_args__ = (
         UniqueConstraint(
-            "usuario_id", "obra_id", name="uq_reviews_usuario_obra"
+            "usuario_id", "obra_id",
+            name="uq_reviews_usuario_obra"
         ),
         CheckConstraint(
-            "length(trim(texto)) > 0", name="ck_reviews_texto_nao_vazio"
+            "length(trim(texto)) > 0",
+            name="ck_reviews_texto_nao_vazio"
         ),
     )
 
@@ -146,4 +143,55 @@ class Review(Base):
     )
     atualizada_em: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True)
+    )
+
+
+# -----------------------------------------
+# SPRINT 04 - BIBLIOTECA PESSOAL
+# -----------------------------------------
+
+
+class Favorito(Base):
+    """Obra adicionada aos favoritos do usuario."""
+
+    __tablename__ = "favoritos"
+    __table_args__ = (
+        UniqueConstraint(
+            "usuario_id", "obra_id",
+            name="uq_favoritos_usuario_obra"
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    usuario_id: Mapped[int] = mapped_column(
+        ForeignKey("usuarios.id", ondelete="CASCADE")
+    )
+    obra_id: Mapped[int] = mapped_column(
+        ForeignKey("obras.id", ondelete="CASCADE")
+    )
+    adicionado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=agora_utc
+    )
+
+
+class QueroOuvir(Base):
+    """Obra salva para ouvir futuramente."""
+
+    __tablename__ = "quero_ouvir"
+    __table_args__ = (
+        UniqueConstraint(
+            "usuario_id", "obra_id",
+            name="uq_quero_ouvir_usuario_obra"
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    usuario_id: Mapped[int] = mapped_column(
+        ForeignKey("usuarios.id", ondelete="CASCADE")
+    )
+    obra_id: Mapped[int] = mapped_column(
+        ForeignKey("obras.id", ondelete="CASCADE")
+    )
+    adicionado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=agora_utc
     )

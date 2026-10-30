@@ -120,3 +120,24 @@ class ReviewPublica(BaseModel):
     texto: str
     criada_em: datetime
     atualizada_em: datetime | None
+
+
+# -----------------------------------------
+# SPRINT 04 - BIBLIOTECA MUSICAL
+# -----------------------------------------
+
+
+class AdicionarItemBibliotecaEntrada(BaseModel):
+    """Dados recebidos ao adicionar uma obra."""
+
+    obra: ObraInteracao
+
+
+class ItemBibliotecaPublico(BaseModel):
+    """Dados devolvidos pela API."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    obra_id: int
+    adicionado_em: datetime
