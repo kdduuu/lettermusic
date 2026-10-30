@@ -36,6 +36,24 @@ from backend.app.interacoes import (
     marcar_obra_ouvida,
     registrar_escuta,
 )
+from backend.app.itens_lista import (
+    ItemJaExisteNaLista,
+    ItemNaoEncontradoNaLista,
+    PosicaoInvalida,
+    adicionar_item_lista,
+    listar_itens_lista,
+    mover_item_lista,
+    remover_item_lista,
+)
+from backend.app.listas import (
+    ListaNaoEncontrada,
+    consultar_lista_publica,
+    criar_lista,
+    editar_lista,
+    excluir_lista,
+    listar_minhas_listas,
+    obter_lista_do_dono,
+)
 from backend.app.models import Usuario
 from backend.app.musicbrainz import pesquisar_obras
 from backend.app.reviews import (
@@ -68,6 +86,14 @@ from backend.app.schemas_interacoes import (
     ReviewCriarEntrada,
     ReviewEditarEntrada,
     ReviewPublica,
+)
+from backend.app.schemas_listas import (
+    ItemListaAdicionarEntrada,
+    ItemListaPublico,
+    ListaCriarEntrada,
+    ListaEditarEntrada,
+    ListaPublica,
+    MoverItemListaEntrada,
 )
 from backend.app.usuarios import (
     UsuarioJaExiste,
@@ -628,4 +654,302 @@ def excluir_quero_ouvir(
         raise HTTPException(
             status_code=404,
             detail="Item nao encontrado na lista Quero ouvir.",
+        ) from None
+
+
+# -----------------------------------------
+# SPRINT 05 - LISTAS MUSICAIS
+# -----------------------------------------
+
+
+@app.post(
+    "/listas",
+    response_model=ListaPublica,
+    status_code=201,
+    tags=["Listas Musicais"],
+)
+def publicar_nova_lista(
+    dados: ListaCriarEntrada,
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    return criar_lista(
+        sessao,
+        usuario.id,
+        dados.titulo,
+        dados.descricao,
+        dados.publica,
+    )
+
+
+@app.get(
+    "/listas/minhas",
+    response_model=list[ListaPublica],
+    tags=["Listas Musicais"],
+)
+def consultar_minhas_listas(
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    return listar_minhas_listas(sessao, usuario.id)
+
+
+@app.get(
+    "/listas/minhas/{lista_id}",
+    response_model=ListaPublica,
+    tags=["Listas Musicais"],
+)
+def consultar_minha_lista(
+    lista_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return obter_lista_do_dono(
+            sessao,
+            usuario.id,
+            lista_id,
+        )
+
+    except ListaNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Lista nao encontrada.",
+        ) from None
+
+
+@app.get(
+    "/listas/{lista_id}",
+    response_model=ListaPublica,
+    tags=["Listas Musicais"],
+)
+def consultar_lista_para_publico(
+    lista_id: int = Path(gt=0),
+    sessao: Session = Depends(obter_sessao),
+):
+    lista = consultar_lista_publica(
+        sessao,
+        lista_id,
+    )
+
+    if lista is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Lista nao encontrada.",
+        )
+
+    return lista
+
+
+@app.put(
+    "/listas/{lista_id}",
+    response_model=ListaPublica,
+    tags=["Listas Musicais"],
+)
+def atualizar_lista(
+    dados: ListaEditarEntrada,
+    lista_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return editar_lista(
+            sessao,
+            usuario.id,
+            lista_id,
+            dados.titulo,
+            dados.descricao,
+            dados.publica,
+        )
+
+    except ListaNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Lista nao encontrada.",
+        ) from None
+
+
+@app.delete(
+    "/listas/{lista_id}",
+    status_code=204,
+    tags=["Listas Musicais"],
+)
+def remover_lista(
+    lista_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        excluir_lista(
+            sessao,
+            usuario.id,
+            lista_id,
+        )
+
+    except ListaNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Lista nao encontrada.",
+        ) from None
+
+
+# -----------------------------------------
+# SPRINT 05 - ITENS DAS LISTAS
+# -----------------------------------------
+
+
+@app.post(
+    "/listas/{lista_id}/itens",
+    response_model=ItemListaPublico,
+    status_code=201,
+    tags=["Listas Musicais"],
+)
+def adicionar_album_na_lista(
+    dados: ItemListaAdicionarEntrada,
+    lista_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return adicionar_item_lista(
+            sessao,
+            usuario.id,
+            lista_id,
+            dados.obra,
+        )
+
+    except ListaNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Lista nao encontrada.",
+        ) from None
+
+    except ItemJaExisteNaLista:
+        raise HTTPException(
+            status_code=409,
+            detail="Esta obra ja pertence a lista.",
+        ) from None
+
+
+@app.get(
+    "/listas/minhas/{lista_id}/itens",
+    response_model=list[ItemListaPublico],
+    tags=["Listas Musicais"],
+)
+def consultar_itens_da_minha_lista(
+    lista_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        obter_lista_do_dono(
+            sessao,
+            usuario.id,
+            lista_id,
+        )
+
+        return listar_itens_lista(
+            sessao,
+            lista_id,
+            usuario.id,
+        )
+
+    except ListaNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Lista nao encontrada.",
+        ) from None
+
+
+@app.get(
+    "/listas/{lista_id}/itens",
+    response_model=list[ItemListaPublico],
+    tags=["Listas Musicais"],
+)
+def consultar_itens_publicos(
+    lista_id: int = Path(gt=0),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return listar_itens_lista(
+            sessao,
+            lista_id,
+        )
+
+    except ListaNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Lista nao encontrada.",
+        ) from None
+
+
+@app.patch(
+    "/listas/{lista_id}/itens/{obra_id}",
+    response_model=ItemListaPublico,
+    tags=["Listas Musicais"],
+)
+def reorganizar_album_na_lista(
+    dados: MoverItemListaEntrada,
+    lista_id: int = Path(gt=0),
+    obra_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        return mover_item_lista(
+            sessao,
+            usuario.id,
+            lista_id,
+            obra_id,
+            dados.nova_posicao,
+        )
+
+    except ListaNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Lista nao encontrada.",
+        ) from None
+
+    except ItemNaoEncontradoNaLista:
+        raise HTTPException(
+            status_code=404,
+            detail="Album nao encontrado na lista.",
+        ) from None
+
+    except PosicaoInvalida:
+        raise HTTPException(
+            status_code=422,
+            detail="Posicao invalida para esta lista.",
+        ) from None
+
+
+@app.delete(
+    "/listas/{lista_id}/itens/{obra_id}",
+    status_code=204,
+    tags=["Listas Musicais"],
+)
+def remover_album_da_lista(
+    lista_id: int = Path(gt=0),
+    obra_id: int = Path(gt=0),
+    usuario: Usuario = Depends(obter_usuario_atual),
+    sessao: Session = Depends(obter_sessao),
+):
+    try:
+        remover_item_lista(
+            sessao,
+            usuario.id,
+            lista_id,
+            obra_id,
+        )
+
+    except ListaNaoEncontrada:
+        raise HTTPException(
+            status_code=404,
+            detail="Lista nao encontrada.",
+        ) from None
+
+    except ItemNaoEncontradoNaLista:
+        raise HTTPException(
+            status_code=404,
+            detail="Album nao encontrado na lista.",
         ) from None

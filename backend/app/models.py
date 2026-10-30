@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     DateTime,
     ForeignKey,
@@ -194,4 +195,77 @@ class QueroOuvir(Base):
     )
     adicionado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=agora_utc
+    )
+
+
+# -----------------------------------------
+# SPRINT 05 - LISTAS MUSICAIS
+# -----------------------------------------
+
+
+class ListaMusical(Base):
+    """Lista de albuns criada por um usuario."""
+
+    __tablename__ = "listas_musicais"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    usuario_id: Mapped[int] = mapped_column(
+        ForeignKey("usuarios.id", ondelete="CASCADE")
+    )
+
+    titulo: Mapped[str] = mapped_column(String(120))
+
+    descricao: Mapped[str | None] = mapped_column(Text)
+
+    publica: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=True,
+    )
+
+    criada_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=agora_utc,
+    )
+
+    atualizada_em: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True)
+    )
+
+
+class ItemLista(Base):
+    """Uma obra musical adicionada a uma lista."""
+
+    __tablename__ = "itens_lista"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "lista_id", "obra_id",
+            name="uq_itens_lista_obra",
+        ),
+        CheckConstraint(
+            "posicao > 0",
+            name="ck_itens_lista_posicao",
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    lista_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "listas_musicais.id",
+            ondelete="CASCADE",
+        )
+    )
+
+    obra_id: Mapped[int] = mapped_column(
+        ForeignKey("obras.id", ondelete="CASCADE")
+    )
+
+    posicao: Mapped[int]
+
+    adicionado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=agora_utc,
     )

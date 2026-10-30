@@ -3,7 +3,7 @@
 
 Rede social de música em desenvolvimento, inspirada na ideia de registrar e compartilhar experiências musicais.
 
-O projeto permite pesquisar álbuns, EPs e singles, registrar escutas, avaliar obras, publicar reviews e organizar coleções pessoais.
+O projeto permite pesquisar álbuns, EPs e singles, registrar escutas, avaliar obras, publicar reviews e organizar coleções pessoais e listas musicais personalizadas.
 
 **Não é um serviço de streaming.**
 
@@ -18,13 +18,13 @@ Atualmente, o projeto possui um backend funcional em Python/FastAPI. A interface
 - **Sprint 02 — Usuários:** cadastro, autenticação JWT, senhas protegidas por hash e perfis públicos.
 - **Manutenção técnica:** melhorias nas transações do banco, metadados de artistas e validação dos tokens.
 - **Sprint 03 — Interações musicais:** obras ouvidas, escutas repetidas, avaliações de 0,5 a 5 estrelas, médias e reviews.
-- **Sprint 04 — Biblioteca pessoal:** favoritos e lista Quero ouvir, com adição, consulta e remoção de obras.
+- **Sprint 04 — Biblioteca pessoal:** favoritos e Quero ouvir, com adição, consulta e remoção de obras.
+- **Sprint 05 — Listas musicais:** listas públicas e privadas, inclusão e remoção de álbuns, organização de posições e controle de permissões.
 
 ### Próximas etapas
 
-- Listas musicais personalizadas.
 - Recursos de descoberta e interação social.
-- Ampliação do catálogo e dos metadados.
+- Ampliação dos metadados apresentados pelo catálogo.
 - Interface web integrada à API.
 - Melhorias de segurança, testes e publicação.
 
@@ -75,7 +75,24 @@ Atualmente, o projeto possui um backend funcional em Python/FastAPI. A interface
 - Impedir registros duplicados por usuário e obra.
 - Manter as duas coleções independentes.
 
+### Listas musicais personalizadas
+
+- Criar listas com título e descrição opcional.
+- Definir listas como públicas ou privadas.
+- Consultar listas públicas sem autenticação.
+- Consultar as próprias listas, incluindo as privadas.
+- Editar informações e configurações de privacidade.
+- Excluir listas próprias.
+- Adicionar álbuns a listas existentes.
+- Impedir a inclusão duplicada da mesma obra na mesma lista.
+- Remover álbuns sem excluí-los do catálogo.
+- Reorganizar a posição dos álbuns.
+- Recalcular posições após a remoção de um item.
+- Restringir modificações ao proprietário da lista.
+
 ## Regras importantes
+
+### Catálogo e escutas
 
 - Pesquisar no MusicBrainz não cadastra automaticamente uma obra.
 - O cadastro local acontece quando uma interação relevante precisa persistir a obra.
@@ -84,11 +101,27 @@ Atualmente, o projeto possui um backend funcional em Python/FastAPI. A interface
 - Editar ou excluir uma review não altera o histórico de escutas.
 - Adicionar ou remover favoritos e itens de Quero ouvir não cria nem exclui escutas.
 - Uma obra pode estar simultaneamente em Favoritos e Quero ouvir.
-- Cada usuário gerencia apenas suas próprias coleções.
+
+### Listas musicais
+
+- As listas são públicas por padrão.
+- O proprietário pode alterar a visibilidade posteriormente.
+- Listas privadas não são disponibilizadas nos endpoints públicos.
+- Somente o proprietário pode editar, excluir ou modificar os itens de sua lista.
+- Uma obra pode participar de diferentes listas.
+- A mesma obra não pode aparecer duas vezes na mesma lista.
+- Adicionar ou remover uma obra de uma lista não registra nem exclui escutas.
+- Remover uma obra da lista não exclui seu registro do catálogo.
+- Excluir uma lista remove seus itens associados, preservando as obras do catálogo.
+- As posições dos álbuns começam em 1 e são reorganizadas após movimentações e exclusões.
 
 As operações que alteram múltiplos registros devem utilizar transações consistentes. A função `registrar_obra()` não confirma a transação diretamente.
 
-## Endpoints da biblioteca
+## Endpoints
+
+A documentação interativa completa está disponível no Swagger.
+
+### Biblioteca pessoal
 
 | Método | Endpoint | Descrição |
 |---|---|---|
@@ -101,7 +134,25 @@ As operações que alteram múltiplos registros devem utilizar transações cons
 
 Todos os endpoints da biblioteca exigem autenticação JWT.
 
-Os demais endpoints podem ser consultados na documentação interativa do FastAPI.
+### Listas musicais
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| POST | `/listas` | Criar lista |
+| GET | `/listas/minhas` | Consultar minhas listas |
+| GET | `/listas/minhas/{lista_id}` | Consultar minha lista, inclusive privada |
+| GET | `/listas/{lista_id}` | Consultar lista pública |
+| PUT | `/listas/{lista_id}` | Editar lista |
+| DELETE | `/listas/{lista_id}` | Excluir lista |
+| POST | `/listas/{lista_id}/itens` | Adicionar álbum |
+| GET | `/listas/{lista_id}/itens` | Consultar itens de lista pública |
+| GET | `/listas/minhas/{lista_id}/itens` | Consultar itens da minha lista |
+| PATCH | `/listas/{lista_id}/itens/{obra_id}` | Alterar posição de álbum |
+| DELETE | `/listas/{lista_id}/itens/{obra_id}` | Remover álbum |
+
+As consultas públicas não exigem autenticação. As operações de gerenciamento e consultas privadas exigem JWT.
+
+Nesta versão, os endpoints de itens retornam os identificadores das obras e suas posições. A apresentação visual dos metadados ficará para a integração com a interface web.
 
 ## Executando localmente
 
@@ -149,7 +200,7 @@ http://127.0.0.1:8000/docs
 python -m pytest backend/tests -q
 ```
 
-**Checkpoint da Sprint 04:** 55 testes automatizados aprovados, incluindo 11 testes específicos da biblioteca musical.
+**Checkpoint da Sprint 05:** 66 testes automatizados aprovados, incluindo 11 testes específicos de listas musicais.
 
 Os testes automatizados utilizam um banco SQLite temporário. As funcionalidades também foram validadas manualmente no PostgreSQL local pelo Swagger.
 
@@ -157,7 +208,8 @@ Os testes automatizados utilizam um banco SQLite temporário. As funcionalidades
 
 - Senhas de usuários são armazenadas com hash, não em texto puro.
 - Operações privadas exigem autenticação JWT.
-- As consultas e alterações das coleções são vinculadas ao usuário autenticado.
+- Consultas e alterações das coleções pessoais são vinculadas ao usuário autenticado.
+- Listas privadas não são expostas pelos endpoints públicos.
 - Credenciais, tokens e configurações privadas não devem ser publicados.
 - O arquivo `.env` deve permanecer fora do Git.
 
@@ -175,6 +227,8 @@ Não inclua `.venv`, `.env` ou dados privados nos arquivos compartilhados.
 
 ## Status
 
-**Backend em desenvolvimento — Sprint 04 concluída funcionalmente.**
+**Backend em desenvolvimento — Sprint 05 concluída funcionalmente.**
 
-Próximo objetivo: continuar a construção das funcionalidades sociais do Lettermusic, mantendo escopo reduzido, testes automatizados e organização do código.
+O sistema já possui catálogo, usuários, autenticação, escutas, avaliações, reviews, biblioteca pessoal e listas musicais personalizadas.
+
+Próximo objetivo: avançar nas funcionalidades sociais e na experiência de utilização, mantendo o escopo reduzido, os testes automatizados e a organização do código.
