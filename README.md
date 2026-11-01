@@ -3,7 +3,7 @@
 
 Rede social de música em desenvolvimento, inspirada na ideia de registrar e compartilhar experiências musicais.
 
-O projeto permite pesquisar álbuns, EPs e singles, registrar escutas, avaliar obras, publicar reviews, organizar coleções pessoais e descobrir obras a partir das interações da comunidade.
+O projeto permite pesquisar álbuns, EPs e singles, registrar escutas, avaliar obras, publicar reviews, organizar coleções pessoais, descobrir obras e consultar perfis sociais.
 
 **Não é um serviço de streaming.**
 
@@ -21,10 +21,11 @@ Atualmente, o projeto possui um backend funcional em Python/FastAPI. A interface
 - **Sprint 04 — Biblioteca pessoal:** favoritos e Quero ouvir, com adição, consulta e remoção de obras.
 - **Sprint 05 — Listas musicais:** listas públicas e privadas, inclusão e remoção de álbuns, organização de posições e controle de permissões.
 - **Sprint 06 — Descoberta musical:** rankings públicos de obras mais ouvidas e mais bem avaliadas, utilizando dados da comunidade.
+- **Sprint 07 — Perfis sociais:** estatísticas públicas, reviews recentes e listas compartilhadas por usuário.
 
 ### Próximas etapas
 
-- Recursos adicionais de descoberta e interação social.
+- Recursos adicionais de interação social.
 - Ampliação dos metadados apresentados pelo catálogo.
 - Interface web integrada à API.
 - Melhorias de segurança, testes e publicação.
@@ -104,6 +105,21 @@ Atualmente, o projeto possui um backend funcional em Python/FastAPI. A interface
 
 Os rankings são calculados diretamente a partir das tabelas de escutas e avaliações existentes, sem armazenar estatísticas duplicadas.
 
+### Perfis sociais
+
+- Consultar perfis sociais pelo username.
+- Visualizar nome de exibição, biografia e data de cadastro.
+- Consultar a quantidade de avaliações do usuário.
+- Consultar a quantidade de reviews publicadas.
+- Consultar a quantidade de listas musicais públicas.
+- Visualizar até cinco reviews recentes.
+- Visualizar até cinco listas musicais públicas recentes.
+- Exibir título e artista das obras associadas às reviews.
+- Consultar perfis sem autenticação.
+- Retornar erro 404 quando o usuário não existe.
+
+As informações sociais são obtidas a partir dos registros existentes. Não foi necessário criar novas tabelas.
+
 ## Regras importantes
 
 ### Catálogo e escutas
@@ -142,6 +158,18 @@ Os rankings são calculados diretamente a partir das tabelas de escutas e avalia
 - Persistindo o empate de média e quantidade, o menor ID aparece primeiro.
 - Os rankings não modificam escutas, avaliações ou registros do catálogo.
 - Nesta versão, não existe quantidade mínima de avaliações para participar do ranking.
+
+### Privacidade dos perfis sociais
+
+- Os perfis sociais podem ser consultados sem autenticação.
+- As estatísticas são calculadas somente para o usuário solicitado.
+- Apenas listas públicas são contabilizadas e exibidas.
+- Listas privadas não aparecem nas respostas públicas.
+- São exibidas no máximo cinco reviews recentes e cinco listas públicas recentes.
+- As estatísticas consideram todos os registros elegíveis, independentemente do limite de exibição.
+- E-mail, hash de senha e tokens não são expostos.
+- O histórico individual de escutas e as coleções pessoais não são incluídos na resposta do perfil social.
+- A consulta do perfil não modifica registros do banco.
 
 As operações que alteram múltiplos registros devem utilizar transações consistentes. A função `registrar_obra()` não confirma a transação diretamente.
 
@@ -198,6 +226,23 @@ Exemplos:
 
 As respostas incluem dados das obras, juntamente com a quantidade de escutas ou a média e quantidade de avaliações.
 
+### Perfis sociais
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/usuarios/{username}` | Consultar dados básicos públicos |
+| GET | `/usuarios/{username}/social` | Consultar perfil e atividades públicas |
+
+Os dois endpoints são públicos e não exigem autenticação JWT.
+
+O endpoint social retorna os dados básicos do usuário, estatísticas, reviews recentes e listas públicas.
+
+Exemplo:
+
+`/usuarios/radiohead_fan/social`
+
+Se o usuário não existir, a API responde com `404 Not Found`.
+
 ## Executando localmente
 
 Requisitos: Python, PostgreSQL e ambiente de desenvolvimento configurado.
@@ -244,11 +289,11 @@ http://127.0.0.1:8000/docs
 python -m pytest backend/tests -q
 ```
 
-**Checkpoint da Sprint 06:** 73 testes automatizados aprovados, incluindo 7 testes específicos dos rankings de descoberta musical.
+**Checkpoint da Sprint 07:** 80 testes automatizados aprovados, incluindo 7 testes específicos de perfis sociais.
 
 Os testes automatizados utilizam um banco SQLite temporário. As funcionalidades também foram validadas manualmente no PostgreSQL local pelo Swagger.
 
-A Sprint 06 não exigiu novas tabelas nem migrações de banco.
+As Sprints 06 e 07 não exigiram novas tabelas nem migrações de banco.
 
 ## Segurança
 
@@ -257,6 +302,7 @@ A Sprint 06 não exigiu novas tabelas nem migrações de banco.
 - Consultas e alterações das coleções pessoais são vinculadas ao usuário autenticado.
 - Listas privadas não são expostas pelos endpoints públicos.
 - Rankings públicos apresentam dados agregados, sem expor o histórico individual de outros usuários.
+- Perfis sociais públicos não expõem e-mail, senha ou histórico individual de escutas.
 - Credenciais, tokens e configurações privadas não devem ser publicados.
 - O arquivo `.env` deve permanecer fora do Git.
 
@@ -274,8 +320,8 @@ Não inclua `.venv`, `.env` ou dados privados nos arquivos compartilhados.
 
 ## Status
 
-**Backend em desenvolvimento — Sprint 06 concluída funcionalmente.**
+**Backend em desenvolvimento — Sprint 07 concluída funcionalmente.**
 
-O sistema possui catálogo, usuários, autenticação, escutas, avaliações, reviews, biblioteca pessoal, listas musicais personalizadas e rankings de descoberta.
+O sistema possui catálogo, usuários, autenticação, escutas, avaliações, reviews, biblioteca pessoal, listas musicais personalizadas, rankings de descoberta e perfis sociais públicos.
 
-Próximo objetivo: continuar a construção das funcionalidades sociais e da experiência de utilização, mantendo o escopo reduzido, os testes automatizados e a organização do código.
+Próximo objetivo: avançar na experiência social e na futura interface web, mantendo escopo reduzido, testes automatizados e organização do código.

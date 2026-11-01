@@ -60,6 +60,7 @@ from backend.app.listas import (
 )
 from backend.app.models import Usuario
 from backend.app.musicbrainz import pesquisar_obras
+from backend.app.perfis import consultar_perfil_social
 from backend.app.reviews import (
     ObraDeReviewNaoEncontrada,
     ReviewJaExiste,
@@ -99,6 +100,7 @@ from backend.app.schemas_listas import (
     ListaPublica,
     MoverItemListaEntrada,
 )
+from backend.app.schemas_perfis import PerfilSocialPublico
 from backend.app.usuarios import (
     UsuarioJaExiste,
     buscar_usuario_por_username,
@@ -214,6 +216,40 @@ def consultar_perfil(
         )
 
     return usuario
+
+
+# -----------------------------------------
+# SPRINT 07 - PERFIL SOCIAL PUBLICO
+# -----------------------------------------
+
+
+@app.get(
+    "/usuarios/{username}/social",
+    response_model=PerfilSocialPublico,
+    tags=["Perfis Sociais"],
+)
+def consultar_atividade_publica(
+    username: str = Path(
+        min_length=3,
+        max_length=30,
+        pattern=r"^[a-zA-Z0-9_]+$",
+    ),
+    sessao: Session = Depends(obter_sessao),
+):
+    """Consulta estatisticas e atividades publicas do perfil."""
+
+    perfil = consultar_perfil_social(
+        sessao,
+        username,
+    )
+
+    if perfil is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Usuario nao encontrado.",
+        )
+
+    return perfil
 
 
 # -----------------------------------------
