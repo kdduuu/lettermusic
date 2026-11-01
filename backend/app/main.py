@@ -30,6 +30,10 @@ from backend.app.biblioteca import (
 )
 from backend.app.catalogo import listar_obras
 from backend.app.database import obter_sessao
+from backend.app.descoberta import (
+    listar_mais_ouvidas,
+    listar_melhor_avaliadas,
+)
 from backend.app.interacoes import (
     listar_escutas,
     listar_obras_ouvidas,
@@ -953,3 +957,42 @@ def remover_album_da_lista(
             status_code=404,
             detail="Album nao encontrado na lista.",
         ) from None
+
+
+# -----------------------------------------
+# SPRINT 06 - DESCOBERTA MUSICAL
+# -----------------------------------------
+
+
+@app.get(
+    "/descoberta/mais-ouvidas",
+    response_model=list[dict],
+    tags=["Descoberta Musical"],
+)
+def consultar_mais_ouvidas(
+    limite: int = Query(default=10, ge=1, le=50),
+    sessao: Session = Depends(obter_sessao),
+):
+    """Consulta obras com maior quantidade de escutas."""
+
+    return listar_mais_ouvidas(
+        sessao,
+        limite,
+    )
+
+
+@app.get(
+    "/descoberta/melhor-avaliadas",
+    response_model=list[dict],
+    tags=["Descoberta Musical"],
+)
+def consultar_melhor_avaliadas(
+    limite: int = Query(default=10, ge=1, le=50),
+    sessao: Session = Depends(obter_sessao),
+):
+    """Consulta obras com maiores medias de avaliacao."""
+
+    return listar_melhor_avaliadas(
+        sessao,
+        limite,
+    )

@@ -3,7 +3,7 @@
 
 Rede social de música em desenvolvimento, inspirada na ideia de registrar e compartilhar experiências musicais.
 
-O projeto permite pesquisar álbuns, EPs e singles, registrar escutas, avaliar obras, publicar reviews e organizar coleções pessoais e listas musicais personalizadas.
+O projeto permite pesquisar álbuns, EPs e singles, registrar escutas, avaliar obras, publicar reviews, organizar coleções pessoais e descobrir obras a partir das interações da comunidade.
 
 **Não é um serviço de streaming.**
 
@@ -20,10 +20,11 @@ Atualmente, o projeto possui um backend funcional em Python/FastAPI. A interface
 - **Sprint 03 — Interações musicais:** obras ouvidas, escutas repetidas, avaliações de 0,5 a 5 estrelas, médias e reviews.
 - **Sprint 04 — Biblioteca pessoal:** favoritos e Quero ouvir, com adição, consulta e remoção de obras.
 - **Sprint 05 — Listas musicais:** listas públicas e privadas, inclusão e remoção de álbuns, organização de posições e controle de permissões.
+- **Sprint 06 — Descoberta musical:** rankings públicos de obras mais ouvidas e mais bem avaliadas, utilizando dados da comunidade.
 
 ### Próximas etapas
 
-- Recursos de descoberta e interação social.
+- Recursos adicionais de descoberta e interação social.
 - Ampliação dos metadados apresentados pelo catálogo.
 - Interface web integrada à API.
 - Melhorias de segurança, testes e publicação.
@@ -90,6 +91,19 @@ Atualmente, o projeto possui um backend funcional em Python/FastAPI. A interface
 - Recalcular posições após a remoção de um item.
 - Restringir modificações ao proprietário da lista.
 
+### Descoberta musical
+
+- Consultar as obras mais ouvidas pela comunidade.
+- Consultar as obras mais bem avaliadas.
+- Exibir metadados musicais junto aos indicadores.
+- Contabilizar escutas repetidas no ranking de popularidade.
+- Calcular médias das avaliações existentes.
+- Aplicar critérios de desempate consistentes.
+- Limitar a quantidade de resultados entre 1 e 50.
+- Consultar rankings públicos sem autenticação.
+
+Os rankings são calculados diretamente a partir das tabelas de escutas e avaliações existentes, sem armazenar estatísticas duplicadas.
+
 ## Regras importantes
 
 ### Catálogo e escutas
@@ -114,6 +128,20 @@ Atualmente, o projeto possui um backend funcional em Python/FastAPI. A interface
 - Remover uma obra da lista não exclui seu registro do catálogo.
 - Excluir uma lista remove seus itens associados, preservando as obras do catálogo.
 - As posições dos álbuns começam em 1 e são reorganizadas após movimentações e exclusões.
+
+### Rankings de descoberta
+
+- O ranking de mais ouvidas utiliza a quantidade total de escutas registradas.
+- Escutas repetidas do mesmo usuário são contabilizadas.
+- O ranking de melhor avaliadas utiliza a média das avaliações atuais.
+- Cada usuário possui somente uma avaliação atual por obra.
+- Obras sem escutas não aparecem no ranking de mais ouvidas.
+- Obras sem avaliações não aparecem no ranking de melhor avaliadas.
+- Em empate de escutas, o menor ID da obra aparece primeiro.
+- Em empate de média, a maior quantidade de avaliações tem prioridade.
+- Persistindo o empate de média e quantidade, o menor ID aparece primeiro.
+- Os rankings não modificam escutas, avaliações ou registros do catálogo.
+- Nesta versão, não existe quantidade mínima de avaliações para participar do ranking.
 
 As operações que alteram múltiplos registros devem utilizar transações consistentes. A função `registrar_obra()` não confirma a transação diretamente.
 
@@ -153,6 +181,22 @@ Todos os endpoints da biblioteca exigem autenticação JWT.
 As consultas públicas não exigem autenticação. As operações de gerenciamento e consultas privadas exigem JWT.
 
 Nesta versão, os endpoints de itens retornam os identificadores das obras e suas posições. A apresentação visual dos metadados ficará para a integração com a interface web.
+
+### Descoberta musical
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/descoberta/mais-ouvidas` | Ranking por quantidade de escutas |
+| GET | `/descoberta/melhor-avaliadas` | Ranking por média das avaliações |
+
+Ambos são públicos e aceitam o parâmetro opcional `limite`, com valor padrão de 10 e máximo de 50.
+
+Exemplos:
+
+- `/descoberta/mais-ouvidas?limite=5`
+- `/descoberta/melhor-avaliadas?limite=10`
+
+As respostas incluem dados das obras, juntamente com a quantidade de escutas ou a média e quantidade de avaliações.
 
 ## Executando localmente
 
@@ -200,9 +244,11 @@ http://127.0.0.1:8000/docs
 python -m pytest backend/tests -q
 ```
 
-**Checkpoint da Sprint 05:** 66 testes automatizados aprovados, incluindo 11 testes específicos de listas musicais.
+**Checkpoint da Sprint 06:** 73 testes automatizados aprovados, incluindo 7 testes específicos dos rankings de descoberta musical.
 
 Os testes automatizados utilizam um banco SQLite temporário. As funcionalidades também foram validadas manualmente no PostgreSQL local pelo Swagger.
+
+A Sprint 06 não exigiu novas tabelas nem migrações de banco.
 
 ## Segurança
 
@@ -210,6 +256,7 @@ Os testes automatizados utilizam um banco SQLite temporário. As funcionalidades
 - Operações privadas exigem autenticação JWT.
 - Consultas e alterações das coleções pessoais são vinculadas ao usuário autenticado.
 - Listas privadas não são expostas pelos endpoints públicos.
+- Rankings públicos apresentam dados agregados, sem expor o histórico individual de outros usuários.
 - Credenciais, tokens e configurações privadas não devem ser publicados.
 - O arquivo `.env` deve permanecer fora do Git.
 
@@ -227,8 +274,8 @@ Não inclua `.venv`, `.env` ou dados privados nos arquivos compartilhados.
 
 ## Status
 
-**Backend em desenvolvimento — Sprint 05 concluída funcionalmente.**
+**Backend em desenvolvimento — Sprint 06 concluída funcionalmente.**
 
-O sistema já possui catálogo, usuários, autenticação, escutas, avaliações, reviews, biblioteca pessoal e listas musicais personalizadas.
+O sistema possui catálogo, usuários, autenticação, escutas, avaliações, reviews, biblioteca pessoal, listas musicais personalizadas e rankings de descoberta.
 
-Próximo objetivo: avançar nas funcionalidades sociais e na experiência de utilização, mantendo o escopo reduzido, os testes automatizados e a organização do código.
+Próximo objetivo: continuar a construção das funcionalidades sociais e da experiência de utilização, mantendo o escopo reduzido, os testes automatizados e a organização do código.
