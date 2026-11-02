@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from backend.app.catalogo import registrar_obra
+from backend.app.catalogo import obter_ou_registrar_obra_oficial
 from backend.app.models import Escuta, ObraOuvida
 from backend.app.schemas_interacoes import (
     MarcarOuvidaEntrada,
@@ -17,15 +17,11 @@ def obter_ou_criar_obra(
     sessao: Session,
     dados: ObraInteracao,
 ):
-    """Localiza ou cadastra a obra no catalogo."""
+    """Localiza ou cadastra uma obra usando metadados oficiais."""
 
-    return registrar_obra(
+    return obter_ou_registrar_obra_oficial(
         sessao=sessao,
         id_musicbrainz=dados.id_musicbrainz,
-        titulo=dados.titulo,
-        tipo=dados.tipo,
-        data_lancamento=dados.data_lancamento,
-        artista=dados.artista,
     )
 
 

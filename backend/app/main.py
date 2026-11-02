@@ -1,4 +1,3 @@
-
 import httpx
 
 from fastapi import Depends, FastAPI, HTTPException, Path, Query
@@ -34,6 +33,7 @@ from backend.app.descoberta import (
     listar_mais_ouvidas,
     listar_melhor_avaliadas,
 )
+from backend.app.erros_catalogo import configurar_erros_catalogo
 from backend.app.interacoes import (
     listar_escutas,
     listar_obras_ouvidas,
@@ -109,6 +109,8 @@ from backend.app.usuarios import (
 
 
 app = FastAPI(title="Lettermusic API")
+
+configurar_erros_catalogo(app)
 
 
 # -----------------------------------------
