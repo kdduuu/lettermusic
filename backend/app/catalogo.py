@@ -13,7 +13,7 @@ from backend.app.schemas_interacoes import ObraInteracao
 
 
 class IdentificadorMusicBrainzInvalido(Exception):
-    """O identificador recebido nao possui formato valido."""
+    """O identificador recebido nao e aceito pelo MusicBrainz."""
 
 
 class ObraNaoEncontradaNoMusicBrainz(Exception):
@@ -100,6 +100,27 @@ def obter_ou_registrar_obra_oficial(
     # A obra ainda nao existe localmente: consulta o MusicBrainz.
     try:
         dados = consultar_obra_por_id(identificador)
+
+    except httpx.HTTPStatusError as erro:
+        # Diferencia um MBID rejeitado de uma falha do servico.
+        if erro.response.status_code == 400:
+            try:
+                detalhes = erro.response.json()
+            except ValueError:
+                detalhes = {}
+
+            if (
+                isinstance(detalhes, dict)
+                and detalhes.get("error") == "Invalid mbid."
+            ):
+                raise IdentificadorMusicBrainzInvalido(
+                    "ID MusicBrainz invalido."
+                ) from erro
+
+        raise FalhaConsultaMusicBrainz(
+            "Nao foi possivel validar a obra no MusicBrainz."
+        ) from erro
+
     except (httpx.HTTPError, ValueError, TypeError) as erro:
         raise FalhaConsultaMusicBrainz(
             "Nao foi possivel validar a obra no MusicBrainz."

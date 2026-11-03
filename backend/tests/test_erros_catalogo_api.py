@@ -230,3 +230,54 @@ def test_api_ignora_metadados_inventados(ambiente):
         assert obra.artista == "Radiohead"
         assert obra.tipo == "Album"
         assert obra.data_lancamento == "1997-05-21"
+
+
+# -----------------------------------------
+# REGRESSAO - MUSICBRAINZ REJEITA O MBID
+# -----------------------------------------
+
+
+def test_musicbrainz_invalid_mbid_retorna_422(ambiente):
+    """Uma resposta 400 Invalid mbid nao deve virar erro 502."""
+
+    cliente, motor, headers = ambiente
+
+    identificador = "00000000-0000-0000-0000-000000000000"
+
+    pedido = httpx.Request(
+        "GET",
+        (
+            "https://musicbrainz.org/ws/2/release-group/"
+            f"{identificador}"
+        ),
+    )
+
+    resposta_musicbrainz = httpx.Response(
+        status_code=400,
+        json={"error": "Invalid mbid."},
+        request=pedido,
+    )
+
+    erro_musicbrainz = httpx.HTTPStatusError(
+        "MusicBrainz rejeitou o identificador.",
+        request=pedido,
+        response=resposta_musicbrainz,
+    )
+
+    with patch(
+        "backend.app.catalogo.consultar_obra_por_id",
+        side_effect=erro_musicbrainz,
+    ):
+        resposta = adicionar_favorito(
+            cliente,
+            headers,
+            identificador,
+        )
+
+    assert resposta.status_code == 422
+    assert resposta.json() == {
+        "detail": "ID MusicBrainz invalido."
+    }
+
+    with Session(motor) as sessao:
+        assert sessao.scalars(select(Obra)).all() == []
