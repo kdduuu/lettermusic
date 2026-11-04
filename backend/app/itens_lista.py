@@ -115,18 +115,20 @@ def adicionar_item_lista(
 
 
 def listar_itens_lista(
-    sessao: Session,
-    lista_id: int,
-    usuario_id: int | None = None,
+    sessao: Session, lista_id: int, usuario_id: int | None = None,
+    pagina: int = 1, por_pagina: int = 50,
 ) -> list[ItemLista]:
-    """Consulta itens se a lista for publica ou do usuario."""
-
+    """Lista uma pagina, sem alterar a logica completa de reordenacao."""
     lista = sessao.get(ListaMusical, lista_id)
-    if lista is None:
+    if lista is None or (not lista.publica and lista.usuario_id != usuario_id):
         raise ListaNaoEncontrada()
-    if not lista.publica and lista.usuario_id != usuario_id:
-        raise ListaNaoEncontrada()
-    return _itens_ordenados(sessao, lista_id)
+    consulta = (
+        select(ItemLista)
+        .where(ItemLista.lista_id == lista_id)
+        .order_by(ItemLista.posicao, ItemLista.id)
+        .offset((pagina - 1) * por_pagina).limit(por_pagina)
+    )
+    return list(sessao.scalars(consulta))
 
 
 def remover_item_lista(

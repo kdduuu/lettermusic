@@ -49,22 +49,13 @@ def criar_lista(
 # -----------------------------------------
 
 
-def listar_minhas_listas(
-    sessao: Session,
-    usuario_id: int,
-) -> list[ListaMusical]:
-    """Consulta as listas publicas e privadas do usuario."""
-
+def listar_minhas_listas(sessao: Session, usuario_id: int, pagina: int = 1, por_pagina: int = 50) -> list[ListaMusical]:
     consulta = (
         select(ListaMusical)
         .where(ListaMusical.usuario_id == usuario_id)
-        .order_by(
-            ListaMusical.criada_em.desc(),
-            ListaMusical.id.desc(),
-        )
-        .limit(50)
+        .order_by(ListaMusical.criada_em.desc(), ListaMusical.id.desc())
+        .offset((pagina - 1) * por_pagina).limit(por_pagina)
     )
-
     return list(sessao.scalars(consulta))
 
 

@@ -29,6 +29,7 @@ from backend.app.biblioteca import (
 )
 from backend.app.catalogo import listar_obras
 from backend.app.cors import configurar_cors
+from backend.app.consultas_frontend import enriquecer_com_obras
 from backend.app.database import obter_sessao
 from backend.app.descoberta import (
     listar_mais_ouvidas,
@@ -154,9 +155,11 @@ def buscar_obras(
 
 @app.get("/catalogo/obras")
 def consultar_catalogo(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=20, ge=1, le=100),
     sessao: Session = Depends(obter_sessao),
 ):
-    obras = listar_obras(sessao)
+    obras = listar_obras(sessao, pagina, por_pagina)
 
     return {
         "resultados": [
@@ -318,12 +321,13 @@ def marcar_como_ouvida(
     response_model=list[ObraOuvidaPublica],
 )
 def consultar_obras_ouvidas(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
 ):
-    return listar_obras_ouvidas(
-        sessao,
-        usuario.id,
+    return enriquecer_com_obras(
+        sessao, listar_obras_ouvidas(sessao, usuario.id, pagina, por_pagina)
     )
 
 
@@ -354,12 +358,13 @@ def criar_registro_escuta(
     response_model=list[EscutaPublica],
 )
 def consultar_historico_escutas(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
 ):
-    return listar_escutas(
-        sessao,
-        usuario.id,
+    return enriquecer_com_obras(
+        sessao, listar_escutas(sessao, usuario.id, pagina, por_pagina)
     )
 
 
@@ -397,12 +402,13 @@ def registrar_avaliacao(
     response_model=list[AvaliacaoPublica],
 )
 def consultar_minhas_avaliacoes(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
 ):
-    return listar_avaliacoes(
-        sessao,
-        usuario.id,
+    return enriquecer_com_obras(
+        sessao, listar_avaliacoes(sessao, usuario.id, pagina, por_pagina)
     )
 
 
@@ -486,12 +492,13 @@ def publicar_review(
     response_model=list[ReviewPublica],
 )
 def consultar_minhas_reviews(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
 ):
-    return listar_minhas_reviews(
-        sessao,
-        usuario.id,
+    return enriquecer_com_obras(
+        sessao, listar_minhas_reviews(sessao, usuario.id, pagina, por_pagina)
     )
 
 
@@ -500,13 +507,14 @@ def consultar_minhas_reviews(
     response_model=list[ReviewPublica],
 )
 def consultar_reviews_publicas(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     obra_id: int = Path(gt=0),
     sessao: Session = Depends(obter_sessao),
 ):
     try:
-        return listar_reviews_da_obra(
-            sessao,
-            obra_id,
+        return enriquecer_com_obras(
+            sessao, listar_reviews_da_obra(sessao, obra_id, pagina, por_pagina)
         )
 
     except ObraDeReviewNaoEncontrada:
@@ -600,12 +608,13 @@ def criar_favorito(
     tags=["Biblioteca Musical"],
 )
 def consultar_favoritos(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
 ):
-    return listar_favoritos(
-        sessao,
-        usuario.id,
+    return enriquecer_com_obras(
+        sessao, listar_favoritos(sessao, usuario.id, pagina, por_pagina)
     )
 
 
@@ -669,12 +678,13 @@ def criar_quero_ouvir(
     tags=["Biblioteca Musical"],
 )
 def consultar_quero_ouvir(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
 ):
-    return listar_quero_ouvir(
-        sessao,
-        usuario.id,
+    return enriquecer_com_obras(
+        sessao, listar_quero_ouvir(sessao, usuario.id, pagina, por_pagina)
     )
 
 
@@ -733,10 +743,12 @@ def publicar_nova_lista(
     tags=["Listas Musicais"],
 )
 def consultar_minhas_listas(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
 ):
-    return listar_minhas_listas(sessao, usuario.id)
+    return listar_minhas_listas(sessao, usuario.id, pagina, por_pagina)
 
 
 @app.get(
@@ -882,6 +894,8 @@ def adicionar_album_na_lista(
     tags=["Listas Musicais"],
 )
 def consultar_itens_da_minha_lista(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     lista_id: int = Path(gt=0),
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
@@ -893,10 +907,8 @@ def consultar_itens_da_minha_lista(
             lista_id,
         )
 
-        return listar_itens_lista(
-            sessao,
-            lista_id,
-            usuario.id,
+        return enriquecer_com_obras(
+            sessao, listar_itens_lista(sessao, lista_id, usuario.id, pagina, por_pagina)
         )
 
     except ListaNaoEncontrada:
@@ -912,13 +924,14 @@ def consultar_itens_da_minha_lista(
     tags=["Listas Musicais"],
 )
 def consultar_itens_publicos(
+    pagina: int = Query(default=1, ge=1),
+    por_pagina: int = Query(default=50, ge=1, le=100),
     lista_id: int = Path(gt=0),
     sessao: Session = Depends(obter_sessao),
 ):
     try:
-        return listar_itens_lista(
-            sessao,
-            lista_id,
+        return enriquecer_com_obras(
+            sessao, listar_itens_lista(sessao, lista_id, pagina=pagina, por_pagina=por_pagina)
         )
 
     except ListaNaoEncontrada:

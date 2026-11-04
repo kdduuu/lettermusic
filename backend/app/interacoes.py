@@ -94,27 +94,21 @@ def registrar_escuta(
         raise
 
 
-def listar_obras_ouvidas(sessao: Session, usuario_id: int) -> list[ObraOuvida]:
+def listar_obras_ouvidas(sessao: Session, usuario_id: int, pagina: int = 1, por_pagina: int = 50) -> list[ObraOuvida]:
     consulta = (
         select(ObraOuvida)
         .where(ObraOuvida.usuario_id == usuario_id)
-        .order_by(
-            ObraOuvida.marcada_em.desc(),
-            ObraOuvida.id.desc(),
-        )
-        .limit(50)
+        .order_by(ObraOuvida.marcada_em.desc(), ObraOuvida.id.desc())
+        .offset((pagina - 1) * por_pagina).limit(por_pagina)
     )
     return list(sessao.scalars(consulta))
 
 
-def listar_escutas(sessao: Session, usuario_id: int) -> list[Escuta]:
+def listar_escutas(sessao: Session, usuario_id: int, pagina: int = 1, por_pagina: int = 50) -> list[Escuta]:
     consulta = (
         select(Escuta)
         .where(Escuta.usuario_id == usuario_id)
-        .order_by(
-            Escuta.ouvida_em.desc(),
-            Escuta.id.desc(),
-        )
-        .limit(50)
+        .order_by(Escuta.ouvida_em.desc(), Escuta.id.desc())
+        .offset((pagina - 1) * por_pagina).limit(por_pagina)
     )
     return list(sessao.scalars(consulta))

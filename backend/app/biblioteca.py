@@ -75,23 +75,14 @@ def _adicionar(
         raise
 
 
-def _listar(
-    sessao: Session,
-    usuario_id: int,
-    modelo,
-):
-    """Lista as ultimas 50 obras de uma colecao."""
-
+def _listar(sessao: Session, usuario_id: int, modelo, pagina: int = 1, por_pagina: int = 50):
+    """Lista uma pagina da colecao pessoal, na ordem mais recente."""
     consulta = (
         select(modelo)
         .where(modelo.usuario_id == usuario_id)
-        .order_by(
-            modelo.adicionado_em.desc(),
-            modelo.id.desc(),
-        )
-        .limit(50)
+        .order_by(modelo.adicionado_em.desc(), modelo.id.desc())
+        .offset((pagina - 1) * por_pagina).limit(por_pagina)
     )
-
     return list(sessao.scalars(consulta))
 
 
@@ -137,11 +128,8 @@ def adicionar_favorito(
     )
 
 
-def listar_favoritos(
-    sessao: Session,
-    usuario_id: int,
-) -> list[Favorito]:
-    return _listar(sessao, usuario_id, Favorito)
+def listar_favoritos(sessao: Session, usuario_id: int, pagina: int = 1, por_pagina: int = 50) -> list[Favorito]:
+    return _listar(sessao, usuario_id, Favorito, pagina, por_pagina)
 
 
 def remover_favorito(
@@ -167,11 +155,8 @@ def adicionar_quero_ouvir(
     )
 
 
-def listar_quero_ouvir(
-    sessao: Session,
-    usuario_id: int,
-) -> list[QueroOuvir]:
-    return _listar(sessao, usuario_id, QueroOuvir)
+def listar_quero_ouvir(sessao: Session, usuario_id: int, pagina: int = 1, por_pagina: int = 50) -> list[QueroOuvir]:
+    return _listar(sessao, usuario_id, QueroOuvir, pagina, por_pagina)
 
 
 def remover_quero_ouvir(

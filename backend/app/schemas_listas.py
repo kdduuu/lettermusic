@@ -109,6 +109,11 @@ class ItemListaPublico(BaseModel):
     obra_id: int
     posicao: int
     adicionado_em: datetime
+    id_musicbrainz: str | None = None
+    titulo: str | None = None
+    artista: str | None = None
+    tipo: str | None = None
+    data_lancamento: str | None = None
 
 
 # -----------------------------------------

@@ -54,6 +54,11 @@ class ObraOuvidaPublica(BaseModel):
     id: int
     obra_id: int
     marcada_em: datetime
+    id_musicbrainz: str | None = None
+    titulo: str | None = None
+    artista: str | None = None
+    tipo: str | None = None
+    data_lancamento: str | None = None
 
 
 class EscutaPublica(BaseModel):
@@ -63,6 +68,11 @@ class EscutaPublica(BaseModel):
     obra_id: int
     ouvida_em: datetime
     registrada_em: datetime
+    id_musicbrainz: str | None = None
+    titulo: str | None = None
+    artista: str | None = None
+    tipo: str | None = None
+    data_lancamento: str | None = None
 
 
 # -----------------------------------------
@@ -93,6 +103,11 @@ class AvaliacaoPublica(BaseModel):
     nota: float
     criada_em: datetime
     atualizada_em: datetime | None
+    id_musicbrainz: str | None = None
+    titulo: str | None = None
+    artista: str | None = None
+    tipo: str | None = None
+    data_lancamento: str | None = None
 
 
 class AvaliacaoMediaPublica(BaseModel):
@@ -135,6 +150,11 @@ class ReviewPublica(BaseModel):
     texto: str
     criada_em: datetime
     atualizada_em: datetime | None
+    id_musicbrainz: str | None = None
+    titulo: str | None = None
+    artista: str | None = None
+    tipo: str | None = None
+    data_lancamento: str | None = None
 
 
 # -----------------------------------------
@@ -156,3 +176,8 @@ class ItemBibliotecaPublico(BaseModel):
     id: int
     obra_id: int
     adicionado_em: datetime
+    id_musicbrainz: str | None = None
+    titulo: str | None = None
+    artista: str | None = None
+    tipo: str | None = None
+    data_lancamento: str | None = None

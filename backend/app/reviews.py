@@ -140,25 +140,24 @@ def excluir_review(
         raise
 
 
-def listar_minhas_reviews(sessao: Session, usuario_id: int) -> list[Review]:
+def listar_minhas_reviews(sessao: Session, usuario_id: int, pagina: int = 1, por_pagina: int = 50) -> list[Review]:
     consulta = (
         select(Review)
         .where(Review.usuario_id == usuario_id)
         .order_by(Review.criada_em.desc(), Review.id.desc())
-        .limit(50)
+        .offset((pagina - 1) * por_pagina).limit(por_pagina)
     )
     return list(sessao.scalars(consulta))
 
 
-def listar_reviews_da_obra(sessao: Session, obra_id: int) -> list[Review]:
+def listar_reviews_da_obra(sessao: Session, obra_id: int, pagina: int = 1, por_pagina: int = 50) -> list[Review]:
     obra = sessao.get(Obra, obra_id)
     if obra is None:
         raise ObraDeReviewNaoEncontrada()
-
     consulta = (
         select(Review)
         .where(Review.obra_id == obra_id)
         .order_by(Review.criada_em.desc(), Review.id.desc())
-        .limit(50)
+        .offset((pagina - 1) * por_pagina).limit(por_pagina)
     )
     return list(sessao.scalars(consulta))

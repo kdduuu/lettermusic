@@ -148,25 +148,14 @@ def editar_avaliacao(
         raise
 
 
-def listar_avaliacoes(
-    sessao: Session,
-    usuario_id: int,
-) -> list[AvaliacaoPublica]:
-    """Consulta as ultimas 50 avaliacoes do usuario."""
-
+def listar_avaliacoes(sessao: Session, usuario_id: int, pagina: int = 1, por_pagina: int = 50) -> list[AvaliacaoPublica]:
     consulta = (
         select(Avaliacao)
         .where(Avaliacao.usuario_id == usuario_id)
         .order_by(Avaliacao.id.desc())
-        .limit(50)
+        .offset((pagina - 1) * por_pagina).limit(por_pagina)
     )
-
-    avaliacoes = sessao.scalars(consulta).all()
-
-    return [
-        formatar_avaliacao(avaliacao)
-        for avaliacao in avaliacoes
-    ]
+    return [formatar_avaliacao(item) for item in sessao.scalars(consulta)]
 
 
 def calcular_media_avaliacoes(

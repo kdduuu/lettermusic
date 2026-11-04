@@ -140,6 +140,9 @@ def obter_ou_registrar_obra_oficial(
     )
 
 
-def listar_obras(sessao: Session) -> list[Obra]:
-    consulta = select(Obra).order_by(Obra.id).limit(20)
+def listar_obras(sessao: Session, pagina: int = 1, por_pagina: int = 20) -> list[Obra]:
+    consulta = (
+        select(Obra).order_by(Obra.id)
+        .offset((pagina - 1) * por_pagina).limit(por_pagina)
+    )
     return list(sessao.scalars(consulta))
