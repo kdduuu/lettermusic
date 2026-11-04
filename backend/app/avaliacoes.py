@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 
 from sqlalchemy import func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from backend.app.interacoes import (
@@ -46,15 +47,18 @@ def criar_avaliacao(
     usuario_id: int,
     dados: AvaliacaoCriarEntrada,
 ) -> AvaliacaoPublica:
-    """Cria uma avaliacao e registra a primeira escuta."""
+    """Cria uma avaliacao e registra uma escuta."""
+
+    obra_id = None
 
     try:
         obra = obter_ou_criar_obra(sessao, dados.obra)
+        obra_id = obra.id
 
         existente = sessao.scalar(
             select(Avaliacao.id).where(
                 Avaliacao.usuario_id == usuario_id,
-                Avaliacao.obra_id == obra.id,
+                Avaliacao.obra_id == obra_id,
             )
         )
 
@@ -63,7 +67,7 @@ def criar_avaliacao(
 
         avaliacao = Avaliacao(
             usuario_id=usuario_id,
-            obra_id=obra.id,
+            obra_id=obra_id,
             nota_passos=int(dados.nota * 2),
         )
 
@@ -72,12 +76,12 @@ def criar_avaliacao(
         garantir_obra_ouvida(
             sessao,
             usuario_id,
-            obra.id,
+            obra_id,
         )
 
         escuta = Escuta(
             usuario_id=usuario_id,
-            obra_id=obra.id,
+            obra_id=obra_id,
             ouvida_em=datetime.now(timezone.utc),
         )
 
@@ -87,6 +91,25 @@ def criar_avaliacao(
         sessao.refresh(avaliacao)
 
         return formatar_avaliacao(avaliacao)
+
+    except IntegrityError as erro:
+        # A transacao falhou: desfaz todas as operacoes.
+        sessao.rollback()
+
+        # Verifica se outra requisicao criou a avaliacao.
+        if obra_id is not None:
+            duplicada = sessao.scalar(
+                select(Avaliacao.id).where(
+                    Avaliacao.usuario_id == usuario_id,
+                    Avaliacao.obra_id == obra_id,
+                )
+            )
+
+            if duplicada is not None:
+                raise AvaliacaoJaExiste() from erro
+
+        # Outros erros de integridade nao sao duplicidades.
+        raise
 
     except Exception:
         sessao.rollback()

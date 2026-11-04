@@ -1,14 +1,11 @@
-
 from datetime import datetime, timezone
 
 from sqlalchemy import func, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from backend.app.interacoes import obter_ou_criar_obra
-from backend.app.listas import (
-    ListaNaoEncontrada,
-    obter_lista_do_dono,
-)
+from backend.app.listas import ListaNaoEncontrada
 from backend.app.models import ItemLista, ListaMusical
 from backend.app.schemas_interacoes import ObraInteracao
 
@@ -25,27 +22,36 @@ class PosicaoInvalida(Exception):
     """A posicao solicitada nao existe na lista."""
 
 
-def _itens_ordenados(
+def _obter_lista_bloqueada(
     sessao: Session,
+    usuario_id: int,
     lista_id: int,
-) -> list[ItemLista]:
+) -> ListaMusical:
+    """Protege a ordem da lista contra atualizacoes simultaneas no PostgreSQL."""
+
+    consulta = (
+        select(ListaMusical)
+        .where(
+            ListaMusical.id == lista_id,
+            ListaMusical.usuario_id == usuario_id,
+        )
+        .with_for_update()
+    )
+    lista = sessao.scalar(consulta)
+    if lista is None:
+        raise ListaNaoEncontrada()
+    return lista
+
+
+def _itens_ordenados(sessao: Session, lista_id: int) -> list[ItemLista]:
     """Busca os itens na ordem definida pelo usuario."""
 
     consulta = (
         select(ItemLista)
         .where(ItemLista.lista_id == lista_id)
-        .order_by(
-            ItemLista.posicao,
-            ItemLista.id,
-        )
+        .order_by(ItemLista.posicao, ItemLista.id)
     )
-
     return list(sessao.scalars(consulta))
-
-
-# -----------------------------------------
-# ADICIONAR
-# -----------------------------------------
 
 
 def adicionar_item_lista(
@@ -56,55 +62,56 @@ def adicionar_item_lista(
 ) -> ItemLista:
     """Adiciona uma obra ao final da lista."""
 
-    try:
-        lista = obter_lista_do_dono(
-            sessao,
-            usuario_id,
-            lista_id,
-        )
+    obra_id = None
 
+    try:
+        lista = _obter_lista_bloqueada(sessao, usuario_id, lista_id)
         obra = obter_ou_criar_obra(sessao, dados)
+        obra_id = obra.id
 
         existente = sessao.scalar(
             select(ItemLista.id).where(
                 ItemLista.lista_id == lista_id,
-                ItemLista.obra_id == obra.id,
+                ItemLista.obra_id == obra_id,
             )
         )
-
         if existente is not None:
             raise ItemJaExisteNaLista()
 
         ultima_posicao = sessao.scalar(
-            select(func.max(ItemLista.posicao))
-            .where(ItemLista.lista_id == lista_id)
+            select(func.max(ItemLista.posicao)).where(
+                ItemLista.lista_id == lista_id
+            )
         )
-
-        proxima_posicao = (ultima_posicao or 0) + 1
 
         item = ItemLista(
             lista_id=lista_id,
-            obra_id=obra.id,
-            posicao=proxima_posicao,
+            obra_id=obra_id,
+            posicao=(ultima_posicao or 0) + 1,
         )
-
         sessao.add(item)
-
         lista.atualizada_em = datetime.now(timezone.utc)
-
         sessao.commit()
         sessao.refresh(item)
-
         return item
+
+    except IntegrityError as erro:
+        sessao.rollback()
+
+        if obra_id is not None:
+            duplicado = sessao.scalar(
+                select(ItemLista.id).where(
+                    ItemLista.lista_id == lista_id,
+                    ItemLista.obra_id == obra_id,
+                )
+            )
+            if duplicado is not None:
+                raise ItemJaExisteNaLista() from erro
+        raise
 
     except Exception:
         sessao.rollback()
         raise
-
-
-# -----------------------------------------
-# CONSULTAR
-# -----------------------------------------
 
 
 def listar_itens_lista(
@@ -115,19 +122,11 @@ def listar_itens_lista(
     """Consulta itens se a lista for publica ou do usuario."""
 
     lista = sessao.get(ListaMusical, lista_id)
-
     if lista is None:
         raise ListaNaoEncontrada()
-
     if not lista.publica and lista.usuario_id != usuario_id:
         raise ListaNaoEncontrada()
-
     return _itens_ordenados(sessao, lista_id)
-
-
-# -----------------------------------------
-# REMOVER
-# -----------------------------------------
 
 
 def remover_item_lista(
@@ -139,47 +138,25 @@ def remover_item_lista(
     """Remove uma obra e reorganiza as posicoes."""
 
     try:
-        lista = obter_lista_do_dono(
-            sessao,
-            usuario_id,
-            lista_id,
-        )
-
+        lista = _obter_lista_bloqueada(sessao, usuario_id, lista_id)
         itens = _itens_ordenados(sessao, lista_id)
-
         item_remover = next(
-            (
-                item for item in itens
-                if item.obra_id == obra_id
-            ),
+            (item for item in itens if item.obra_id == obra_id),
             None,
         )
-
         if item_remover is None:
             raise ItemNaoEncontradoNaLista()
 
         sessao.delete(item_remover)
-
-        restantes = [
-            item for item in itens
-            if item.id != item_remover.id
-        ]
-
+        restantes = [item for item in itens if item.id != item_remover.id]
         for posicao, item in enumerate(restantes, start=1):
             item.posicao = posicao
 
         lista.atualizada_em = datetime.now(timezone.utc)
-
         sessao.commit()
-
     except Exception:
         sessao.rollback()
         raise
-
-
-# -----------------------------------------
-# REORDENAR
-# -----------------------------------------
 
 
 def mover_item_lista(
@@ -192,42 +169,26 @@ def mover_item_lista(
     """Move um album e reorganiza os demais."""
 
     try:
-        lista = obter_lista_do_dono(
-            sessao,
-            usuario_id,
-            lista_id,
-        )
-
+        lista = _obter_lista_bloqueada(sessao, usuario_id, lista_id)
         itens = _itens_ordenados(sessao, lista_id)
-
         item_mover = next(
-            (
-                item for item in itens
-                if item.obra_id == obra_id
-            ),
+            (item for item in itens if item.obra_id == obra_id),
             None,
         )
-
         if item_mover is None:
             raise ItemNaoEncontradoNaLista()
-
         if not 1 <= nova_posicao <= len(itens):
             raise PosicaoInvalida()
 
         itens.remove(item_mover)
-
         itens.insert(nova_posicao - 1, item_mover)
-
         for posicao, item in enumerate(itens, start=1):
             item.posicao = posicao
 
         lista.atualizada_em = datetime.now(timezone.utc)
-
         sessao.commit()
         sessao.refresh(item_mover)
-
         return item_mover
-
     except Exception:
         sessao.rollback()
         raise

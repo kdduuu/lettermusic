@@ -1,4 +1,3 @@
-
 from uuid import UUID
 
 import httpx
@@ -9,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.models import Obra
 from backend.app.musicbrainz import consultar_obra_por_id
+from backend.app.persistencia import inserir_se_ausente
 from backend.app.schemas_interacoes import ObraInteracao
 
 
@@ -35,9 +35,7 @@ def registrar_obra(
     """Insere ou localiza a obra, sem confirmar a transacao."""
 
     obra = sessao.scalar(
-        select(Obra).where(
-            Obra.id_musicbrainz == id_musicbrainz
-        )
+        select(Obra).where(Obra.id_musicbrainz == id_musicbrainz)
     )
 
     if obra is not None:
@@ -48,18 +46,24 @@ def registrar_obra(
 
         return obra
 
-    obra = Obra(
-        id_musicbrainz=id_musicbrainz,
-        titulo=titulo,
-        artista=artista,
-        tipo=tipo,
-        data_lancamento=data_lancamento,
+    # O banco resolve a disputa por MBID de forma atomica.
+    # Isso preserva o rollback do cadastro quando a operacao principal falha.
+    inserir_se_ausente(
+        sessao,
+        Obra,
+        valores={
+            "id_musicbrainz": id_musicbrainz,
+            "titulo": titulo,
+            "artista": artista,
+            "tipo": tipo,
+            "data_lancamento": data_lancamento,
+        },
+        colunas_unicas=[Obra.id_musicbrainz],
     )
 
-    sessao.add(obra)
-    sessao.flush()
-
-    return obra
+    return sessao.scalar(
+        select(Obra).where(Obra.id_musicbrainz == id_musicbrainz)
+    )
 
 
 def obter_ou_registrar_obra_oficial(
@@ -68,17 +72,13 @@ def obter_ou_registrar_obra_oficial(
 ) -> Obra:
     """Reutiliza uma obra existente ou consulta sua origem oficial."""
 
-    # Primeiro consulta o banco, sem depender da internet.
     obra = sessao.scalar(
-        select(Obra).where(
-            Obra.id_musicbrainz == id_musicbrainz
-        )
+        select(Obra).where(Obra.id_musicbrainz == id_musicbrainz)
     )
 
     if obra is not None:
         return obra
 
-    # Valida e normaliza o identificador recebido.
     try:
         identificador = str(UUID(id_musicbrainz))
     except (ValueError, TypeError, AttributeError) as erro:
@@ -86,23 +86,16 @@ def obter_ou_registrar_obra_oficial(
             "ID MusicBrainz invalido."
         ) from erro
 
-    # Evita cadastrar novamente um ID ja normalizado.
     if identificador != id_musicbrainz:
         obra = sessao.scalar(
-            select(Obra).where(
-                Obra.id_musicbrainz == identificador
-            )
+            select(Obra).where(Obra.id_musicbrainz == identificador)
         )
-
         if obra is not None:
             return obra
 
-    # A obra ainda nao existe localmente: consulta o MusicBrainz.
     try:
         dados = consultar_obra_por_id(identificador)
-
     except httpx.HTTPStatusError as erro:
-        # Diferencia um MBID rejeitado de uma falha do servico.
         if erro.response.status_code == 400:
             try:
                 detalhes = erro.response.json()
@@ -120,7 +113,6 @@ def obter_ou_registrar_obra_oficial(
         raise FalhaConsultaMusicBrainz(
             "Nao foi possivel validar a obra no MusicBrainz."
         ) from erro
-
     except (httpx.HTTPError, ValueError, TypeError) as erro:
         raise FalhaConsultaMusicBrainz(
             "Nao foi possivel validar a obra no MusicBrainz."
@@ -131,7 +123,6 @@ def obter_ou_registrar_obra_oficial(
             "Obra nao encontrada no MusicBrainz."
         )
 
-    # Confere os tipos e tamanhos antes de salvar no banco.
     try:
         metadados = ObraInteracao.model_validate(dados)
     except ValidationError as erro:
@@ -139,7 +130,6 @@ def obter_ou_registrar_obra_oficial(
             "O MusicBrainz retornou metadados invalidos."
         ) from erro
 
-    # Somente dados oficiais sao utilizados no novo cadastro.
     return registrar_obra(
         sessao=sessao,
         id_musicbrainz=metadados.id_musicbrainz,
@@ -151,10 +141,5 @@ def obter_ou_registrar_obra_oficial(
 
 
 def listar_obras(sessao: Session) -> list[Obra]:
-    consulta = (
-        select(Obra)
-        .order_by(Obra.id)
-        .limit(20)
-    )
-
+    consulta = select(Obra).order_by(Obra.id).limit(20)
     return list(sessao.scalars(consulta))

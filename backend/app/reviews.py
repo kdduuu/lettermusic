@@ -1,7 +1,7 @@
-
 from datetime import datetime, timezone
 
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from backend.app.interacoes import (
@@ -34,45 +34,54 @@ def criar_review(
 ) -> Review:
     """Publica uma review e registra uma escuta."""
 
+    obra_id = None
+
     try:
         obra = obter_ou_criar_obra(sessao, dados.obra)
+        obra_id = obra.id
 
         existente = sessao.scalar(
             select(Review.id).where(
                 Review.usuario_id == usuario_id,
-                Review.obra_id == obra.id,
+                Review.obra_id == obra_id,
             )
         )
-
         if existente is not None:
             raise ReviewJaExiste()
 
         review = Review(
             usuario_id=usuario_id,
-            obra_id=obra.id,
+            obra_id=obra_id,
             texto=dados.texto,
         )
-
         sessao.add(review)
 
-        garantir_obra_ouvida(
-            sessao,
-            usuario_id,
-            obra.id,
+        garantir_obra_ouvida(sessao, usuario_id, obra_id)
+        sessao.add(
+            Escuta(
+                usuario_id=usuario_id,
+                obra_id=obra_id,
+                ouvida_em=datetime.now(timezone.utc),
+            )
         )
-
-        escuta = Escuta(
-            usuario_id=usuario_id,
-            obra_id=obra.id,
-            ouvida_em=datetime.now(timezone.utc),
-        )
-
-        sessao.add(escuta)
 
         sessao.commit()
         sessao.refresh(review)
-
         return review
+
+    except IntegrityError as erro:
+        sessao.rollback()
+
+        if obra_id is not None:
+            duplicada = sessao.scalar(
+                select(Review.id).where(
+                    Review.usuario_id == usuario_id,
+                    Review.obra_id == obra_id,
+                )
+            )
+            if duplicada is not None:
+                raise ReviewJaExiste() from erro
+        raise
 
     except Exception:
         sessao.rollback()
@@ -94,18 +103,14 @@ def editar_review(
                 Review.obra_id == obra_id,
             )
         )
-
         if review is None:
             raise ReviewNaoEncontrada()
 
         review.texto = dados.texto
         review.atualizada_em = datetime.now(timezone.utc)
-
         sessao.commit()
         sessao.refresh(review)
-
         return review
-
     except Exception:
         sessao.rollback()
         raise
@@ -125,42 +130,28 @@ def excluir_review(
                 Review.obra_id == obra_id,
             )
         )
-
         if review is None:
             raise ReviewNaoEncontrada()
 
         sessao.delete(review)
         sessao.commit()
-
     except Exception:
         sessao.rollback()
         raise
 
 
-def listar_minhas_reviews(
-    sessao: Session,
-    usuario_id: int,
-) -> list[Review]:
-    """Consulta as ultimas 50 reviews do usuario."""
-
+def listar_minhas_reviews(sessao: Session, usuario_id: int) -> list[Review]:
     consulta = (
         select(Review)
         .where(Review.usuario_id == usuario_id)
         .order_by(Review.criada_em.desc(), Review.id.desc())
         .limit(50)
     )
-
     return list(sessao.scalars(consulta))
 
 
-def listar_reviews_da_obra(
-    sessao: Session,
-    obra_id: int,
-) -> list[Review]:
-    """Consulta as ultimas 50 reviews publicas de uma obra."""
-
+def listar_reviews_da_obra(sessao: Session, obra_id: int) -> list[Review]:
     obra = sessao.get(Obra, obra_id)
-
     if obra is None:
         raise ObraDeReviewNaoEncontrada()
 
@@ -170,5 +161,4 @@ def listar_reviews_da_obra(
         .order_by(Review.criada_em.desc(), Review.id.desc())
         .limit(50)
     )
-
     return list(sessao.scalars(consulta))

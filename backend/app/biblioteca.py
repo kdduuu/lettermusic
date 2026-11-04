@@ -1,5 +1,6 @@
 
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from backend.app.interacoes import obter_ou_criar_obra
@@ -23,13 +24,16 @@ def _adicionar(
 ):
     """Adiciona uma obra a uma colecao pessoal."""
 
+    obra_id = None
+
     try:
         obra = obter_ou_criar_obra(sessao, dados)
+        obra_id = obra.id
 
         existente = sessao.scalar(
             select(modelo.id).where(
                 modelo.usuario_id == usuario_id,
-                modelo.obra_id == obra.id,
+                modelo.obra_id == obra_id,
             )
         )
 
@@ -38,7 +42,7 @@ def _adicionar(
 
         registro = modelo(
             usuario_id=usuario_id,
-            obra_id=obra.id,
+            obra_id=obra_id,
         )
 
         sessao.add(registro)
@@ -46,6 +50,25 @@ def _adicionar(
         sessao.refresh(registro)
 
         return registro
+
+    except IntegrityError as erro:
+        # Desfaz a transacao que falhou.
+        sessao.rollback()
+
+        # Verifica se outra requisicao cadastrou o mesmo item.
+        if obra_id is not None:
+            duplicado = sessao.scalar(
+                select(modelo.id).where(
+                    modelo.usuario_id == usuario_id,
+                    modelo.obra_id == obra_id,
+                )
+            )
+
+            if duplicado is not None:
+                raise ItemJaExiste() from erro
+
+        # Nao confunde outros erros do banco com duplicidade.
+        raise
 
     except Exception:
         sessao.rollback()
