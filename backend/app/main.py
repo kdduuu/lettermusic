@@ -28,6 +28,7 @@ from backend.app.biblioteca import (
     remover_quero_ouvir,
 )
 from backend.app.catalogo import listar_obras
+from backend.app.cors import configurar_cors
 from backend.app.database import obter_sessao
 from backend.app.descoberta import (
     listar_mais_ouvidas,
@@ -109,6 +110,8 @@ from backend.app.usuarios import (
 
 
 app = FastAPI(title="Lettermusic API")
+
+configurar_cors(app)
 
 configurar_erros_catalogo(app)
 

@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from backend.app.models import Obra
 from backend.app.musicbrainz import consultar_obra_por_id
 from backend.app.persistencia import inserir_se_ausente
-from backend.app.schemas_interacoes import ObraInteracao
+from backend.app.schemas_interacoes import MetadadosObraOficial
 
 
 class IdentificadorMusicBrainzInvalido(Exception):
@@ -124,7 +124,7 @@ def obter_ou_registrar_obra_oficial(
         )
 
     try:
-        metadados = ObraInteracao.model_validate(dados)
+        metadados = MetadadosObraOficial.model_validate(dados)
     except ValidationError as erro:
         raise FalhaConsultaMusicBrainz(
             "O MusicBrainz retornou metadados invalidos."

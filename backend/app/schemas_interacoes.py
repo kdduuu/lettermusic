@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from decimal import Decimal
 
@@ -17,6 +16,22 @@ from pydantic import (
 
 
 class ObraInteracao(BaseModel):
+    """Contrato publico: o cliente identifica a obra, sem fornecer metadados."""
+
+    # Aceita os campos antigos, mas os descarta: titulo e artista sempre
+    # sao consultados no MusicBrainz ao cadastrar uma obra nova.
+    model_config = ConfigDict(extra="ignore")
+
+    id_musicbrainz: str = Field(
+        min_length=1,
+        max_length=36,
+        description="ID do release-group no MusicBrainz.",
+    )
+
+
+class MetadadosObraOficial(BaseModel):
+    """Contrato interno da resposta oficial do MusicBrainz (nao do cliente)."""
+
     id_musicbrainz: str = Field(min_length=1, max_length=36)
     titulo: str = Field(min_length=1, max_length=255)
     artista: str | None = Field(default=None, max_length=255)
