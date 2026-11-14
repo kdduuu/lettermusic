@@ -113,3 +113,35 @@ export async function detalharAlbum(idMusicBrainz: string): Promise<ResultadoDet
     };
   }
 }
+
+export async function obterCapaAlbum(idMusicBrainz: string): Promise<string | null> {
+  const idValido = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!idValido.test(idMusicBrainz)) return null;
+
+  try {
+    const resposta = await fetch(
+      `${urlBackend()}/catalogo/musicbrainz/${encodeURIComponent(idMusicBrainz)}/capa`,
+      { cache: "no-store", signal: AbortSignal.timeout(10_000) },
+    );
+    if (!resposta.ok) return null;
+
+    const dados: unknown = await resposta.json();
+    if (!objeto(dados) || typeof dados.url !== "string") return null;
+
+    // A URL deve ter sido construída pelo nosso back-end, no domínio esperado.
+    const url = new URL(dados.url);
+    if (
+      url.protocol !== "https:" ||
+      url.hostname !== "coverartarchive.org" ||
+      url.pathname !== `/release-group/${idMusicBrainz.toLowerCase()}/front-500` ||
+      url.search !== "" ||
+      url.hash !== ""
+    ) {
+      return null;
+    }
+    return url.toString();
+  } catch {
+    // Capa é opcional: falha externa não impede a visualização do álbum.
+    return null;
+  }
+}

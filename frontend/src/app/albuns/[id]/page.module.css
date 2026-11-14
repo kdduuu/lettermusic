@@ -21,6 +21,8 @@
 }
 
 .cover {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   aspect-ratio: 1;
   border-radius: 10px;
@@ -30,6 +32,8 @@
   place-items: center;
   font-size: 56px;
 }
+
+.cover img { object-fit: cover; }
 
 .accent {
   display: block;

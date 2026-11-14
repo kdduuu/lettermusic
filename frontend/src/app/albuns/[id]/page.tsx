@@ -1,9 +1,15 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { detalharAlbum } from "@/lib/catalogo";
+import { CapaAlbum } from "@/components/capa-album";
+import { detalharAlbum, obterCapaAlbum } from "@/lib/catalogo";
 import styles from "./page.module.css";
 
 type ParametrosAlbum = Promise<{ id: string }>;
+
+async function CapaDaObra({ id, titulo }: { id: string; titulo: string }) {
+  const url = await obterCapaAlbum(id);
+  return <CapaAlbum key={id} url={url} titulo={titulo} className={styles.cover} />;
+}
 
 async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
   const { id } = await params;
@@ -16,7 +22,9 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
   const { obra } = resultado;
   return (
     <article className={styles.album}>
-      <div className={styles.cover} aria-label="Capa ainda não disponível">♪</div>
+      <Suspense fallback={<div className={styles.cover} aria-label="Carregando capa">♪</div>}>
+        <CapaDaObra id={id} titulo={obra.titulo ?? "Álbum"} />
+      </Suspense>
       <div className={styles.info}>
         <span className={styles.accent} aria-hidden="true" />
         <h1>{obra.titulo}</h1>
