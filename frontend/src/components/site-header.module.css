@@ -1,0 +1,133 @@
+.header {
+  background: #171717;
+  color: #fff;
+}
+
+.inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand span {
+  color: #ed2436;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 30px);
+  flex: 1;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+
+.nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav span {
+  color: #9e9e9e;
+  cursor: default;
+}
+
+.search {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: min(100%, 320px);
+}
+
+.search input {
+  font: inherit;
+  min-width: 0;
+  flex: 1;
+  border-radius: 8px;
+  border: 1px solid #414141;
+  padding: 11px 13px;
+  color: #fff;
+  background: #2e2e2e;
+}
+
+.search input::placeholder {
+  color: #c2c2c2;
+}
+
+.search button {
+  font: inherit;
+  color: #fff;
+  background: #2e2e2e;
+  border: 1px solid #414141;
+  border-radius: 8px;
+  padding: 11px 14px;
+  cursor: pointer;
+}
+
+.heroSearch {
+  width: min(100%, 560px);
+  margin-top: 28px;
+}
+
+.heroSearch input {
+  background: #fff;
+  border-color: #d7d4d2;
+  color: #171717;
+}
+
+.heroSearch input::placeholder {
+  color: #777;
+}
+
+.heroSearch button {
+  background: #171717;
+  border-color: #171717;
+  color: #fff;
+}
+
+.search input:focus-visible,
+.search button:focus-visible,
+.nav a:focus-visible,
+.brand:focus-visible {
+  outline: 2px solid #e7283b;
+  outline-offset: 2px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 980px) {
+  .inner { gap: 18px; }
+  .nav { order: 3; width: 100%; flex-basis: 100%; }
+  .search { margin-left: auto; }
+}
+
+@media (max-width: 600px) {
+  .inner { padding: 16px; }
+  .brand { font-size: 24px; }
+  .search { width: 100%; }
+  .nav { font-size: 12px; }
+}
