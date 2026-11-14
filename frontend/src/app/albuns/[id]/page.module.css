@@ -1,0 +1,56 @@
+.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 54px 28px 96px;
+}
+
+.back {
+  display: inline-block;
+  color: #666;
+  text-decoration: none;
+  margin-bottom: 34px;
+}
+
+.back:hover { text-decoration: underline; }
+
+.album {
+  display: grid;
+  grid-template-columns: minmax(200px, 340px) 1fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.cover {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: #e8e5e2;
+  color: #888;
+  display: grid;
+  place-items: center;
+  font-size: 56px;
+}
+
+.accent {
+  display: block;
+  width: 44px;
+  height: 3px;
+  background: #e72234;
+  margin-bottom: 20px;
+}
+
+.info h1 {
+  font: bold clamp(40px, 6vw, 68px)/1.08 Georgia, "Times New Roman", serif;
+  letter-spacing: -1.5px;
+  margin: 0 0 14px;
+}
+
+.artist { font-size: 24px; margin: 0 0 16px; }
+.meta { color: #666; font-size: 16px; margin: 0; }
+.message { padding-top: 32px; color: #666; }
+
+@media (max-width: 700px) {
+  .container { padding: 32px 16px 64px; }
+  .album { grid-template-columns: 1fr; gap: 28px; }
+  .cover { max-width: 340px; }
+}

@@ -101,3 +101,13 @@
   .resultItem h3 { font-size: 18px; }
   .type { display: none; }
 }
+
+.resultLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.resultLink:hover,
+.resultLink:focus-visible {
+  text-decoration: underline;
+}
