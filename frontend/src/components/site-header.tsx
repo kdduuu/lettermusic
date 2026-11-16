@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import { sair } from "@/app/acoes";
+import { obterUsuarioAutenticado } from "@/lib/sessao";
 import styles from "./site-header.module.css";
 
 type SearchFormProps = {
@@ -32,6 +35,30 @@ export function SearchForm({ variant = "header" }: SearchFormProps) {
   );
 }
 
+async function AreaConta() {
+  const usuario = await obterUsuarioAutenticado();
+
+  if (!usuario) {
+    return (
+      <div className={styles.conta}>
+        <Link href="/entrar">Entrar</Link>
+        <Link href="/cadastro">Criar conta</Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.conta}>
+      <Link href="/biblioteca" title={`Conectado como ${usuario.nome_exibicao}`}>
+        {usuario.username}
+      </Link>
+      <form action={sair}>
+        <button type="submit">Sair</button>
+      </form>
+    </div>
+  );
+}
+
 export function SiteHeader() {
   return (
     <header className={styles.header}>
@@ -47,6 +74,9 @@ export function SiteHeader() {
           <span title="Em desenvolvimento">Comunidade</span>
         </nav>
         <SearchForm />
+        <Suspense fallback={<span className={styles.aguardando}>Conta</span>}>
+          <AreaConta />
+        </Suspense>
       </div>
     </header>
   );

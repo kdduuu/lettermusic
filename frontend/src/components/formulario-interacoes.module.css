@@ -1,0 +1,23 @@
+.grupo {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.acao { min-width: 100px; max-width: 170px; }
+.acao button {
+  border: 1px solid #777;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  padding: 11px 15px;
+  cursor: pointer;
+  width: 100%;
+}
+.acao button:hover { border-color: #ececec; }
+.acao button:disabled { opacity: .6; cursor: wait; }
+.sucesso, .erro { font-size: 12px; margin: 7px 0 0; }
+.sucesso { color: #b4d4b9; }
+.erro { color: #ff949d; }

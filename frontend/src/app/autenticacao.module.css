@@ -1,0 +1,48 @@
+.container {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 76px 22px 100px;
+}
+
+.container h1 {
+  margin: 0 0 12px;
+  font: bold clamp(38px, 5vw, 52px)/1.1 Georgia, "Times New Roman", serif;
+}
+
+.introducao {
+  margin: 0 0 32px;
+  color: #777;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form label { font-size: 14px; font-weight: 600; }
+.form input {
+  width: 100%;
+  border: 1px solid #494949;
+  border-radius: 8px;
+  background: #262626;
+  color: #fff;
+  padding: 13px 14px;
+  margin-bottom: 8px;
+}
+
+.form button {
+  margin-top: 12px;
+  background: #efedef;
+  color: #181818;
+  border: 0;
+  border-radius: 8px;
+  padding: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.form button:disabled { opacity: .6; cursor: wait; }
+.mensagem { color: #ff949d; margin: 0; font-size: 14px; }
+.alternativa { color: #999; font-size: 14px; text-align: center; }
+.alternativa a { color: #f2f2f2; }

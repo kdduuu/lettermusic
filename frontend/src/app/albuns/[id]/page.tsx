@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { CapaAlbum } from "@/components/capa-album";
+import { FormularioInteracoes } from "@/components/formulario-interacoes";
 import { detalharAlbum, obterCapaAlbum } from "@/lib/catalogo";
+import { obterUsuarioAutenticado } from "@/lib/sessao";
 import styles from "./page.module.css";
 
 type ParametrosAlbum = Promise<{ id: string }>;
@@ -20,6 +22,7 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
   }
 
   const { obra } = resultado;
+  const usuario = await obterUsuarioAutenticado();
   return (
     <article className={styles.album}>
       <Suspense fallback={<div className={styles.cover} aria-label="Carregando capa">♪</div>}>
@@ -32,6 +35,13 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
         <p className={styles.meta}>
           {[obra.data_lancamento?.slice(0, 4), obra.tipo].filter(Boolean).join(" · ")}
         </p>
+        {usuario ? (
+          <FormularioInteracoes id={id} />
+        ) : (
+          <p className={styles.convite}>
+            <Link href="/entrar">Entre</Link> para registrar, favoritar ou adicionar à sua biblioteca.
+          </p>
+        )}
       </div>
     </article>
   );
