@@ -1,32 +1,27 @@
-
+"""Contratos de dados publicos do perfil social."""
 from datetime import datetime
 
 from pydantic import BaseModel, Field
 
 
-# -----------------------------------------
-# ESTATISTICAS DO PERFIL
-# -----------------------------------------
-
-
 class EstatisticasPerfilPublico(BaseModel):
-    """Quantidades de interacoes publicas do usuario."""
-
     avaliacoes: int = Field(ge=0)
     reviews: int = Field(ge=0)
     listas_publicas: int = Field(ge=0)
 
 
-# -----------------------------------------
-# REVIEWS RECENTES
-# -----------------------------------------
+class AlbumRecentePerfil(BaseModel):
+    """Obra com avaliacao ou review publica, nunca escuta privada."""
+    id_musicbrainz: str
+    titulo: str
+    artista: str | None
+    registrado_em: datetime
 
 
 class ReviewRecentePerfil(BaseModel):
-    """Review acompanhada dos dados basicos da obra."""
-
     id: int
     obra_id: int
+    id_musicbrainz: str
     titulo: str
     artista: str | None
     texto: str
@@ -34,35 +29,20 @@ class ReviewRecentePerfil(BaseModel):
     atualizada_em: datetime | None
 
 
-# -----------------------------------------
-# LISTAS PUBLICAS
-# -----------------------------------------
-
-
 class ListaPublicaPerfil(BaseModel):
-    """Lista musical visivel no perfil social."""
-
     id: int
     titulo: str
     descricao: str | None
     criada_em: datetime
 
 
-# -----------------------------------------
-# PERFIL SOCIAL COMPLETO
-# -----------------------------------------
-
-
 class PerfilSocialPublico(BaseModel):
-    """Resposta publica do perfil de um usuario."""
-
     id: int
     username: str
     nome_exibicao: str
     bio: str | None
     criado_em: datetime
-
     estatisticas: EstatisticasPerfilPublico
-
+    albuns_recentes: list[AlbumRecentePerfil]
     reviews_recentes: list[ReviewRecentePerfil]
     listas_publicas: list[ListaPublicaPerfil]

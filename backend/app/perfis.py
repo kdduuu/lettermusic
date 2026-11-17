@@ -1,47 +1,34 @@
+"""Consulta segura do perfil social e dos registros publicos recentes."""
+
+from datetime import datetime, timezone
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from backend.app.models import (
-    Avaliacao,
-    ListaMusical,
-    Obra,
-    Review,
-    Usuario,
-)
+from backend.app.models import Avaliacao, ListaMusical, Obra, Review, Usuario
 
 
-def consultar_perfil_social(
-    sessao: Session,
-    username: str,
-) -> dict | None:
-    """Consulta dados e atividades publicas de um usuario."""
+def instante_utc(data: datetime) -> datetime:
+    """Normaliza datas vindas de SQLite/PostgreSQL para ordenacao coerente."""
+    if data.tzinfo is None:
+        return data.replace(tzinfo=timezone.utc)
+    return data.astimezone(timezone.utc)
 
+
+def consultar_perfil_social(sessao: Session, username: str) -> dict | None:
+    """Devolve apenas informacoes publicas, sem registrar visualizacoes."""
     usuario = sessao.scalar(
-        select(Usuario).where(
-            Usuario.username == username.lower()
-        )
+        select(Usuario).where(Usuario.username == username.lower())
     )
-
     if usuario is None:
         return None
 
-    # -----------------------------------------
-    # ESTATISTICAS PUBLICAS
-    # -----------------------------------------
-
     total_avaliacoes = sessao.scalar(
-        select(func.count(Avaliacao.id)).where(
-            Avaliacao.usuario_id == usuario.id
-        )
+        select(func.count(Avaliacao.id)).where(Avaliacao.usuario_id == usuario.id)
     )
-
     total_reviews = sessao.scalar(
-        select(func.count(Review.id)).where(
-            Review.usuario_id == usuario.id
-        )
+        select(func.count(Review.id)).where(Review.usuario_id == usuario.id)
     )
-
     total_listas_publicas = sessao.scalar(
         select(func.count(ListaMusical.id)).where(
             ListaMusical.usuario_id == usuario.id,
@@ -49,30 +36,20 @@ def consultar_perfil_social(
         )
     )
 
-    # -----------------------------------------
-    # REVIEWS RECENTES
-    # -----------------------------------------
-
-    consulta_reviews = (
+    # Reviews ja sao publicas; consultamos a obra numa unica consulta JOIN.
+    reviews = sessao.execute(
         select(Review, Obra)
-        .join(
-            Obra,
-            Review.obra_id == Obra.id,
-        )
+        .join(Obra, Review.obra_id == Obra.id)
         .where(Review.usuario_id == usuario.id)
-        .order_by(
-            Review.criada_em.desc(),
-            Review.id.desc(),
-        )
+        .order_by(Review.criada_em.desc(), Review.id.desc())
         .limit(5)
-    )
-
-    reviews = sessao.execute(consulta_reviews).all()
+    ).all()
 
     reviews_recentes = [
         {
             "id": review.id,
             "obra_id": obra.id,
+            "id_musicbrainz": obra.id_musicbrainz,
             "titulo": obra.titulo,
             "artista": obra.artista,
             "texto": review.texto,
@@ -82,24 +59,15 @@ def consultar_perfil_social(
         for review, obra in reviews
     ]
 
-    # -----------------------------------------
-    # LISTAS PUBLICAS
-    # -----------------------------------------
-
-    consulta_listas = (
+    listas = sessao.scalars(
         select(ListaMusical)
         .where(
             ListaMusical.usuario_id == usuario.id,
             ListaMusical.publica.is_(True),
         )
-        .order_by(
-            ListaMusical.criada_em.desc(),
-            ListaMusical.id.desc(),
-        )
+        .order_by(ListaMusical.criada_em.desc(), ListaMusical.id.desc())
         .limit(5)
-    )
-
-    listas = sessao.scalars(consulta_listas).all()
+    ).all()
 
     listas_publicas = [
         {
@@ -111,9 +79,41 @@ def consultar_perfil_social(
         for lista in listas
     ]
 
-    # -----------------------------------------
-    # RESPOSTA DO PERFIL
-    # -----------------------------------------
+    # Destaques exibem somente reviews e avaliacoes — nao revelam escutas,
+    # marcacoes Ja ouvi, favoritos, Quero ouvir ou listas privadas.
+    # Cada consulta traz no maximo 5 candidatos; o mesmo album aparece uma vez.
+    avaliacoes = sessao.execute(
+        select(Avaliacao, Obra)
+        .join(Obra, Avaliacao.obra_id == Obra.id)
+        .where(Avaliacao.usuario_id == usuario.id)
+        .order_by(
+            func.coalesce(Avaliacao.atualizada_em, Avaliacao.criada_em).desc(),
+            Avaliacao.id.desc(),
+        )
+        .limit(5)
+    ).all()
+
+    candidatos = []
+    for review, obra in reviews:
+        candidatos.append((instante_utc(review.atualizada_em or review.criada_em), obra))
+    for avaliacao, obra in avaliacoes:
+        candidatos.append((instante_utc(avaliacao.atualizada_em or avaliacao.criada_em), obra))
+
+    candidatos.sort(key=lambda item: (item[0], item[1].id), reverse=True)
+    albuns_recentes = []
+    ids_adicionados = set()
+    for instante, obra in candidatos:
+        if obra.id in ids_adicionados:
+            continue
+        ids_adicionados.add(obra.id)
+        albuns_recentes.append({
+            "id_musicbrainz": obra.id_musicbrainz,
+            "titulo": obra.titulo,
+            "artista": obra.artista,
+            "registrado_em": instante,
+        })
+        if len(albuns_recentes) == 5:
+            break
 
     return {
         "id": usuario.id,
@@ -124,10 +124,9 @@ def consultar_perfil_social(
         "estatisticas": {
             "avaliacoes": int(total_avaliacoes or 0),
             "reviews": int(total_reviews or 0),
-            "listas_publicas": int(
-                total_listas_publicas or 0
-            ),
+            "listas_publicas": int(total_listas_publicas or 0),
         },
+        "albuns_recentes": albuns_recentes,
         "reviews_recentes": reviews_recentes,
         "listas_publicas": listas_publicas,
     }

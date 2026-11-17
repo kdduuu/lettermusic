@@ -59,8 +59,10 @@ async function BlocoSocial({ id }: { id: string }) {
             {resumo.dados.reviews.map((review, indice) => (
               <li key={`${review.username}-${review.criada_em}-${indice}`}>
                 <p className={styles.reviewAutor}>
-                  <strong>{review.nome_exibicao}</strong>
-                  <span> @{review.username}</span>
+                  <Link href={`/usuarios/${encodeURIComponent(review.username)}`}>
+                    <strong>{review.nome_exibicao}</strong>
+                    <span> @{review.username}</span>
+                  </Link>
                 </p>
                 <p className={styles.reviewTexto}>{review.texto}</p>
               </li>

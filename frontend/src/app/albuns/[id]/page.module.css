@@ -31,7 +31,9 @@
 .reviewLista { list-style: none; padding: 0; margin: 0; }
 .reviewLista li { padding: 18px 0; border-bottom: 1px solid #393939; }
 .reviewAutor { margin: 0 0 9px; font-size: 14px; }
-.reviewAutor span { color: #aaa; }
+.reviewAutor span { color: #bdbdbd; }
+.reviewAutor a { color: #f2f2f2; text-decoration: none; }
+.reviewAutor a:hover, .reviewAutor a:focus-visible { text-decoration: underline; }
 .reviewTexto { margin: 0; font-size: 15px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 700px) {
   .container { padding: 32px 16px 64px; }

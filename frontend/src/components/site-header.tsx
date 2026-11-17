@@ -49,9 +49,10 @@ async function AreaConta() {
 
   return (
     <div className={styles.conta}>
-      <Link href="/biblioteca" title={`Conectado como ${usuario.nome_exibicao}`}>
+      <Link href={`/usuarios/${encodeURIComponent(usuario.username)}`} title={`Ver perfil de ${usuario.nome_exibicao}`}>
         {usuario.username}
       </Link>
+      <Link href="/biblioteca">Biblioteca</Link>
       <form action={sair}>
         <button type="submit">Sair</button>
       </form>

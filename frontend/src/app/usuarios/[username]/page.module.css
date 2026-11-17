@@ -1,0 +1,54 @@
+.container { max-width: 1080px; margin: 0 auto; padding: 44px 28px 100px; color: #f3f3f3; }
+.voltar { display: inline-block; color: #b8b8b8; font-size: 14px; text-decoration: none; margin-bottom: 44px; }
+.voltar:hover { text-decoration: underline; }
+.cabecalho { display: flex; align-items: center; gap: 32px; }
+.avatar {
+  width: 124px; height: 124px; flex: 0 0 124px;
+  border: 1px solid #555; border-radius: 50%;
+  background: #303030; color: #fafafa;
+  display: grid; place-items: center; font: bold 62px/1 Georgia, "Times New Roman", serif;
+}
+.apresentacao { min-width: 0; }
+.etiqueta { margin: 0 0 6px; color: #e47686; text-transform: uppercase; letter-spacing: 1.4px; font-size: 11px; font-weight: 700; }
+.apresentacao h1 { font: bold clamp(36px, 5.5vw, 64px)/1.04 Georgia, "Times New Roman", serif; letter-spacing: -1px; margin: 0 0 8px; overflow-wrap: anywhere; }
+.username { color: #bdbdbd; margin: 0; font-size: 14px; }
+.bio { margin: 18px 0 0; max-width: 660px; font-size: 16px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.estatisticas { display: flex; flex-wrap: wrap; gap: 36px; margin: 34px 0 0; padding: 24px 0; border-top: 1px solid #464646; border-bottom: 1px solid #464646; }
+.estatisticas div { display: flex; flex-direction: column-reverse; gap: 4px; }
+.estatisticas dt { color: #b5b5b5; font-size: 13px; }
+.estatisticas dd { margin: 0; font: bold 27px/1.2 Georgia, "Times New Roman", serif; }
+.secao { margin-top: 56px; }
+.tituloSecao { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+.tituloSecao h2 { margin: 0; font: bold 28px/1.2 Georgia, "Times New Roman", serif; }
+.tituloSecao span, .vazio { color: #b6b6b6; font-size: 14px; }
+.gradeCapas { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 16px; }
+.itemCapa { display: block; min-width: 0; color: #f2f2f2; text-decoration: none; font-size: 14px; line-height: 1.4; }
+.itemCapa > span { display: block; margin-top: 10px; overflow-wrap: anywhere; }
+.itemCapa:hover > span, .itemCapa:focus-visible > span { text-decoration: underline; }
+.capa { position: relative; display: grid; place-items: center; overflow: hidden; aspect-ratio: 1; width: 100%; border-radius: 8px; background: #333; color: #bdbdbd; font-size: 42px; }
+.capa img { object-fit: cover; }
+.feed, .listas { list-style: none; padding: 0; margin: 0; }
+.feed li { padding: 19px 0; border-top: 1px solid #494949; }
+.feed li:last-child { border-bottom: 1px solid #494949; }
+.tituloReview { display: flex; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.tituloReview a { color: #f3f3f3; font-weight: 700; text-decoration: none; }
+.tituloReview a:hover { text-decoration: underline; }
+.tituloReview span { color: #b5b5b5; font-size: 13px; }
+.feed li p { margin: 10px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.65; color: #dedede; }
+.listas { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.listas li { padding: 20px; border: 1px solid #494949; border-radius: 8px; }
+.listas h3 { margin: 0; font: bold 20px/1.25 Georgia, "Times New Roman", serif; }
+.listas p { margin: 12px 0 0; color: #bcbcbc; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.erro { color: #ffb0b4; }
+@media (max-width: 750px) {
+  .container { padding: 28px 16px 70px; }
+  .cabecalho { gap: 18px; align-items: flex-start; }
+  .avatar { width: 86px; height: 86px; flex-basis: 86px; font-size: 43px; }
+  .gradeCapas { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+  .listas { grid-template-columns: 1fr; }
+  .estatisticas { gap: 26px; }
+}
+@media (max-width: 450px) {
+  .cabecalho { flex-direction: column; }
+  .gradeCapas { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
