@@ -1,30 +1,19 @@
-.container { max-width: 1000px; margin: 0 auto; padding: 64px 28px 100px; }
-.container h1 {
-  font: bold clamp(38px, 5vw, 56px)/1.1 Georgia, "Times New Roman", serif;
-  margin: 0 0 14px;
-}
-.subtitulo { color: #888; margin-bottom: 42px; }
-.secao { margin-bottom: 42px; }
-.secao h2 {
-  font: bold 26px/1.2 Georgia, "Times New Roman", serif;
-  margin: 0 0 18px;
-  border-bottom: 1px solid #414141;
-  padding-bottom: 12px;
-}
+.container { max-width: 890px; margin: 0 auto; padding: 58px 28px 96px; }
+.container h1 { font: bold clamp(36px, 5vw, 52px)/1.1 Georgia, "Times New Roman", serif; margin: 0 0 12px; }
+.subtitulo { color: #aaa; font-size: 15px; margin: 0 0 40px; }
+.secao { margin-top: 34px; }
+.secao h2 { font: bold 25px/1.2 Georgia, "Times New Roman", serif; padding-bottom: 12px; border-bottom: 1px solid #555; }
 .lista { list-style: none; padding: 0; margin: 0; }
-.lista li {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 15px 0;
-  border-bottom: 1px solid #323232;
-}
-.lista a { color: inherit; text-decoration: none; font-weight: 600; }
-.lista a:hover { text-decoration: underline; }
-.artista, .mensagem, .limite { color: #929292; }
-.limite { font-size: 12px; margin-top: 50px; }
-@media (max-width: 700px) {
-  .container { padding: 40px 16px 72px; }
-  .lista li { flex-direction: column; gap: 5px; }
+.lista li { padding: 14px 0; border-bottom: 1px solid #494949; }
+.linha { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 16px; row-gap: 7px; }
+.linha a { color: #eee; text-decoration: none; font-weight: 600; }
+.linha a:hover, .linha a:focus-visible { text-decoration: underline; }
+.artista { margin-left: auto; color: #aaa; font-size: 14px; }
+.detalhe { color: #b4b4b4; font-size: 13px; }
+.reviewTexto { width: 100%; color: #aaa; font-size: 14px; line-height: 1.45; margin: 4px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.mensagem { color: #aaa; font-size: 14px; }
+.limite { color: #868686; font-size: 12px; margin-top: 36px; }
+@media (max-width: 650px) {
+  .container { padding: 38px 16px 64px; }
+  .artista { margin-left: 0; }
 }

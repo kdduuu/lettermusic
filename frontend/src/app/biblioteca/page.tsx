@@ -6,21 +6,29 @@ import { obterTokenSessao, obterUsuarioAutenticado } from "@/lib/sessao";
 import styles from "./page.module.css";
 
 type Registro = {
+  id: number;
   obra_id: number;
   id_musicbrainz: string | null;
   titulo: string | null;
   artista: string | null;
+  nota?: number;
+  texto?: string;
+  ouvida_em?: string;
 };
 
 type Categoria = {
   titulo: string;
   caminho: string;
+  tipo: "ouvidas" | "favoritos" | "quero-ouvir" | "escutas" | "avaliacoes" | "reviews";
 };
 
 const CATEGORIAS: Categoria[] = [
-  { titulo: "Já ouvi", caminho: "/interacoes/obras-ouvidas" },
-  { titulo: "Favoritos", caminho: "/biblioteca/favoritos" },
-  { titulo: "Quero ouvir", caminho: "/biblioteca/quero-ouvir" },
+  { titulo: "Já ouvi", caminho: "/interacoes/obras-ouvidas", tipo: "ouvidas" },
+  { titulo: "Favoritos", caminho: "/biblioteca/favoritos", tipo: "favoritos" },
+  { titulo: "Quero ouvir", caminho: "/biblioteca/quero-ouvir", tipo: "quero-ouvir" },
+  { titulo: "Histórico de escutas", caminho: "/interacoes/escutas", tipo: "escutas" },
+  { titulo: "Minhas avaliações", caminho: "/interacoes/avaliacoes", tipo: "avaliacoes" },
+  { titulo: "Minhas reviews", caminho: "/interacoes/reviews", tipo: "reviews" },
 ];
 
 async function buscarRegistros(caminho: string, token: string): Promise<Registro[] | null> {
@@ -33,6 +41,7 @@ async function buscarRegistros(caminho: string, token: string): Promise<Registro
     if (!Array.isArray(dados)) return null;
     return dados.filter((item): item is Registro =>
       typeof item === "object" && item !== null &&
+      typeof item.id === "number" &&
       typeof item.obra_id === "number" &&
       (item.id_musicbrainz === null || typeof item.id_musicbrainz === "string") &&
       (item.titulo === null || typeof item.titulo === "string") &&
@@ -41,6 +50,24 @@ async function buscarRegistros(caminho: string, token: string): Promise<Registro
   } catch {
     return null;
   }
+}
+
+function Complemento({ registro, tipo }: { registro: Registro; tipo: Categoria["tipo"] }) {
+  if (tipo === "avaliacoes" && typeof registro.nota === "number") {
+    return <span className={styles.detalhe}>★ {registro.nota.toLocaleString("pt-BR")}</span>;
+  }
+  if (tipo === "reviews" && typeof registro.texto === "string") {
+    return <p className={styles.reviewTexto}>{registro.texto}</p>;
+  }
+  if (tipo === "escutas" && typeof registro.ouvida_em === "string") {
+    const data = new Date(registro.ouvida_em);
+    return !Number.isNaN(data.getTime()) ? (
+      <span className={styles.detalhe}>
+        {new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeZone: "America/Sao_Paulo" }).format(data)}
+      </span>
+    ) : null;
+  }
+  return null;
 }
 
 async function ConteudoBiblioteca() {
@@ -70,15 +97,16 @@ async function ConteudoBiblioteca() {
             ) : (
               <ul className={styles.lista}>
                 {itens.map((item) => (
-                  <li key={item.obra_id}>
-                    {item.id_musicbrainz && /^[a-f0-9-]{36}$/i.test(item.id_musicbrainz) ? (
-                      <Link href={`/albuns/${encodeURIComponent(item.id_musicbrainz)}`}>
-                        {item.titulo ?? "Álbum sem título"}
-                      </Link>
-                    ) : (
-                      <span>{item.titulo ?? "Álbum sem título"}</span>
-                    )}
-                    <span className={styles.artista}>{item.artista ?? "Artista desconhecido"}</span>
+                  <li key={`${categoria.tipo}-${item.id}`}>
+                    <div className={styles.linha}>
+                      {item.id_musicbrainz && /^[a-f0-9-]{36}$/i.test(item.id_musicbrainz) ? (
+                        <Link href={`/albuns/${encodeURIComponent(item.id_musicbrainz)}`}>
+                          {item.titulo ?? "Álbum sem título"}
+                        </Link>
+                      ) : <span>{item.titulo ?? "Álbum sem título"}</span>}
+                      <span className={styles.artista}>{item.artista ?? "Artista desconhecido"}</span>
+                      <Complemento registro={item} tipo={categoria.tipo} />
+                    </div>
                   </li>
                 ))}
               </ul>

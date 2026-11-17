@@ -1,0 +1,20 @@
+.container { margin-top: 30px; display: grid; gap: 24px; max-width: 590px; }
+.avaliacao, .review { display: grid; gap: 10px; }
+.avaliacao label, .review label { font-weight: 600; font-size: 16px; }
+.linha { display: flex; gap: 10px; flex-wrap: wrap; }
+.avaliacao select, .review textarea {
+  font: inherit; padding: 11px 13px; border-radius: 6px;
+  color: #f4f4f4; background: #242424; border: 1px solid #535353;
+}
+.avaliacao select { min-width: 180px; }
+.review textarea { width: 100%; resize: vertical; line-height: 1.5; }
+.avaliacao button, .review button {
+  font: inherit; font-size: 13px; color: #fff; background: #292929;
+  border: 1px solid #666; border-radius: 6px; padding: 11px 15px;
+  cursor: pointer; justify-self: start;
+}
+.avaliacao button:disabled, .review button:disabled { opacity: .55; cursor: progress; }
+.sucesso, .erro { margin: 0; font-size: 12px; }
+.sucesso { color: #a8c5ab; }
+.erro { color: #ee979c; }
+.nota { margin: 0; color: #8f8f8f; font-size: 12px; line-height: 1.4; }

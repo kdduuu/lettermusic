@@ -1,23 +1,17 @@
-.grupo {
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 30px;
+.container { margin-top: 28px; }
+.container h2 { font: 600 17px Arial, Helvetica, sans-serif; margin: 0 0 14px; }
+.grupo { display: flex; flex-wrap: wrap; align-items: start; gap: 10px; }
+.acao { display: flex; flex-direction: column; gap: 6px; }
+.acao button, .escuta button, .confirmado {
+  font: inherit; font-size: 13px; border: 1px solid #686868;
+  border-radius: 6px; background: transparent; color: inherit;
+  padding: 10px 14px; cursor: pointer;
 }
-
-.acao { min-width: 100px; max-width: 170px; }
-.acao button {
-  border: 1px solid #777;
-  border-radius: 8px;
-  background: transparent;
-  color: inherit;
-  padding: 11px 15px;
-  cursor: pointer;
-  width: 100%;
-}
-.acao button:hover { border-color: #ececec; }
-.acao button:disabled { opacity: .6; cursor: wait; }
-.sucesso, .erro { font-size: 12px; margin: 7px 0 0; }
-.sucesso { color: #b4d4b9; }
-.erro { color: #ff949d; }
+.acao button:hover, .escuta button:hover { background: #2e2e2e; }
+.acao button:disabled, .escuta button:disabled { opacity: .55; cursor: progress; }
+.confirmado { color: #bfcfbe; cursor: default; border-color: #4a5849; }
+.escuta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 15px; }
+.contador { font-size: 13px; color: #aaa; }
+.sucesso, .erro { width: 100%; margin: 0; font-size: 12px; }
+.sucesso { color: #a8c5ab; }
+.erro { color: #ee979c; }

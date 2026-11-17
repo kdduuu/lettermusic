@@ -1,53 +1,41 @@
-.container {
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 54px 28px 96px;
-}
-.back {
-  display: inline-block;
-  color: #888;
-  text-decoration: none;
-  margin-bottom: 34px;
-}
+.container { max-width: 1320px; margin: 0 auto; padding: 54px 28px 96px; }
+.back { display: inline-block; color: #999; text-decoration: none; margin-bottom: 34px; }
 .back:hover { text-decoration: underline; }
 .album {
-  display: grid;
-  grid-template-columns: minmax(200px, 340px) 1fr;
-  gap: 50px;
-  align-items: center;
+  display: grid; grid-template-columns: minmax(200px, 340px) 1fr;
+  gap: 50px; align-items: center;
 }
 .cover {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 10px;
-  background: #e8e5e2;
-  color: #888;
-  display: grid;
-  place-items: center;
-  font-size: 56px;
+  position: relative; overflow: hidden; width: 100%; aspect-ratio: 1;
+  border-radius: 10px; background: #2d2a29; color: #888;
+  display: grid; place-items: center; font-size: 56px;
 }
 .cover img { object-fit: cover; }
-.accent {
-  display: block;
-  width: 44px;
-  height: 3px;
-  background: #e72234;
-  margin-bottom: 20px;
-}
+.accent { display: block; width: 44px; height: 3px; background: #ed5268; margin-bottom: 20px; }
 .info h1 {
   font: bold clamp(40px, 6vw, 68px)/1.08 Georgia, "Times New Roman", serif;
-  letter-spacing: -1.5px;
-  margin: 0 0 14px;
+  letter-spacing: -1.5px; margin: 0 0 14px;
 }
 .artist { font-size: 24px; margin: 0 0 16px; }
-.meta { color: #888; font-size: 16px; margin: 0; }
-.message { padding-top: 32px; color: #999; }
-.convite { margin-top: 28px; color: #999; font-size: 14px; }
-.convite a { color: inherit; text-decoration: underline; }
+.meta { color: #999; font-size: 16px; margin: 0; }
+.message { padding-top: 32px; color: #aaa; }
+.social { max-width: 860px; margin-top: 64px; border-top: 1px solid #404040; padding-top: 30px; }
+.social h2 { font: bold 24px/1.2 Georgia, "Times New Roman", serif; margin: 0 0 12px; }
+.resumo { margin-bottom: 22px; }
+.resumo p { margin: 0; }
+.resumo strong { font-size: 24px; }
+.resumo span, .muted { color: #aaa; font-size: 14px; }
+.muted a { color: inherit; text-underline-offset: 3px; }
+.interacoes { padding: 2px 0 26px; border-bottom: 1px solid #393939; }
+.reviews { margin-top: 32px; }
+.reviewLista { list-style: none; padding: 0; margin: 0; }
+.reviewLista li { padding: 18px 0; border-bottom: 1px solid #393939; }
+.reviewAutor { margin: 0 0 9px; font-size: 14px; }
+.reviewAutor span { color: #aaa; }
+.reviewTexto { margin: 0; font-size: 15px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 700px) {
   .container { padding: 32px 16px 64px; }
   .album { grid-template-columns: 1fr; gap: 28px; }
   .cover { max-width: 340px; }
+  .social { margin-top: 38px; }
 }
