@@ -96,7 +96,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
           <ul className={styles.listas}>
             {perfil.listas_publicas.map((lista) => (
               <li key={lista.id}>
-                <h3>{lista.titulo}</h3>
+                <h3><Link href={`/listas/${lista.id}`}>{lista.titulo}</Link></h3>
                 {lista.descricao ? <p>{lista.descricao}</p> : null}
               </li>
             ))}

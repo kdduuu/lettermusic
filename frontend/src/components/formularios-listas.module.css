@@ -1,0 +1,35 @@
+.form { display: grid; gap: 10px; }
+.form label, .adicionar label { font-size: 14px; font-weight: 600; }
+.form input:not([type="checkbox"]), .form textarea, .adicionar select, .buscar input {
+  width: 100%; font: inherit; color: #f5f5f5; background: #292929;
+  border: 1px solid #595959; border-radius: 7px; padding: 12px 13px;
+}
+.form textarea { resize: vertical; }
+.checkbox { display: flex; gap: 9px; align-items: center; margin-top: 6px; }
+.checkbox input { accent-color: #d84e61; width: 16px; height: 16px; }
+.ajuda { color: #b3b3b3; font-size: 12px; margin: 0; }
+.form button, .adicionar button, .botaoBusca button, .controles button, .excluir button {
+  font: inherit; font-size: 13px; cursor: pointer; color: #f5f5f5;
+  border: 1px solid #747474; background: #262626; border-radius: 7px; padding: 10px 14px;
+}
+.form button:hover, .adicionar button:hover, .botaoBusca button:hover, .controles button:hover { background: #393939; }
+.form button:disabled, .adicionar button:disabled, .botaoBusca button:disabled, .controles button:disabled, .excluir button:disabled { opacity: .6; cursor: progress; }
+.form .primario { background: #f2f2f2; color: #191919; border-color: #f2f2f2; justify-self: start; }
+.sucesso, .erro { color: #b4d9b8; font-size: 13px; margin: 0; }
+.erro { color: #ffa2a9; }
+.excluir { margin-top: 25px; border-top: 1px solid #4e4e4e; padding-top: 18px; }
+.excluir summary { cursor: pointer; color: #ed9fa5; font-size: 13px; }
+.excluir p { font-size: 13px; color: #c6c6c6; }
+.excluir form { display: grid; justify-items: start; gap: 9px; }
+.excluir .perigo { border-color: #9b5660; color: #ffc4c8; }
+.adicionar { display: grid; gap: 10px; margin-top: 20px; max-width: 620px; }
+.linha { display: flex; gap: 10px; flex-wrap: wrap; }
+.linha select { flex: 1; min-width: 200px; }
+.botaoBusca { display: grid; gap: 5px; margin-top: 10px; }
+.botaoBusca button { justify-self: start; }
+.controles { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.controles button { padding: 7px 10px; font-size: 12px; }
+.controles .sucesso, .controles .erro { flex-basis: 100%; }
+.form input:focus-visible, .form textarea:focus-visible, .form button:focus-visible,
+.adicionar select:focus-visible, .adicionar button:focus-visible, .controles button:focus-visible,
+.botaoBusca button:focus-visible { outline: 2px solid #e05b70; outline-offset: 2px; }

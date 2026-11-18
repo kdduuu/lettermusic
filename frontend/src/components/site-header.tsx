@@ -71,7 +71,7 @@ export function SiteHeader() {
           <Link href="/">Descobrir</Link>
           <span title="Em desenvolvimento">Álbuns</span>
           <span title="Em desenvolvimento">Reviews</span>
-          <span title="Em desenvolvimento">Listas</span>
+          <Link href="/listas">Listas</Link>
           <span title="Em desenvolvimento">Comunidade</span>
         </nav>
         <SearchForm />

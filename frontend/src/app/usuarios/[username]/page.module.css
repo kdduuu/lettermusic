@@ -52,3 +52,5 @@
   .cabecalho { flex-direction: column; }
   .gradeCapas { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
+.listas h3 a { color: #f3f3f3; text-decoration: none; }
+.listas h3 a:hover, .listas h3 a:focus-visible { text-decoration: underline; }

@@ -3,9 +3,11 @@ import { Suspense } from "react";
 import { CapaAlbum } from "@/components/capa-album";
 import { FormularioInteracoes } from "@/components/formulario-interacoes";
 import { FormularioAvaliacao } from "@/components/formulario-avaliacao";
+import { FormularioAdicionarAlbum } from "@/components/formularios-listas";
 import { detalharAlbum, obterCapaAlbum } from "@/lib/catalogo";
 import { obterEstadoAlbum, obterResumoAlbum } from "@/lib/estado-album";
 import { obterTokenSessao, obterUsuarioAutenticado } from "@/lib/sessao";
+import { listasParaAdicionar } from "@/lib/listas";
 import styles from "./page.module.css";
 
 type ParametrosAlbum = Promise<{ id: string }>;
@@ -21,7 +23,10 @@ async function BlocoSocial({ id }: { id: string }) {
     obterUsuarioAutenticado(),
   ]);
   const token = usuario ? await obterTokenSessao() : null;
-  const estado = token ? await obterEstadoAlbum(id, token) : null;
+  const [estado, listas] = await Promise.all([
+    token ? obterEstadoAlbum(id, token) : Promise.resolve(null),
+    token ? listasParaAdicionar(token) : Promise.resolve(null),
+  ]);
 
   return (
     <section className={styles.social} aria-label="Atividade social do álbum">
@@ -51,6 +56,23 @@ async function BlocoSocial({ id }: { id: string }) {
           <Link href="/entrar">Entre na sua conta</Link> para avaliar, registrar escutas ou escrever uma review.
         </p>
       )}
+
+      {usuario && listas ? (
+        <section className={styles.listasDoAlbum} aria-label="Adicionar a uma lista musical">
+          <h2>Suas listas</h2>
+          {listas.ok && listas.dados.length ? (
+            <FormularioAdicionarAlbum idMusicBrainz={id} listas={listas.dados} />
+          ) : (
+            <p className={styles.muted}>
+              {listas.ok ? "Você ainda não criou uma lista." : listas.mensagem}{" "}
+              <Link href="/listas">Gerenciar listas</Link>
+            </p>
+          )}
+          {listas.ok && listas.dados.length > 0 ? (
+            <p className={styles.muted}><Link href="/listas">Ver todas as listas</Link></p>
+          ) : null}
+        </section>
+      ) : null}
 
       <div className={styles.reviews}>
         <h2>Reviews recentes</h2>

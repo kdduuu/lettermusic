@@ -41,3 +41,6 @@
   .cover { max-width: 340px; }
   .social { margin-top: 38px; }
 }
+
+.listasDoAlbum { border-bottom: 1px solid #404040; padding: 28px 0; }
+.listasDoAlbum h2 { font: bold 22px/1.2 Georgia, serif; margin: 0 0 6px; }
