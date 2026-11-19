@@ -1,0 +1,26 @@
+.mensagem { color: #c6c6c6; line-height: 1.6; }
+.grade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; padding: 0; margin: 0; list-style: none; }
+.grade li { min-width: 0; }
+.album { display: grid; gap: 10px; text-decoration: none; color: #f5f5f5; }
+.album:hover strong, .album:focus-visible strong { text-decoration: underline; }
+.album strong { overflow-wrap: anywhere; }
+.grade p { margin: 5px 0 0; color: #c6c6c6; font-size: 13px; overflow-wrap: anywhere; }
+.capaDestaque, .capaReview { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 5px; background: #303030; color: #c6c6c6; display: grid; place-items: center; font-size: 25px; }
+.capaDestaque { width: 100%; }
+.capaReview { width: 86px; }
+.capaDestaque img, .capaReview img { object-fit: cover; }
+.reviews { list-style: none; margin: 0; padding: 0; }
+.review { display: grid; grid-template-columns: 86px minmax(0, 1fr); align-items: start; gap: 20px; padding: 22px 0; border-bottom: 1px solid #484848; }
+.review h3 { margin: 0; font: 600 22px Georgia, serif; overflow-wrap: anywhere; }
+.review a { color: #f5f5f5; text-decoration: none; }
+.review a:hover, .review a:focus-visible { text-decoration: underline; }
+.artista, .meta { color: #c6c6c6; font-size: 13px; margin: 6px 0; overflow-wrap: anywhere; }
+.meta a { color: #d5d5d5; }
+.texto, .resumo { color: #ededed; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; margin: 12px 0 0; }
+.resumo { display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 650px) {
+  .grade { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .review { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; }
+  .capaReview { width: 64px; }
+  .review h3 { font-size: 19px; }
+}

@@ -1,0 +1,8 @@
+.container { max-width: 900px; margin: 0 auto; padding: 58px 28px 90px; }
+.container header { padding-bottom: 25px; border-bottom: 1px solid #484848; }
+.container h1 { margin: 0 0 12px; font: 600 clamp(40px, 5vw, 58px) Georgia, serif; }
+.container header p, .mensagem { color: #c6c6c6; line-height: 1.65; }
+.paginacao { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 25px 0; font-size: 14px; color: #c6c6c6; }
+.paginacao a { color: #f5f5f5; border: 1px solid #636363; border-radius: 5px; padding: 8px 12px; text-decoration: none; }
+.paginacao a:hover, .paginacao a:focus-visible { text-decoration: underline; }
+@media (max-width: 650px) { .container { padding: 38px 16px 60px; } }

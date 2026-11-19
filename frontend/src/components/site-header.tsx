@@ -70,7 +70,7 @@ export function SiteHeader() {
         <nav className={styles.nav} aria-label="Navegação principal">
           <Link href="/">Descobrir</Link>
           <span title="Em desenvolvimento">Álbuns</span>
-          <span title="Em desenvolvimento">Reviews</span>
+          <Link href="/reviews">Reviews</Link>
           <Link href="/listas">Listas</Link>
           <span title="Em desenvolvimento">Comunidade</span>
         </nav>
