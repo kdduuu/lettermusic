@@ -72,7 +72,7 @@ export function SiteHeader() {
           <span title="Em desenvolvimento">Álbuns</span>
           <Link href="/reviews">Reviews</Link>
           <Link href="/listas">Listas</Link>
-          <span title="Em desenvolvimento">Comunidade</span>
+          <Link href="/comunidade">Comunidade</Link>
         </nav>
         <SearchForm />
         <Suspense fallback={<span className={styles.aguardando}>Conta</span>}>

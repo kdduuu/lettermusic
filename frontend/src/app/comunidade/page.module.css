@@ -1,0 +1,24 @@
+.container { max-width: 1100px; margin: 0 auto; padding: 58px 28px 90px; }
+.cabecalho { border-bottom: 1px solid #484848; padding-bottom: 24px; margin-bottom: 30px; }
+.cabecalho h1 { margin: 0 0 12px; font: 600 clamp(36px, 5vw, 58px) Georgia, serif; }
+.cabecalho p, .mensagem { color: #c6c6c6; line-height: 1.6; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 48px; }
+.layout h2 { font: 600 24px Georgia, serif; margin: 0 0 12px; }
+.layout a { color: #f5f5f5; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.layout a:hover, .layout a:focus-visible { color: #ef929f; }
+.atividades, .membros, .obras { list-style: none; padding: 0; margin: 0 0 20px; }
+.atividade { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: start; gap: 14px; padding: 18px 0; border-bottom: 1px solid #484848; }
+.avatar { width: 40px; aspect-ratio: 1; border: 1px solid #636363; border-radius: 50%; display: grid; place-items: center; font: 600 20px Georgia, serif; color: #f5f5f5; background: #303030; }
+.atividade p { margin: 0 0 8px; line-height: 1.55; overflow-wrap: anywhere; }
+.meta { color: #c6c6c6; font-size: 13px; margin: 5px 0 0; overflow-wrap: anywhere; }
+.resumo { white-space: pre-wrap; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.nota { color: #e9d3a3; }
+.linkSecundario { font-size: 13px; }
+.lateral { min-width: 0; }
+.lateral section + section { border-top: 1px solid #484848; padding-top: 24px; }
+.membros li, .obras li { border-bottom: 1px solid #484848; padding: 12px 0; }
+.obra { display: grid; grid-template-columns: 54px minmax(0, 1fr); align-items: center; gap: 12px; }
+.obra p { color: #c6c6c6; font-size: 13px; margin: 4px 0 0; }
+.capa { width: 54px; aspect-ratio: 1; position: relative; overflow: hidden; border-radius: 4px; display: grid; place-items: center; background: #303030; color: #c6c6c6; }
+.capa img { object-fit: cover; }
+@media (max-width: 760px) { .container { padding: 38px 16px 60px; } .layout { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
