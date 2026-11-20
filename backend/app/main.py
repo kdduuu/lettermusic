@@ -1,10 +1,12 @@
 import httpx
 
-from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Path, Query, Request
 from sqlalchemy.orm import Session
 
 from backend.app.rotas_detalhes import router as router_detalhes
 from backend.app.rotas_conta import router as router_conta
+from backend.app.rotas_recuperacao import router as router_recuperacao
+from backend.app import recuperacao_email as rec
 from backend.app.erros_validacao import configurar_erros_validacao
 from backend.app.limites_login import (
     verificar,
@@ -130,6 +132,7 @@ configurar_erros_validacao(app)
 
 app.include_router(router_detalhes)
 app.include_router(router_conta)
+app.include_router(router_recuperacao)
 app.include_router(router_feed)
 app.include_router(router_exploracao)
 
@@ -205,10 +208,24 @@ def consultar_catalogo(
 )
 def criar_usuario(
     dados: UsuarioCriar,
+    tarefas: BackgroundTasks,
     sessao: Session = Depends(obter_sessao),
 ):
     try:
-        return cadastrar_usuario(sessao, dados)
+        usuario = cadastrar_usuario(sessao, dados)
+
+        if rec.email_configurado():
+            segredo = rec.emitir_token(
+                sessao, usuario, "verificacao"
+            )
+            tarefas.add_task(
+                rec.enviar_mensagem,
+                usuario.email,
+                "verificacao",
+                segredo,
+            )
+
+        return usuario
 
     except UsuarioJaExiste:
         raise HTTPException(
@@ -304,6 +321,12 @@ def fazer_login(
     except HTTPException:
         registrar_falha(ip, dados.identificador)
         raise
+
+    if rec.verificacao_obrigatoria() and not usuario.email_confirmado:
+        raise HTTPException(
+            status_code=403,
+            detail="Confirme seu e-mail antes de entrar.",
+        )
 
     registrar_sucesso(ip, dados.identificador)
 

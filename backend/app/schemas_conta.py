@@ -8,6 +8,7 @@ class ContaPrivada(BaseModel):
     username: str
     nome_exibicao: str
     email: EmailStr
+    email_confirmado: bool
 
 
 class AtualizarContaEntrada(BaseModel):

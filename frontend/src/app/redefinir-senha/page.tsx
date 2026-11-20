@@ -1,0 +1,24 @@
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import { FormularioRedefinicao } from "@/components/formularios-recuperacao";
+import styles from "../autenticacao.module.css";
+
+export const metadata: Metadata = {
+  title: "Redefinir senha | Lettermusic",
+  referrer: "no-referrer",
+  robots: { index: false, follow: false },
+};
+
+export default function RedefinirSenhaPage() {
+  return (
+    <main className={styles.container}>
+      <h1>Nova senha</h1>
+      <p className={styles.introducao}>
+        Escolha uma nova senha para sua conta.
+      </p>
+      <Suspense fallback={<p>Carregando formulário...</p>}>
+        <FormularioRedefinicao />
+      </Suspense>
+    </main>
+  );
+}

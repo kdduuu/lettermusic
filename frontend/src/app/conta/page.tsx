@@ -7,12 +7,14 @@ import {
   FormularioNome,
   FormularioSenha,
 } from "@/components/formularios-conta";
+import { FormularioReenviar } from "@/components/formularios-recuperacao";
 import styles from "../autenticacao.module.css";
 
 type Conta = {
   username: string;
   nome_exibicao: string;
   email: string;
+  email_confirmado: boolean;
 };
 
 function contaValida(valor: unknown): valor is Conta {
@@ -22,7 +24,8 @@ function contaValida(valor: unknown): valor is Conta {
 
   return typeof dados.username === "string" &&
     typeof dados.nome_exibicao === "string" &&
-    typeof dados.email === "string";
+    typeof dados.email === "string" &&
+    typeof dados.email_confirmado === "boolean";
 }
 
 // Conteudo dinamico: depende da sessao do usuario.
@@ -72,6 +75,12 @@ async function ConteudoConta() {
         <h2>Dados pessoais</h2>
         <p>Usuário: <strong>@{conta.username}</strong></p>
         <p>E-mail: <strong>{conta.email}</strong></p>
+        <p>
+          Status: {conta.email_confirmado ? "Confirmado" : "Pendente de confirmação"}
+        </p>
+        {!conta.email_confirmado && (
+          <FormularioReenviar emailInicial={conta.email} />
+        )}
         <FormularioNome nome={conta.nome_exibicao} />
       </section>
 

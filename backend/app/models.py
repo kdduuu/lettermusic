@@ -42,6 +42,9 @@ class Usuario(Base):
     nome_exibicao: Mapped[str] = mapped_column(String(80))
     email: Mapped[str] = mapped_column(String(254), unique=True)
     senha_hash: Mapped[str] = mapped_column(String(255))
+    email_confirmado: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="false"
+    )
     sessao_versao: Mapped[int] = mapped_column(
         Integer, nullable=False, default=0, server_default="0"
     )
@@ -272,4 +275,38 @@ class ItemLista(Base):
     adicionado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=agora_utc,
+    )
+
+
+class TokenConta(Base):
+    """Token temporario de recuperacao ou verificacao."""
+
+    __tablename__ = "tokens_conta"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    usuario_id: Mapped[int] = mapped_column(
+        ForeignKey("usuarios.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    finalidade: Mapped[str] = mapped_column(
+        String(20), nullable=False,
+    )
+
+    token_hash: Mapped[str] = mapped_column(
+        String(64), nullable=False, unique=True,
+    )
+
+    expira_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False,
+    )
+
+    usado_em: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+    )
+
+    criado_em: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=agora_utc,
     )

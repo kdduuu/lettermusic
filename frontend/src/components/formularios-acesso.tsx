@@ -15,9 +15,13 @@ export function FormularioLogin() {
       <input id="identificador" name="identificador" autoComplete="username" required maxLength={254} />
       <label htmlFor="senha-login">Senha</label>
       <input id="senha-login" name="senha" type="password" autoComplete="current-password" required />
+      <p className={styles.alternativa}>
+        <Link href="/esqueci-senha">Esqueci minha senha</Link>
+      </p>
       {estado.mensagem && <p role="alert" className={styles.mensagem}>{estado.mensagem}</p>}
       <button type="submit" disabled={pendente}>{pendente ? "Entrando..." : "Entrar"}</button>
       <p className={styles.alternativa}>Ainda não tem conta? <Link href="/cadastro">Criar conta</Link></p>
+      <p className={styles.alternativa}>Não recebeu a confirmação? <Link href="/reenviar-confirmacao">Reenviar link</Link></p>
     </form>
   );
 }

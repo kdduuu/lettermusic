@@ -22,7 +22,9 @@ async function autenticar(identificador: string, senha: string): Promise<EstadoA
           ? "Muitas tentativas. Aguarde um minuto."
           : resposta.status === 401
             ? "Usuário/e-mail ou senha incorretos."
-            : "Não foi possível entrar agora. Tente novamente.",
+            : resposta.status === 403
+              ? "Confirme seu e-mail antes de entrar. Solicite outro link, se necessário."
+              : "Não foi possível entrar agora. Tente novamente.",
       };
     }
 
