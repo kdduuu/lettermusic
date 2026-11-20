@@ -8,18 +8,39 @@ import styles from "../../page.module.css";
 
 type Props = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ pagina?: string | string[] }>;
+  searchParams: Promise<{
+    pagina?: string | string[];
+    tipo?: string | string[];
+    ordem?: string | string[];
+  }>;
 };
 
 async function Conteudo({ params, searchParams }: Props) {
   const { id } = await params;
   if (!MBID_VALIDO.test(id)) notFound();
 
-  const pagina = obterPagina((await searchParams).pagina);
+  const filtros = await searchParams;
+  const pagina = obterPagina(filtros.pagina);
+  const tipos = ["todos", "album", "single", "ep", "compilation", "live"];
+  const tipo = typeof filtros.tipo === "string" && tipos.includes(filtros.tipo) ? filtros.tipo : "todos";
+  const ordem = filtros.ordem === "antigos" || filtros.ordem === "recentes" ? filtros.ordem : "catalogo";
+  const endereco = `/artistas/${id}?${new URLSearchParams({ tipo, ordem })}`;
   const perfil = await artista(id);
   if (!perfil.ok) return <p role="alert" className={styles.message}>{perfil.mensagem}</p>;
 
-  const obras = await discografia(id, pagina);
+  const obras = await discografia(id, pagina, tipo);
+  const itens = obras.ok ? [...obras.dados.resultados] : [];
+
+  if (ordem !== "catalogo") {
+    itens.sort((a, b) => {
+      if (!a.data && !b.data) return a.titulo.localeCompare(b.titulo);
+      if (!a.data) return 1;
+      if (!b.data) return -1;
+      return ordem === "antigos"
+        ? a.data.localeCompare(b.data)
+        : b.data.localeCompare(a.data);
+    });
+  }
 
   return (
     <>
@@ -31,10 +52,28 @@ async function Conteudo({ params, searchParams }: Props) {
       <section className={styles.descobertaSecao}>
         <h2>Discografia</h2>
         <p>Álbuns, singles e outros lançamentos vinculados ao artista.</p>
+        <form action={`/artistas/${id}`} className={styles.filtroCatalogo}>
+          <label htmlFor="tipo-discografia">Lançamentos</label>
+          <select id="tipo-discografia" name="tipo" defaultValue={tipo}>
+            <option value="todos">Todos</option>
+            <option value="album">Álbuns</option>
+            <option value="single">Singles</option>
+            <option value="ep">EPs</option>
+            <option value="compilation">Coletâneas</option>
+            <option value="live">Ao vivo</option>
+          </select>
+          <label htmlFor="ordem-discografia">Ordem nesta página</label>
+          <select id="ordem-discografia" name="ordem" defaultValue={ordem}>
+            <option value="catalogo">Catálogo</option>
+            <option value="antigos">Mais antigos</option>
+            <option value="recentes">Mais recentes</option>
+          </select>
+          <button type="submit">Aplicar</button>
+        </form>
         {obras.ok ? (
           <>
-            <ResultadosMusicais itens={obras.dados.resultados} categoria="albuns" />
-            <Paginacao pagina={pagina} temProxima={obras.dados.tem_proxima} endereco={`/artistas/${id}`} />
+            <ResultadosMusicais itens={itens} categoria="albuns" />
+            <Paginacao pagina={pagina} temProxima={obras.dados.tem_proxima} endereco={endereco} />
           </>
         ) : <p role="alert" className={styles.message}>{obras.mensagem}</p>}
       </section>

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { Paginacao, ResultadosMusicais } from "@/components/exploracao-musical";
-import { buscar, obterPagina, type Categoria } from "@/lib/exploracao";
+import { buscar, obterPagina, type Categoria, type Item } from "@/lib/exploracao";
+import { MBID_VALIDO } from "@/lib/estado-album";
+import { TentarNovamente } from "@/components/tentar-novamente";
 import { idPositivo, verificarMinhaLista } from "@/lib/listas";
 import { obterTokenSessao } from "@/lib/sessao";
 import styles from "../page.module.css";
@@ -11,6 +13,7 @@ type Parametros = Promise<{
   categoria?: string | string[];
   pagina?: string | string[];
   lista?: string | string[];
+  artista?: string | string[];
 }>;
 
 const CATEGORIAS: Categoria[] = ["albuns", "artistas", "faixas"];
@@ -24,6 +27,9 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
     ? params.categoria as Categoria : listaId ? "albuns" : "todos";
 
   const pagina = obterPagina(params.pagina);
+  const artistaId = !listaId && categoria !== "todos" &&
+    categoria !== "artistas" && typeof params.artista === "string" &&
+    MBID_VALIDO.test(params.artista) ? params.artista : undefined;
   const token = listaId ? await obterTokenSessao() : null;
   const minhaLista = listaId && token ? await verificarMinhaLista(listaId, token) : null;
   const permitida = minhaLista?.ok ? minhaLista.dados : null;
@@ -64,8 +70,8 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
             </nav>
           ) : null}
 
-          <Suspense fallback={<p className={styles.message}>Buscando música...</p>} key={`${termo}-${categoria}-${pagina}`}>
-            <Resultados termo={termo} categoria={categoria} pagina={pagina} listaId={permitida?.id} listaContexto={listaId ?? undefined} />
+          <Suspense fallback={<p className={styles.message}>Buscando música...</p>} key={`${termo}-${categoria}-${pagina}-${artistaId ?? ""}`}>
+            <Resultados termo={termo} categoria={categoria} pagina={pagina} listaId={permitida?.id} listaContexto={listaId ?? undefined} artistaId={artistaId} />
           </Suspense>
         </>
       ) : <p className={styles.message}>Informe entre 2 e 100 caracteres para pesquisar.</p>}
@@ -73,41 +79,284 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
   );
 }
 
-async function Resultados({
-  termo, categoria, pagina, listaId, listaContexto,
+type Consulta = Awaited<ReturnType<typeof buscar>>;
+
+function normalizar(texto: string) {
+  return texto.normalize("NFKD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+}
+
+// Contexto aproximado conservador: uma alteracao em palavra longa.
+function quaseIgual(a: string, b: string) {
+  if (a.length < 5 || b.length < 5 || a.includes(" ") ||
+      b.includes(" ") || a[0] !== b[0] ||
+      Math.abs(a.length - b.length) > 1) return false;
+
+  let i = 0;
+  let j = 0;
+  let erros = 0;
+
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) {
+      i++;
+      j++;
+      continue;
+    }
+
+    if (++erros > 1) return false;
+
+    if (a.length >= b.length) i++;
+    if (b.length >= a.length) j++;
+  }
+
+  return erros + (a.length - i) + (b.length - j) <= 1;
+}
+
+function escolherArtista(
+  resultado: Consulta,
+  termo: string,
+): Item | null {
+  if (!resultado.ok) return null;
+
+  const primeiro = resultado.dados.resultados[0];
+  if (!primeiro) return null;
+
+  const busca = normalizar(termo);
+  const nome = normalizar(primeiro.titulo);
+
+  if (busca === nome) return primeiro;
+
+  if (quaseIgual(busca, nome)) {
+    const ambiguo = resultado.dados.resultados.slice(1).some(item => {
+      const outro = normalizar(item.titulo);
+      return outro === busca || outro === nome || quaseIgual(busca, outro);
+    });
+
+    if (!ambiguo) return primeiro;
+  }
+
+  return null;
+}
+
+async function SecaoResultado({
+  tarefa, termo, tipo, geral, pagina,
+  listaId, endereco, contexto, artistaId,
+}: {
+  tarefa: Promise<Consulta>;
+  termo: string;
+  tipo: Categoria;
+  geral: boolean;
+  pagina: number;
+  listaId?: number;
+  endereco: string;
+  contexto?: Promise<Item | null>;
+  artistaId?: string;
+}) {
+  const resultado = await tarefa;
+  const artista = contexto ? await contexto : null;
+
+  if (geral && resultado.ok && !resultado.dados.resultados.length) {
+    return null;
+  }
+
+  const itens = resultado.ok ? resultado.dados.resultados : [];
+  const primeiro = itens[0];
+
+  const destaque = geral && tipo === "artistas" &&
+    primeiro && artista?.id_musicbrainz === primeiro.id_musicbrainz;
+
+  const vinculo = tipo !== "artistas"
+    ? artista?.id_musicbrainz ?? artistaId
+    : undefined;
+
+  const enderecoContextual = vinculo
+    ? `${endereco}&artista=${encodeURIComponent(vinculo)}`
+    : endereco;
+
+  const tituloSecao = destaque
+    ? "Outros artistas"
+    : artista && tipo !== "artistas"
+      ? `${TITULOS[tipo]} de ${artista.titulo}`
+      : TITULOS[tipo];
+
+  return (
+    <section className={styles.results}>
+      {destaque ? (
+        <>
+          <h2>
+            {normalizar(primeiro.titulo) === normalizar(termo)
+              ? "Artista em destaque"
+              : "Artista sugerido"}
+          </h2>
+          <ResultadosMusicais itens={[primeiro]} categoria="artistas" />
+        </>
+      ) : null}
+
+      {(!destaque || itens.length > 1 ||
+        (resultado.ok && resultado.dados.tem_proxima)) ? (
+        <div className={styles.tituloDescoberta}>
+          <h2>{tituloSecao}</h2>
+          {geral && resultado.ok &&
+            (resultado.dados.tem_proxima || Boolean(vinculo)) ? (
+              <Link prefetch={false} href={enderecoContextual}>
+                Ver todos
+              </Link>
+            ) : null}
+        </div>
+      ) : null}
+
+      {!geral && vinculo ? (
+        <p className={styles.notaExploracao}>
+          Resultados do artista selecionado.{" "}
+          <Link prefetch={false} href={endereco}>
+            Ver busca geral
+          </Link>
+        </p>
+      ) : null}
+
+      {resultado.ok ? (
+        <>
+          {destaque && itens.length === 1 ? null : (
+            <ResultadosMusicais
+              itens={destaque ? itens.slice(1) : itens}
+              categoria={tipo}
+              listaId={listaId}
+            />
+          )}
+
+          {!geral ? (
+            <>
+              <p className={styles.notaExploracao}>
+                Até 60 resultados relevantes. Refine a pesquisa para encontrar outros.
+              </p>
+              <Paginacao
+                pagina={pagina}
+                temProxima={resultado.dados.tem_proxima}
+                endereco={enderecoContextual}
+              />
+            </>
+          ) : null}
+        </>
+      ) : (
+        <p role="alert" className={styles.message}>
+          {resultado.mensagem}{" "}
+          <TentarNovamente />
+        </p>
+      )}
+    </section>
+  );
+}
+
+async function AvisoSemResultados({
+  tarefas,
+}: {
+  tarefas: Promise<Consulta>[];
+}) {
+  const resultados = await Promise.all(tarefas);
+
+  return resultados.every(r => r.ok && r.dados.resultados.length === 0)
+    ? <p className={styles.message}>
+        Nenhum resultado encontrado. Tente outro termo.
+      </p>
+    : null;
+}
+
+function Resultados({
+  termo, categoria, pagina,
+  listaId, listaContexto, artistaId,
 }: {
   termo: string;
   categoria: Categoria | "todos";
   pagina: number;
   listaId?: number;
   listaContexto?: number;
+  artistaId?: string;
 }) {
-  const categorias = categoria === "todos" ? ["artistas", "albuns", "faixas"] as const : [categoria];
-  const secoes = [];
+  const geral = categoria === "todos";
 
-  // Sequencial: nao disputar o mesmo limitador de rede dentro da busca.
-  for (const tipo of categorias) {
-    const resultado = await buscar(termo, tipo, categoria === "todos" ? 1 : pagina, categoria === "todos" ? 3 : 12);
-    const p = new URLSearchParams({ termo, categoria: tipo });
-    if (listaContexto) p.set("lista", String(listaContexto));
-    const endereco = `/buscar?${p}`;
+  const categorias: readonly Categoria[] = categoria === "todos"
+    ? ["artistas", "albuns", "faixas"]
+    : [categoria];
 
-    secoes.push(
-      <section className={styles.results} key={tipo}>
-        <div className={styles.tituloDescoberta}>
-          <h2>{TITULOS[tipo]}</h2>
-          {categoria === "todos" ? <Link prefetch={false} href={endereco}>Ver todos</Link> : null}
-        </div>
-        {resultado.ok ? (
-          <>
-            <ResultadosMusicais itens={resultado.dados.resultados} categoria={tipo} listaId={listaId} />
-            {categoria !== "todos" ? <Paginacao pagina={pagina} temProxima={resultado.dados.tem_proxima} endereco={endereco} /> : null}
-          </>
-        ) : <p role="alert" className={styles.message}>{resultado.mensagem}</p>}
-      </section>
-    );
-  }
-  return <>{secoes}</>;
+  let anterior: Promise<unknown> = Promise.resolve();
+  let contexto: Promise<Item | null> = Promise.resolve(null);
+
+  const tarefas = categorias.map(tipo => {
+    // Captura o contexto anterior para evitar dependencias circulares.
+    const contextoAnterior = contexto;
+
+    const tarefa = anterior.then(async () => {
+      const escolhido = geral && tipo !== "artistas"
+        ? await contextoAnterior
+        : null;
+
+      return buscar(
+        termo,
+        tipo,
+        geral ? 1 : pagina,
+        geral ? 3 : 12,
+        escolhido?.id_musicbrainz ?? artistaId,
+      );
+    });
+
+    if (geral && tipo === "artistas") {
+      contexto = tarefa.then(resultado =>
+        escolherArtista(resultado, termo)
+      );
+    }
+
+    anterior = tarefa;
+
+    return {
+      tipo,
+      tarefa,
+      contexto: geral ? contexto : undefined,
+    };
+  });
+
+  return (
+    <>
+      {tarefas.map(({ tipo, tarefa, contexto }) => {
+        const p = new URLSearchParams({
+          termo,
+          categoria: tipo,
+        });
+
+        if (listaContexto) {
+          p.set("lista", String(listaContexto));
+        }
+
+        return (
+          <Suspense key={tipo} fallback={
+            <p className={styles.message}>
+              Buscando {TITULOS[tipo].toLowerCase()}...
+            </p>
+          }>
+            <SecaoResultado
+              tarefa={tarefa}
+              termo={termo}
+              tipo={tipo}
+              geral={geral}
+              pagina={pagina}
+              listaId={listaId}
+              endereco={`/buscar?${p}`}
+              contexto={contexto}
+              artistaId={artistaId}
+            />
+          </Suspense>
+        );
+      })}
+
+      {geral ? (
+        <Suspense fallback={null}>
+          <AvisoSemResultados tarefas={tarefas.map(t => t.tarefa)} />
+        </Suspense>
+      ) : null}
+    </>
+  );
 }
 
 export default function BuscarPage({ searchParams }: { searchParams: Parametros }) {

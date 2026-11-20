@@ -30,6 +30,7 @@ class RespostaCapa(BaseModel):
 @router.get(
     "/catalogo/musicbrainz/{id_musicbrainz}",
     response_model=MetadadosObraOficial,
+    response_model_exclude_unset=True,
     tags=["Catálogo Musical"],
 )
 def detalhar_obra(id_musicbrainz: UUID):

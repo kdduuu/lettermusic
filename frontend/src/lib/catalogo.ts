@@ -1,6 +1,13 @@
 // Módulo de acesso à API executado no servidor Next.js.
 // Não importar em Client Components.
+export type CreditoArtista = {
+  id_musicbrainz: string | null;
+  nome: string;
+  separador: string;
+};
+
 export type ObraMusical = {
+  creditos_artistas?: CreditoArtista[];
   id_musicbrainz: string | null;
   titulo: string | null;
   artista: string | null;
@@ -27,6 +34,16 @@ function converterObra(item: Record<string, unknown>): ObraMusical {
     artista: stringOuNull(item.artista),
     tipo: stringOuNull(item.tipo),
     data_lancamento: stringOuNull(item.data_lancamento),
+    creditos_artistas: Array.isArray(item.creditos_artistas)
+      ? item.creditos_artistas.filter(
+          (c: unknown): c is CreditoArtista =>
+            objeto(c) && typeof c.nome === "string" &&
+            typeof c.separador === "string" &&
+            (c.id_musicbrainz === null ||
+              (typeof c.id_musicbrainz === "string" &&
+                /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(c.id_musicbrainz)))
+        )
+      : [],
   };
 }
 

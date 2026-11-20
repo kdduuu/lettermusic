@@ -117,7 +117,20 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
         <div className={styles.info}>
           <span className={styles.accent} aria-hidden="true" />
           <h1>{obra.titulo}</h1>
-          <p className={styles.artist}>{obra.artista ?? "Artista não informado"}</p>
+          <p className={styles.artist}>
+            {obra.creditos_artistas?.length ? (
+              obra.creditos_artistas.map((credito, indice) => (
+                <span key={`${credito.id_musicbrainz}-${indice}`}>
+                  {credito.id_musicbrainz ? (
+                    <Link prefetch={false} href={`/artistas/${credito.id_musicbrainz}`}>
+                      {credito.nome}
+                    </Link>
+                  ) : credito.nome}
+                  {credito.separador}
+                </span>
+              ))
+            ) : obra.artista ?? "Artista não informado"}
+          </p>
           <p className={styles.meta}>
             {[obra.data_lancamento?.slice(0, 4), obra.tipo].filter(Boolean).join(" · ")}
           </p>

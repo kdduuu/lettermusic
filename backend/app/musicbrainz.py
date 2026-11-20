@@ -21,7 +21,8 @@ INTERVALO_REQUISICOES = 1.05
 TIMEOUT = 5.0
 MAX_TENTATIVAS = 2
 ESPERA_MAX_RETRY = 3.0
-TTL_BUSCA = 300.0
+TTL_BUSCA = 1800.0
+TTL_CACHE_OBSOLETO = 3600.0
 TTL_DETALHE = 3600.0
 MAX_CACHE = 512
 
@@ -122,14 +123,37 @@ def _ler_cache(chave):
             if _agora() < validade:
                 _cache.move_to_end(chave)
                 return True, deepcopy(dados)
-            del _cache[chave]
+            # Preserva dados expirados por um periodo limitado.
+            # Eles so serao utilizados caso a rede falhe.
+            if _agora() - validade > TTL_CACHE_OBSOLETO:
+                del _cache[chave]
         return False, None
+
+
+def _ler_obsoleto(chave):
+    """Recupera dados expirados somente durante falhas externas."""
+    with _lock_cache:
+        entrada = _cache.get(chave)
+        if entrada is None:
+            return None
+
+        validade, dados = entrada
+        agora = _agora()
+
+        if validade <= agora <= validade + TTL_CACHE_OBSOLETO:
+            _cache.move_to_end(chave)
+            return deepcopy(dados)
+
+        return None
 
 
 def _guardar_cache(chave, dados, ttl):
     with _lock_cache:
         agora = _agora()
-        for antiga in [k for k, (validade, _) in _cache.items() if validade <= agora]:
+        for antiga in [
+            k for k, (validade, _) in _cache.items()
+            if validade + TTL_CACHE_OBSOLETO < agora
+        ]:
             del _cache[antiga]
         _cache[chave] = (agora + ttl, deepcopy(dados))
         _cache.move_to_end(chave)
@@ -153,7 +177,20 @@ def _consultar(url, parametros, operacao, ttl, interpretar):
         encontrado, dados = _ler_cache(chave)
         if encontrado:
             return dados
-        resposta = _requisitar(url, parametros, operacao)
+        try:
+            resposta = _requisitar(url, parametros, operacao)
+        except httpx.HTTPError:
+            anterior = _ler_obsoleto(chave)
+
+            if anterior is not None:
+                _logger.warning(
+                    "MusicBrainz %s: reutilizando cache durante falha",
+                    operacao,
+                )
+                return anterior
+
+            raise
+
         if operacao == "detalhe" and resposta.status_code == 404:
             return None
         try:
@@ -263,10 +300,39 @@ def _interpretar_detalhe(grupo: dict, mbid: str) -> dict:
     ):
         raise ValueError("Resposta inesperada do MusicBrainz.")
 
-    return {
+    resultado = {
         "id_musicbrainz": mbid,
         "titulo": grupo["title"],
         "artista": extrair_artista(grupo.get("artist-credit", [])),
         "tipo": grupo.get("primary-type"),
         "data_lancamento": grupo.get("first-release-date"),
     }
+
+    creditos = []
+
+    for credito in grupo.get("artist-credit", []):
+        if not isinstance(credito, dict):
+            continue
+
+        artista = credito.get("artist") or {}
+        nome = credito.get("name")
+        separador = credito.get("joinphrase", "")
+
+        if not isinstance(nome, str) or not nome.strip():
+            continue
+
+        try:
+            artista_id = str(UUID(str(artista.get("id"))))
+        except (ValueError, TypeError, AttributeError):
+            artista_id = None
+
+        creditos.append({
+            "id_musicbrainz": artista_id,
+            "nome": nome,
+            "separador": separador if isinstance(separador, str) else "",
+        })
+
+    if any(c["id_musicbrainz"] for c in creditos):
+        resultado["creditos_artistas"] = creditos
+
+    return resultado

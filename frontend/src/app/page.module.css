@@ -48,3 +48,6 @@
 .buscaCategorias a:hover { color: #fff; }
 .filtroCatalogo { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
 .filtroCatalogo select { background: #303030; color: #f5f5f5; padding: 10px; border: 1px solid #666; border-radius: 6px; font: inherit; }
+.filtroCatalogo { align-items: center; }
+.filtroCatalogo button { background: #ededed; color: #151515; border: 0; border-radius: 6px; padding: 10px 14px; font: inherit; cursor: pointer; }
+.notaExploracao { color: #bdbdbd; font-size: 13px; margin-top: 20px; }

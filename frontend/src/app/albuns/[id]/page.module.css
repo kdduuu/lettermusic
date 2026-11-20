@@ -17,6 +17,8 @@
   letter-spacing: -1.5px; margin: 0 0 14px;
 }
 .artist { font-size: 24px; margin: 0 0 16px; }
+.artist a { color: inherit; text-decoration: none; }
+.artist a:hover, .artist a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
 .meta { color: #999; font-size: 16px; margin: 0; }
 .message { padding-top: 32px; color: #aaa; }
 .social { max-width: 860px; margin-top: 64px; border-top: 1px solid #404040; padding-top: 30px; }

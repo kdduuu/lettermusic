@@ -2,12 +2,19 @@
 from typing import Literal
 from uuid import UUID
 
+import httpx
 from pydantic import BaseModel, Field
 
 from backend.app import musicbrainz as mb
+from backend.app.popularidade import obter_popularidade, obter_destaques
+from backend.app.relevancia import ordenar_resultados
 
 BASE = "https://musicbrainz.org/ws/2/"
 Categoria = Literal["albuns", "artistas", "faixas"]
+TipoDiscografia = Literal[
+    "todos", "album", "single", "ep", "compilation", "live"
+]
+MAX_CANDIDATOS = 60
 
 
 class LancamentoRelacionado(BaseModel):
@@ -68,27 +75,42 @@ def registros(dados, chave):
 
 
 def consulta_textual(termo: str, campos: tuple[str, ...]) -> str:
-    # O usuario fornece texto, nunca uma expressao Lucene arbitraria.
     palavras = termo.split()
     if not palavras:
         raise ValueError("Pesquisa vazia.")
 
     grupos = []
+
     for palavra in palavras:
         segura = mb.escapar_consulta(palavra)
-        grupos.append("(" + " OR ".join(
-            f'{campo}:"{segura}"' for campo in campos
-        ) + ")")
+        alternativas = [
+            f'{campo}:"{segura}"^3' for campo in campos
+        ]
+
+        # Busca aproximada somente para palavras suficientemente longas.
+        # Nao permite que operadores fornecidos pelo usuario virem filtros.
+        if len(palavra) >= 5 and palavra.isalnum():
+            alternativas.extend(
+                f"{campo}:{palavra}~1" for campo in campos
+            )
+
+        grupos.append("(" + " OR ".join(alternativas) + ")")
+
     return " AND ".join(grupos)
 
 
 def converter_album(dados):
+    secundarios = dados.get("secondary-types") or []
+    subtitulo = " · ".join(
+        tipo for tipo in secundarios if isinstance(tipo, str)
+    )
     return ItemExploracao(
         id_musicbrainz=identificador(dados.get("id")),
         titulo=dados["title"],
         artista=mb.extrair_artista(dados.get("artist-credit", [])),
         tipo=texto(dados.get("primary-type")),
         data=texto(dados.get("first-release-date")),
+        subtitulo=subtitulo or None,
     )
 
 
@@ -149,7 +171,102 @@ def interpretar_pagina(dados, chave, conversor, pagina, limite, total_chave):
     )
 
 
-def pesquisar(termo: str, categoria: Categoria, pagina: int, limite: int):
+def enriquecer_faixas(itens):
+    """Busca lancamentos relacionados em lote pelo ID das gravacoes."""
+    if not itens:
+        return itens
+
+    ids = {item.id_musicbrainz for item in itens}
+
+    query = " OR ".join(
+        f'rid:"{identificador_}"'
+        for identificador_ in sorted(ids)
+    )
+
+    try:
+        linhas = mb._consultar(
+            BASE + "recording/",
+            {
+                "query": query,
+                "fmt": "json",
+                "limit": len(ids),
+                "offset": 0,
+            },
+            "busca",
+            mb.TTL_DETALHE,
+            lambda dados: registros(dados, "recordings"),
+        )
+    except (httpx.HTTPError, ValueError, TypeError, KeyError, AttributeError):
+        return itens
+
+    relacionados = {}
+
+    for linha in linhas:
+        try:
+            item = converter_faixa(linha)
+        except (ValueError, TypeError, KeyError, AttributeError):
+            continue
+
+        if item.id_musicbrainz in ids:
+            relacionados[item.id_musicbrainz] = item.relacionados
+
+    return [
+        item.model_copy(update={
+            "relacionados": relacionados.get(item.id_musicbrainz, [])
+        })
+        for item in itens
+    ]
+
+
+def pagina_destaques(artista_id, categoria, pagina, limite):
+    destaques = obter_destaques(categoria, artista_id)
+
+    if not destaques:
+        return None
+
+    offset = (pagina - 1) * limite
+    recorte = destaques[offset:offset + limite]
+
+    itens = [
+        ItemExploracao(
+            id_musicbrainz=item["id_musicbrainz"],
+            titulo=item["titulo"],
+            artista=item.get("artista"),
+            tipo=item.get("tipo"),
+            data=item.get("data"),
+        )
+        for item in recorte
+    ]
+
+    # A previa de 3 faixas usa os dados ja retornados pelo
+    # ListenBrainz, sem consultar o MusicBrainz novamente.
+    # Na pagina completa, mantemos os lancamentos associados.
+    if categoria == "faixas" and limite > 3:
+        itens = enriquecer_faixas(itens)
+
+    return PaginaExploracao(
+        resultados=itens,
+        pagina=pagina,
+        tem_proxima=offset + len(recorte) < len(destaques),
+    )
+
+
+def pesquisar(
+    termo: str,
+    categoria: Categoria,
+    pagina: int,
+    limite: int,
+    artista_id: str | None = None,
+):
+    if artista_id and categoria != "artistas":
+        artista_id = identificador(artista_id)
+
+        destaques = pagina_destaques(
+            artista_id, categoria, pagina, limite
+        )
+
+        if destaques is not None:
+            return destaques
     configuracoes = {
         "albuns": (
             "release-group", "release-groups",
@@ -166,18 +283,75 @@ def pesquisar(termo: str, categoria: Categoria, pagina: int, limite: int):
     }
 
     entidade, chave, campos, conversor = configuracoes[categoria]
+    termo = " ".join(termo.split())
+    query = consulta_textual(termo, campos)
+
+    if categoria != "artistas":
+        # Bonus para resultados associados a lancamentos oficiais,
+        # sem eliminar completamente o restante do catalogo.
+        query = f"+({query}) status:official^2"
+
+    if artista_id and categoria != "artistas":
+        # Fallback: o termo pode estar incorreto, mas o MBID nao e ambiguo.
+        query = f'+(arid:"{artista_id}") status:official^2'
+
+        if categoria == "albuns":
+            query += " primarytype:album^3"
+
     parametros = {
-        "query": consulta_textual(termo, campos),
+        "query": query,
         "fmt": "json",
-        "limit": limite,
-        "offset": (pagina - 1) * limite,
+        "limit": MAX_CANDIDATOS,
+        "offset": 0,
     }
 
-    return mb._consultar(
-        BASE + entidade + "/", parametros, "busca", mb.TTL_BUSCA,
-        lambda dados: interpretar_pagina(
-            dados, chave, conversor, pagina, limite, "count"
-        ),
+    def interpretar(dados):
+        linhas = registros(dados, chave)
+        total = dados.get("count")
+
+        if type(total) is not int or total < 0:
+            raise ValueError("Contagem MusicBrainz invalida.")
+
+        return linhas[:MAX_CANDIDATOS]
+
+    # Mesma consulta para a previa e para as paginas individuais.
+    # Isto preserva o cache e evita reordenar cada pagina isoladamente.
+    linhas = mb._consultar(
+        BASE + entidade + "/", parametros, "busca",
+        mb.TTL_BUSCA, interpretar,
+    )
+
+    candidatos = []
+    ids = set()
+
+    for linha in linhas:
+        try:
+            item = conversor(linha)
+        except (ValueError, TypeError, KeyError, AttributeError):
+            continue
+
+        if item.id_musicbrainz not in ids:
+            ids.add(item.id_musicbrainz)
+            candidatos.append((linha, item))
+
+    # Consulta opcional fora do lock de rede do MusicBrainz.
+    # Nao chamar novamente o provedor opcional durante o fallback.
+    popularidade = (
+        {} if artista_id
+        else obter_popularidade(categoria, list(ids))
+    )
+
+    ordenados = ordenar_resultados(
+        termo, categoria, candidatos, popularidade
+    )
+
+    offset = (pagina - 1) * limite
+    recorte = ordenados[offset:offset + limite]
+
+    return PaginaExploracao(
+        resultados=[item for _, item in recorte],
+        pagina=pagina,
+        tem_proxima=offset + len(recorte) < len(ordenados),
     )
 
 
@@ -195,16 +369,27 @@ def consultar_artista(mbid: str):
     )
 
 
-def consultar_discografia(mbid: str, pagina: int, limite: int):
+def consultar_discografia(
+    mbid: str,
+    pagina: int,
+    limite: int,
+    tipo: TipoDiscografia = "todos",
+):
+    parametros = {
+        "artist": mbid,
+        "fmt": "json",
+        "inc": "artist-credits",
+        "limit": limite,
+        "offset": (pagina - 1) * limite,
+        "release-group-status": "website-default",
+    }
+
+    if tipo != "todos":
+        parametros["type"] = tipo
+
     return mb._consultar(
         BASE + "release-group/",
-        {
-            "artist": mbid,
-            "fmt": "json",
-            "inc": "artist-credits",
-            "limit": limite,
-            "offset": (pagina - 1) * limite,
-        },
+        parametros,
         "busca", mb.TTL_DETALHE,
         lambda dados: interpretar_pagina(
             dados, "release-groups", converter_album,
@@ -213,20 +398,18 @@ def consultar_discografia(mbid: str, pagina: int, limite: int):
     )
 
 
-def interpretar_faixas(dados):
-    edicoes = registros(dados, "releases")
-    if not edicoes:
-        return FaixasAlbum()
-
-    edicao = edicoes[0]
+def interpretar_edicao(edicao):
     faixas = []
 
     for indice, disco in enumerate(edicao.get("media") or [], start=1):
         for posicao, faixa in enumerate(disco.get("tracks") or [], start=1):
             gravacao = faixa.get("recording") or {}
-            titulo = texto(faixa.get("title")) or texto(gravacao.get("title"))
-            if not titulo:
-                continue
+            titulo = texto(faixa.get("title"))
+            desconhecidos = {"[unknown]", "unknown", "[untitled]"}
+            if not titulo or titulo.casefold() in desconhecidos:
+                titulo = texto(gravacao.get("title"))
+            if not titulo or titulo.casefold() in desconhecidos:
+                titulo = "Faixa sem título informado"
 
             duracao = faixa.get("length")
             if type(duracao) is not int or duracao < 0:
@@ -248,16 +431,48 @@ def interpretar_faixas(dados):
     )
 
 
+def interpretar_faixas(dados):
+    edicoes = registros(dados, "releases")
+    candidatas = []
+
+    for edicao in edicoes:
+        try:
+            candidatas.append(interpretar_edicao(edicao))
+        except (ValueError, TypeError, KeyError, AttributeError):
+            continue
+
+    if not candidatas:
+        return FaixasAlbum()
+
+    def qualidade(edicao):
+        desconhecidas = sum(
+            faixa.titulo == "Faixa sem título informado"
+            for faixa in edicao.faixas
+        )
+        proporcao = desconhecidas / max(1, len(edicao.faixas))
+
+        return (
+            not bool(edicao.faixas),
+            proporcao,
+            edicao.data is None,
+            edicao.data or "9999",
+            edicao.edicao_id or "",
+        )
+
+    return min(candidatas, key=qualidade)
+
+
 def consultar_faixas(mbid: str):
-    # Uma edicao oficial, identificada na resposta.
-    # Nao pressupoe que seja a edicao original.
+    # Seleciona uma edicao entre ate cinco candidatas oficiais.
+    # Prefere dados completos e datas mais antigas, sem afirmar
+    # que a escolhida seja necessariamente a edicao original.
     return mb._consultar(
         BASE + "release/",
         {
             "release-group": mbid,
             "status": "official",
             "inc": "recordings",
-            "limit": 1,
+            "limit": 5,
             "fmt": "json",
         },
         "busca", mb.TTL_DETALHE, interpretar_faixas,

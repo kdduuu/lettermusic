@@ -30,11 +30,18 @@ def buscar(
     categoria: ex.Categoria = "albuns",
     pagina: int = Query(default=1, ge=1, le=1000),
     limite: int = Query(default=12, ge=1, le=24),
+    artista_id: UUID | None = None,
 ):
     termo = termo.strip()
     if len(termo) < 2:
         raise HTTPException(422, "Informe pelo menos dois caracteres.")
-    return consultar(ex.pesquisar, termo, categoria, pagina, limite)
+    if artista_id is not None and categoria == "artistas":
+        raise HTTPException(422, "Contexto invalido para busca de artistas.")
+
+    return consultar(
+        ex.pesquisar, termo, categoria, pagina, limite,
+        str(artista_id) if artista_id else None,
+    )
 
 
 @router.get("/artistas/{mbid}", response_model=ex.ItemExploracao)
@@ -50,8 +57,9 @@ def discografia(
     mbid: UUID,
     pagina: int = Query(default=1, ge=1, le=1000),
     limite: int = Query(default=12, ge=1, le=24),
+    tipo: ex.TipoDiscografia = "todos",
 ):
-    return consultar(ex.consultar_discografia, str(mbid), pagina, limite)
+    return consultar(ex.consultar_discografia, str(mbid), pagina, limite, tipo)
 
 
 @router.get("/albuns/{mbid}/faixas", response_model=ex.FaixasAlbum)

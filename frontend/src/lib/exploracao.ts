@@ -108,10 +108,21 @@ export function obterPagina(valor: string | string[] | undefined) {
   return Number.isSafeInteger(n) && n >= 1 && n <= 1000 ? n : 1;
 }
 
-export function buscar(termo: string, categoria: Categoria, pagina = 1, limite = 12) {
+export function buscar(
+  termo: string,
+  categoria: Categoria,
+  pagina = 1,
+  limite = 12,
+  artistaId?: string,
+) {
   const params = new URLSearchParams({
     termo, categoria, pagina: String(pagina), limite: String(limite),
   });
+
+  if (artistaId && categoria !== "artistas") {
+    params.set("artista_id", artistaId);
+  }
+
   return consultar(`/busca?${params}`, paginaValida);
 }
 
@@ -119,8 +130,9 @@ export function artista(id: string) {
   return consultar(`/artistas/${encodeURIComponent(id)}`, itemValido);
 }
 
-export function discografia(id: string, pagina: number) {
-  return consultar(`/artistas/${encodeURIComponent(id)}/discografia?pagina=${pagina}`, paginaValida);
+export function discografia(id: string, pagina: number, tipo = "todos") {
+  const parametros = new URLSearchParams({ pagina: String(pagina), tipo });
+  return consultar(`/artistas/${encodeURIComponent(id)}/discografia?${parametros}`, paginaValida);
 }
 
 export function faixasAlbum(id: string) {

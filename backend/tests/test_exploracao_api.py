@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
 from backend.app import musicbrainz as mb
+from backend.app import exploracao as ex
 from backend.app.database import obter_sessao
 from backend.app.main import app
 from backend.app.models import Base, Obra
@@ -37,6 +38,8 @@ def cliente(monkeypatch):
         pytest.fail("Consulta externa nao simulada.")
 
     monkeypatch.setattr(mb.httpx, "get", bloquear_rede)
+    monkeypatch.setattr(ex, "obter_popularidade", lambda *args: {})
+    monkeypatch.setattr(ex, "obter_destaques", lambda *args: [])
 
     motor = create_engine(
         "sqlite+pysqlite://",
@@ -191,3 +194,273 @@ def test_catalogo_local_filtra_sem_consultar_api(cliente):
     assert r.status_code == 200
     assert r.json()["resultados"][0]["titulo"] == "Nevermind"
     assert not r.json()["tem_proxima"]
+
+
+def test_artista_popular_priorizado_sem_fixar_nome(cliente, monkeypatch):
+    simular(monkeypatch, {
+        "count": 2,
+        "artists": [
+            {"id": ARTISTA, "name": "Nirvana", "score": 100},
+            {"id": FAIXA, "name": "Nirvana", "score": 95},
+        ],
+    })
+
+    monkeypatch.setattr(
+        ex, "obter_popularidade",
+        lambda *args: {ARTISTA: 1, FAIXA: 50000},
+    )
+
+    c, _ = cliente
+    r = c.get("/catalogo/explorar/busca?termo=Nirvana&categoria=artistas")
+
+    assert r.status_code == 200
+    assert r.json()["resultados"][0]["id_musicbrainz"] == FAIXA
+
+
+def test_correspondencia_exata_supera_resultado_famoso(cliente, monkeypatch):
+    simular(monkeypatch, {
+        "count": 2,
+        "artists": [
+            {"id": ARTISTA, "name": "Nirvana", "score": 90},
+            {"id": FAIXA, "name": "Outra Nirvana", "score": 100},
+        ],
+    })
+
+    monkeypatch.setattr(
+        ex, "obter_popularidade",
+        lambda *args: {ARTISTA: 1, FAIXA: 1000000},
+    )
+
+    c, _ = cliente
+    r = c.get("/catalogo/explorar/busca?termo=Nirvana&categoria=artistas")
+
+    assert r.json()["resultados"][0]["id_musicbrainz"] == ARTISTA
+
+
+def test_ranking_e_paginacao_usam_mesmos_candidatos(cliente, monkeypatch):
+    chamadas = simular(monkeypatch, {
+        "count": 3,
+        "artists": [
+            {"id": ARTISTA, "name": "Nirvana", "score": 100},
+            {"id": FAIXA, "name": "Nirvana", "score": 100},
+            {"id": ALBUM, "name": "Nirvana 2002", "score": 90},
+        ],
+    })
+
+    monkeypatch.setattr(
+        ex, "obter_popularidade",
+        lambda *args: {ARTISTA: 10, FAIXA: 1000},
+    )
+
+    c, _ = cliente
+    base = "/catalogo/explorar/busca?termo=Nirvana&categoria=artistas&limite=1"
+    primeira = c.get(base).json()
+    segunda = c.get(base + "&pagina=2").json()
+
+    assert primeira["resultados"][0]["id_musicbrainz"] == FAIXA
+    assert segunda["resultados"][0]["id_musicbrainz"] == ARTISTA
+    assert primeira["tem_proxima"]
+    assert len(chamadas) == 1
+    assert chamadas[0][1]["limit"] == 60
+
+
+def test_busca_aceita_correspondencia_aproximada(cliente, monkeypatch):
+    chamadas = simular(monkeypatch, {
+        "count": 1,
+        "artists": [{"id": ARTISTA, "name": "Radiohead"}],
+    })
+
+    c, _ = cliente
+    r = c.get("/catalogo/explorar/busca?termo=Radiohed&categoria=artistas")
+
+    assert r.status_code == 200
+    assert r.json()["resultados"][0]["titulo"] == "Radiohead"
+    assert "artist:Radiohed~1" in chamadas[0][1]["query"]
+
+
+def test_discografia_filtra_tipo_no_provedor(cliente, monkeypatch):
+    chamadas = simular(monkeypatch, {
+        "release-group-count": 1,
+        "release-groups": [{
+            **GRUPO, "secondary-types": ["Compilation"],
+        }],
+    })
+
+    c, _ = cliente
+    r = c.get(
+        f"/catalogo/explorar/artistas/{ARTISTA}/discografia?tipo=compilation"
+    )
+
+    assert r.status_code == 200
+    assert chamadas[0][1]["type"] == "compilation"
+    assert r.json()["resultados"][0]["subtitulo"] == "Compilation"
+
+
+def test_faixas_priorizam_edicao_com_metadados_completos(cliente, monkeypatch):
+    simular(monkeypatch, {
+        "releases": [
+            {
+                "id": EDICAO, "title": "Edicao incompleta",
+                "date": "1991",
+                "media": [{"tracks": [{"title": "[unknown]"}]}],
+            },
+            {
+                "id": FAIXA, "title": "Edicao completa",
+                "date": "1992",
+                "media": [{"tracks": [{"title": "Come As You Are"}]}],
+            },
+        ],
+    })
+
+    c, _ = cliente
+    r = c.get(f"/catalogo/explorar/albuns/{ALBUM}/faixas")
+
+    assert r.status_code == 200
+    assert r.json()["edicao_id"] == FAIXA
+    assert r.json()["faixas"][0]["titulo"] == "Come As You Are"
+
+
+def test_detalhe_album_inclui_mbid_do_artista(cliente, monkeypatch):
+    simular(monkeypatch, {
+        **GRUPO,
+        "artist-credit": [{
+            "name": "Nirvana",
+            "artist": {"id": ARTISTA},
+            "joinphrase": "",
+        }],
+    })
+
+    c, _ = cliente
+    r = c.get(f"/catalogo/musicbrainz/{ALBUM}")
+
+    assert r.status_code == 200
+    assert r.json()["creditos_artistas"] == [{
+        "id_musicbrainz": ARTISTA,
+        "nome": "Nirvana",
+        "separador": "",
+    }]
+
+
+def test_busca_contextual_retorna_albuns_do_artista(cliente, monkeypatch):
+    def destaques(categoria, artista_id):
+        assert categoria == "albuns"
+        assert artista_id == ARTISTA
+
+        return [{
+            "id_musicbrainz": ALBUM,
+            "titulo": "Nevermind",
+            "artista": "Nirvana",
+            "tipo": "Album",
+            "data": "1991",
+            "ouvintes": 10000,
+        }]
+
+    monkeypatch.setattr(ex, "obter_destaques", destaques)
+
+    c, _ = cliente
+    r = c.get(
+        f"/catalogo/explorar/busca?termo=Nirvana"
+        f"&categoria=albuns&artista_id={ARTISTA}"
+    )
+
+    assert r.status_code == 200
+    assert r.json()["resultados"][0]["id_musicbrainz"] == ALBUM
+
+
+def test_fallback_contextual_preserva_mbid(cliente, monkeypatch):
+    chamadas = simular(monkeypatch, {
+        "count": 1,
+        "release-groups": [GRUPO],
+    })
+
+    c, _ = cliente
+    r = c.get(
+        f"/catalogo/explorar/busca?termo=Nirvana"
+        f"&categoria=albuns&artista_id={ARTISTA}"
+    )
+
+    assert r.status_code == 200
+    assert r.json()["resultados"][0]["titulo"] == "Nevermind"
+    assert f'arid:"{ARTISTA}"' in chamadas[0][1]["query"]
+
+
+def test_faixas_populares_enriquecem_lancamentos(cliente, monkeypatch):
+    monkeypatch.setattr(
+        ex, "obter_destaques",
+        lambda *args: [{
+            "id_musicbrainz": FAIXA,
+            "titulo": "Come As You Are",
+            "artista": "Nirvana",
+            "tipo": "Faixa",
+            "ouvintes": 10000,
+        }],
+    )
+
+    chamadas = simular(monkeypatch, {
+        "recordings": [{
+            "id": FAIXA,
+            "title": "Come As You Are",
+            "releases": [{
+                "id": EDICAO,
+                "title": "Nevermind",
+                "release-group": {
+                    "id": ALBUM, "title": "Nevermind",
+                },
+            }],
+        }],
+    })
+
+    c, _ = cliente
+
+    r = c.get(
+        f"/catalogo/explorar/busca?termo=Nirvana"
+        f"&categoria=faixas&artista_id={ARTISTA}"
+    )
+
+    assert r.status_code == 200
+
+    item = r.json()["resultados"][0]
+
+    assert item["id_musicbrainz"] == FAIXA
+    assert item["relacionados"][0]["id_musicbrainz"] == ALBUM
+    assert f'rid:"{FAIXA}"' in chamadas[0][1]["query"]
+
+
+def test_contexto_rejeita_mbid_invalido(cliente):
+    c, _ = cliente
+    r = c.get(
+        "/catalogo/explorar/busca?termo=Nirvana&artista_id=invalido"
+    )
+    assert r.status_code == 422
+
+
+def test_previa_faixas_evitar_consulta_musicbrainz_extra(
+    cliente, monkeypatch,
+):
+    monkeypatch.setattr(
+        ex,
+        "obter_destaques",
+        lambda *args: [{
+            "id_musicbrainz": FAIXA,
+            "titulo": "Come As You Are",
+            "artista": "Nirvana",
+            "tipo": "Faixa",
+            "ouvintes": 1000,
+        }],
+    )
+
+    def consulta_inesperada(*args, **kwargs):
+        pytest.fail("Previa nao deve consultar MusicBrainz.")
+
+    monkeypatch.setattr(mb, "_consultar", consulta_inesperada)
+
+    c, _ = cliente
+
+    r = c.get(
+        f"/catalogo/explorar/busca?termo=Nirvana"
+        f"&categoria=faixas&artista_id={ARTISTA}&limite=3"
+    )
+
+    assert r.status_code == 200
+    assert r.json()["resultados"][0]["titulo"] == "Come As You Are"
+    assert r.json()["resultados"][0]["relacionados"] == []

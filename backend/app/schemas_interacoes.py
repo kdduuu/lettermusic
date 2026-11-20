@@ -29,6 +29,12 @@ class ObraInteracao(BaseModel):
     )
 
 
+class CreditoArtista(BaseModel):
+    id_musicbrainz: str | None = None
+    nome: str
+    separador: str = ""
+
+
 class MetadadosObraOficial(BaseModel):
     """Contrato interno da resposta oficial do MusicBrainz (nao do cliente)."""
 
@@ -37,6 +43,7 @@ class MetadadosObraOficial(BaseModel):
     artista: str | None = Field(default=None, max_length=255)
     tipo: str | None = Field(default=None, max_length=30)
     data_lancamento: str | None = Field(default=None, max_length=10)
+    creditos_artistas: list[CreditoArtista] = Field(default_factory=list)
 
 
 class MarcarOuvidaEntrada(BaseModel):
