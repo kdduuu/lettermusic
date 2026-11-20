@@ -1,0 +1,21 @@
+.resultados { list-style: none; padding: 0; margin: 18px 0; max-width: 960px; }
+.resultados > li { display: flex; align-items: flex-start; gap: 18px; padding: 18px 0; border-bottom: 1px solid #484848; }
+.capa, .icone { position: relative; flex: 0 0 82px; width: 82px; height: 82px; border-radius: 6px; overflow: hidden; display: grid; place-items: center; background: #303030; color: #ccc; font-size: 28px; }
+.capa img { object-fit: cover; }
+.info { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+.info h3 { font: 600 22px Georgia, serif; margin: 0 0 6px; }
+.info a, .paginacao a { color: #f5f5f5; text-underline-offset: 4px; }
+.info p { color: #c6c6c6; font-size: 14px; margin: 7px 0; }
+.relacionados { display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px; }
+.relacionados p { flex-basis: 100%; }
+.paginacao { display: flex; justify-content: center; align-items: center; gap: 18px; padding: 25px 0; color: #ccc; }
+.faixas { max-width: 860px; margin-top: 44px; border-top: 1px solid #484848; padding-top: 24px; }
+.faixas h2 { font: 600 25px Georgia, serif; }
+.faixas ul { padding: 0; list-style: none; }
+.faixas li { display: grid; grid-template-columns: 42px minmax(0, 1fr) 56px; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid #393939; }
+.faixas li span { color: #c6c6c6; font-size: 13px; }
+.mensagem { color: #c6c6c6; line-height: 1.65; }
+@media (max-width: 600px) {
+  .capa, .icone { width: 62px; height: 62px; flex-basis: 62px; }
+  .info h3 { font-size: 18px; }
+}

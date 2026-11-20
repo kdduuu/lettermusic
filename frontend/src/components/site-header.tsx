@@ -19,7 +19,7 @@ export function SearchForm({ variant = "header" }: SearchFormProps) {
       className={`${styles.search} ${variant === "hero" ? styles.heroSearch : ""}`}
     >
       <label htmlFor={id} className={styles.srOnly}>
-        Buscar álbuns
+        Buscar músicas
       </label>
       <input
         id={id}
@@ -28,7 +28,7 @@ export function SearchForm({ variant = "header" }: SearchFormProps) {
         minLength={2}
         maxLength={100}
         required
-        placeholder="Buscar álbuns..."
+        placeholder="Álbum, artista ou faixa..."
       />
       <button type="submit">Buscar</button>
     </form>
@@ -69,7 +69,7 @@ export function SiteHeader() {
         </Link>
         <nav className={styles.nav} aria-label="Navegação principal">
           <Link href="/">Descobrir</Link>
-          <span title="Em desenvolvimento">Álbuns</span>
+          <Link href="/albuns">Álbuns</Link>
           <Link href="/reviews">Reviews</Link>
           <Link href="/listas">Listas</Link>
           <Link href="/comunidade">Comunidade</Link>

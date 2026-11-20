@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.rotas_detalhes import router as router_detalhes
 from backend.app.rotas_feed import router as router_feed
+from backend.app.rotas_exploracao import router as router_exploracao
 
 from backend.app.auth import (
     autenticar_usuario,
@@ -121,6 +122,7 @@ configurar_erros_catalogo(app)
 
 app.include_router(router_detalhes)
 app.include_router(router_feed)
+app.include_router(router_exploracao)
 
 
 # -----------------------------------------

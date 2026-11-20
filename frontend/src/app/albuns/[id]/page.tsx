@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { CapaAlbum } from "@/components/capa-album";
+import { FaixasDoAlbum } from "@/components/exploracao-musical";
 import { FormularioInteracoes } from "@/components/formulario-interacoes";
 import { FormularioAvaliacao } from "@/components/formulario-avaliacao";
 import { FormularioAdicionarAlbum } from "@/components/formularios-listas";
@@ -122,6 +123,9 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
           </p>
         </div>
       </article>
+      <Suspense fallback={<p className={styles.message}>Carregando faixas...</p>}>
+        <FaixasDoAlbum id={id} />
+      </Suspense>
       <Suspense fallback={<p className={styles.message}>Carregando atividade musical...</p>}>
         <BlocoSocial id={id} />
       </Suspense>
