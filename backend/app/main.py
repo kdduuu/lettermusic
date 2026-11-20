@@ -1,9 +1,16 @@
 import httpx
 
-from fastapi import Depends, FastAPI, HTTPException, Path, Query
+from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request
 from sqlalchemy.orm import Session
 
 from backend.app.rotas_detalhes import router as router_detalhes
+from backend.app.rotas_conta import router as router_conta
+from backend.app.erros_validacao import configurar_erros_validacao
+from backend.app.limites_login import (
+    verificar,
+    registrar_falha,
+    registrar_sucesso,
+)
 from backend.app.rotas_feed import router as router_feed
 from backend.app.rotas_exploracao import router as router_exploracao
 
@@ -119,8 +126,10 @@ app = FastAPI(title="Lettermusic API")
 configurar_cors(app)
 
 configurar_erros_catalogo(app)
+configurar_erros_validacao(app)
 
 app.include_router(router_detalhes)
+app.include_router(router_conta)
 app.include_router(router_feed)
 app.include_router(router_exploracao)
 
@@ -279,16 +288,29 @@ def consultar_atividade_publica(
 )
 def fazer_login(
     dados: CredenciaisLogin,
+    request: Request,
     sessao: Session = Depends(obter_sessao),
 ):
-    usuario = autenticar_usuario(
-        sessao,
-        dados.identificador,
-        dados.senha,
-    )
+    ip = request.client.host if request.client else "desconhecido"
+
+    verificar(ip, dados.identificador)
+
+    try:
+        usuario = autenticar_usuario(
+            sessao,
+            dados.identificador,
+            dados.senha,
+        )
+    except HTTPException:
+        registrar_falha(ip, dados.identificador)
+        raise
+
+    registrar_sucesso(ip, dados.identificador)
 
     return {
-        "access_token": criar_token(usuario.id),
+        "access_token": criar_token(
+            usuario.id, usuario.sessao_versao
+        ),
         "token_type": "bearer",
     }
 

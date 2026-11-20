@@ -7,6 +7,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Index,
+    Integer,
     String,
     Text,
     UniqueConstraint,
@@ -41,6 +42,9 @@ class Usuario(Base):
     nome_exibicao: Mapped[str] = mapped_column(String(80))
     email: Mapped[str] = mapped_column(String(254), unique=True)
     senha_hash: Mapped[str] = mapped_column(String(255))
+    sessao_versao: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
     bio: Mapped[str | None] = mapped_column(String(300))
     criado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=agora_utc

@@ -60,11 +60,11 @@ def autenticar_usuario(
     return usuario
 
 
-def criar_token(usuario_id: int) -> str:
+def criar_token(usuario_id: int, versao: int = 0) -> str:
     expiracao = datetime.now(timezone.utc) + timedelta(minutes=30)
 
     return jwt.encode(
-        {"sub": str(usuario_id), "exp": expiracao},
+        {"sub": str(usuario_id), "exp": expiracao, "ver": versao},
         obter_chave(),
         algorithm="HS256"
     )
@@ -94,6 +94,13 @@ def obter_usuario_atual(
     usuario = sessao.get(Usuario, usuario_id)
 
     if usuario is None:
+        raise erro_autenticacao()
+
+    # Tokens anteriores a revogacao deixam de ser aceitos.
+    if (
+        type(dados.get("ver")) is not int
+        or dados["ver"] != usuario.sessao_versao
+    ):
         raise erro_autenticacao()
 
     return usuario

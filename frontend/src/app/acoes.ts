@@ -18,9 +18,11 @@ async function autenticar(identificador: string, senha: string): Promise<EstadoA
     if (!resposta.ok) {
       return {
         sucesso: false,
-        mensagem: resposta.status === 401
-          ? "Usuário/e-mail ou senha incorretos."
-          : "Não foi possível entrar agora. Tente novamente.",
+        mensagem: resposta.status === 429
+          ? "Muitas tentativas. Aguarde um minuto."
+          : resposta.status === 401
+            ? "Usuário/e-mail ou senha incorretos."
+            : "Não foi possível entrar agora. Tente novamente.",
       };
     }
 
@@ -109,6 +111,19 @@ export async function cadastrar(
 }
 
 export async function sair(): Promise<void> {
+  const token = await obterTokenSessao();
+
+  if (token) {
+    try {
+      await requisitarBackend("/auth/sessoes/revogar", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch {
+      // Mesmo sem API, limpar o cookie deste navegador.
+    }
+  }
+
   const armazenamento = await cookies();
   armazenamento.delete(NOME_COOKIE_SESSAO);
   revalidatePath("/", "layout");

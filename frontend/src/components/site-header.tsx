@@ -53,6 +53,7 @@ async function AreaConta() {
         {usuario.username}
       </Link>
       <Link href="/biblioteca">Biblioteca</Link>
+      <Link href="/conta">Conta</Link>
       <form action={sair}>
         <button type="submit">Sair</button>
       </form>
