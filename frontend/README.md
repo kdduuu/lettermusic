@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lettermusic — Frontend
 
-## Getting Started
+Interface da plataforma social de música.
 
-First, run the development server:
+Stack: Next.js 16, React, TypeScript e CSS Modules.
 
-```bash
+## Desenvolvimento local
+
+A partir da pasta `frontend`:
+
+```powershell
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+O backend FastAPI precisa estar disponível no endereço
+definido por `BACKEND_URL`, cujo padrão de desenvolvimento
+é `http://127.0.0.1:8000`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`BACKEND_URL` é utilizada pelo servidor Next.js.
+Não coloque senhas ou JWT secrets em `NEXT_PUBLIC_*`.
 
-## Learn More
+## Verificações
 
-To learn more about Next.js, take a look at the following resources:
+```powershell
+npm run lint
+npm run build
+npx tsc --noEmit
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Organização
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `src/app`: páginas, estilos e ações.
+- `src/components`: componentes reutilizáveis.
+- `src/lib`: consultas, contratos e sessão.
+- `public`: recursos estáticos.
 
-## Deploy on Vercel
+O FastAPI mantém a autoridade sobre regras de negócio,
+autorização e persistência.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Status
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Funcionalmente implementado, aguardando refinamento
+visual da F09 e validação pública da F10.

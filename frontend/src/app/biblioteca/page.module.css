@@ -18,3 +18,7 @@
   .container { padding: 38px 16px 64px; }
   .artista { margin-left: 0; }
 }
+
+.paginacao { display: flex; gap: 18px; align-items: center; margin-top: 18px; color: #bdbdbd; font-size: 13px; }
+.paginacao a { color: #f1f1f1; }
+.secao { scroll-margin-top: 24px; }

@@ -6,6 +6,7 @@ import { obterTokenSessao } from "@/lib/sessao";
 import {
   FormularioNome,
   FormularioSenha,
+  FormularioExcluirConta,
 } from "@/components/formularios-conta";
 import { FormularioReenviar } from "@/components/formularios-recuperacao";
 import styles from "../autenticacao.module.css";
@@ -91,6 +92,15 @@ async function ConteudoConta() {
           Entre novamente com a nova senha.
         </p>
         <FormularioSenha />
+      </section>
+
+      <section style={{ marginTop: 48 }}>
+        <h2>Excluir conta</h2>
+        <p className={styles.introducao}>
+          Esta ação é permanente. Seu perfil, listas, avaliações,
+          reviews e registros pessoais serão excluídos.
+        </p>
+        <FormularioExcluirConta />
       </section>
     </main>
   );

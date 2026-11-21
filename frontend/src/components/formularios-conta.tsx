@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { atualizarNome, atualizarSenha } from "@/app/acoes-conta";
+import { atualizarNome, atualizarSenha, excluirConta } from "@/app/acoes-conta";
 import { ESTADO_INICIAL } from "@/lib/estado-acoes";
 import styles from "@/app/autenticacao.module.css";
 
@@ -63,6 +63,61 @@ export function FormularioSenha() {
       )}
       <button disabled={pendente}>
         {pendente ? "Alterando..." : "Alterar senha"}
+      </button>
+    </form>
+  );
+}
+
+export function FormularioExcluirConta() {
+  const [estado, acao, pendente] = useActionState(
+    excluirConta, ESTADO_INICIAL
+  );
+
+  return (
+    <form
+      action={acao}
+      className={styles.form}
+      onSubmit={(evento) => {
+        if (!window.confirm(
+          "Excluir sua conta e todos os seus registros? Esta ação é permanente."
+        )) {
+          evento.preventDefault();
+        }
+      }}
+    >
+      <label htmlFor="exclusao_senha">
+        Confirme sua senha
+      </label>
+      <input
+        id="exclusao_senha"
+        name="senha_atual"
+        type="password"
+        autoComplete="current-password"
+        required
+      />
+
+      <label htmlFor="confirmacao_exclusao">
+        Digite EXCLUIR para confirmar
+      </label>
+      <input
+        id="confirmacao_exclusao"
+        name="confirmacao_exclusao"
+        autoComplete="off"
+        pattern="EXCLUIR"
+        required
+      />
+
+      {estado.mensagem && (
+        <p role="alert" className={styles.mensagem}>
+          {estado.mensagem}
+        </p>
+      )}
+
+      <button
+        type="submit"
+        disabled={pendente}
+      >
+        {pendente ? "Excluindo..." : "Excluir minha conta"}
       </button>
     </form>
   );

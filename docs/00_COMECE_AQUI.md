@@ -1,55 +1,57 @@
-# Lettermusic — Ponto de partida V1
+# Lettermusic — Estado atual da V1
 
-**Checkpoint:** 12/11/2026
-**Situação:** fase visual encerrada para fins de execução; iniciando implementação de front-end em outra sessão. **Nenhum código foi modificado neste pacote.**
+**Checkpoint:** F08.6C2, em validação.
+**Fonte da verdade:** código, testes e GitHub.
 
-## Intenção do projeto
+## O que estamos construindo
 
-Plataforma **social de música**, inspirada no Letterboxd: descobrir, registrar escutas, avaliar, escrever reviews, organizar listas, explorar atividades. **Não é streaming**.
+Uma plataforma social para registrar e compartilhar experiências
+musicais. Não reproduz música e não é um serviço de streaming.
 
-**Objetivo de aprendizado:** dar mais peso a **back-end, arquitetura, requisições, contratos de API, banco, testes e manutenção**. Aprender front-end com profundidade suficiente para criar e manter um produto profissional — sem transformar a UI no projeto inteiro.
+O foco de aprendizado é backend, arquitetura, API, contratos,
+persistência e manutenção. O frontend deve ser funcional,
+consistente e visualmente agradável, sem complexidade excessiva.
 
-## Decisões oficialmente adotadas
+## Stack confirmada
 
-| Assunto | Decisão |
-|---|---|
-| Front-end | **Next.js (App Router) + React + TypeScript** |
-| Aparência | **CSS Modules + CSS próprio**; sem framework visual pesado no início |
-| API | **FastAPI/Python**, já implementada; preservar responsabilidades |
-| Persistência | PostgreSQL + SQLAlchemy + Alembic |
-| Integrações | MusicBrainz; uso de capas/faixas a avaliar por fonte e contrato |
-| Testes atuais | **130 passed, 4 skipped, 1 warning** no PC do autor; suíte não foi reproduzida integralmente no ambiente de auditoria |
-| Git | `main...origin/main` limpo; commit `0e7c598` ao receber o ZIP |
-| Telas | 7 aprovadas; **Comunidade V1** como referência de trabalho, sem aceite final formal |
-| Método | Uma funcionalidade de ponta a ponta por vez, com testes e checkpoint |
+- Next.js, React, TypeScript e CSS Modules.
+- FastAPI, SQLAlchemy, Alembic e PostgreSQL.
+- MusicBrainz, Cover Art Archive e ListenBrainz opcional.
+- Pytest, ESLint, TypeScript e GitHub Actions.
 
-**Histórico de escolhas:** React+Vite e Vue+Vite foram hipóteses consideradas anteriormente; **foram substituídas pela decisão Next.js + React + TypeScript**. Não retomar a escolha do zero.
+## Decisões preservadas
 
-## Inventário de documentos deste pacote
+- MusicBrainz como fonte única de catálogo na V1.
+- Nenhum cadastro manual próprio de álbuns na V1.
+- Busca sem persistência automática.
+- Já ouvi distinto de múltiplas escutas.
+- Avaliação e review únicas por usuário/obra, editáveis.
+- Criar avaliação ou review registra uma escuta.
+- Favoritos, Quero ouvir e listas não implicam escuta.
+- Listas públicas e privadas, com autorização por proprietário.
+- Telas de Perfil e Detalhes de Lista como referências visuais.
+- F09 reservada ao refinamento visual.
+- F10 reservada à infraestrutura e publicação.
 
-1. `01_ARQUITETURA_E_REGRAS.md` — componentes, comunicação e decisões pendentes.
-2. `02_MAPA_TELAS_E_API.md` — o que a API já oferece e o que depende de evolução.
-3. `03_PLANO_DE_EXECUCAO.md` — ordem sugerida, definição de pronto e aprendizado.
-4. `04_PROXIMA_SESSAO.md` — instruções curtas para iniciar outro dia.
-5. `referencias/AUDITORIA_TECNICA_2026-11-12.md` — auditoria original do ZIP; note que sua proposta de React+Vite está **superada** por esta decisão.
+## Fases
 
-**Fonte da verdade:** código e testes do repositório local/GitHub. Este material é planejamento e deve ser atualizado após mudanças relevantes.
+- F01–F08.5: funcionalidades centrais implementadas.
+- F08.6A: API de listas públicas e revogação de links.
+- F08.6B: interface de listas, reviews, Biblioteca e busca.
+- F08.6C1: proteções de conta e limpeza de tokens.
+- F08.6C2: documentação, teste de paginação e auditoria final.
+- F09: acabamento visual.
+- F10: implantação, validação e publicação.
 
-## Fora de escopo hoje
+A F08.6 só estará encerrada após testes e commit aprovado.
 
-- Não instalar pacotes nem criar o projeto Next.js agora.
-- Não alterar o backend existente nem mover diretórios antigos.
-- Não criar modelos visuais adicionais ou redefinir telas aprovadas.
-- Não começar funcionalidades sociais avançadas antes dos fluxos principais.
+## Diretrizes visuais
 
-## Princípios visuais V1
+Fluidez, conteúdo centralizado, música em destaque, poucos
+elementos, tipografia editorial, cores discretas e experiência
+social evidente. Preservar as referências aprovadas.
 
-1. **Fluidez:** páginas contínuas, centralizadas, espaçamento natural, sem aparência de dashboard.
-2. **Menos elementos, mais significado:** remover controles e explicações redundantes.
-3. **Música protagonista:** capas, álbuns, reviews, avaliações.
-4. **Identidade sem exageros:** claro/escuro, tipografia editorial, vermelho discreto.
-5. **Experiência social evidente:** registro, avaliação, descoberta e discussão — nunca streaming.
+## Próximo passo
 
-**Referências favoritas internas:** Perfil e Detalhes de Lista (“Noite Indie”). Álbum é aprovado, com possíveis refinamentos futuros. A última Comunidade simplificada, sem banner, com feed e apoios discretos “Membros ativos”/“Em alta”, é apenas a referência para implementação, não uma demanda por mais mockups.
-
-**Arquivos visuais:** estão preservados separadamente no ZIP `LETTERMUSIC_TELAS_REFERENCIA_2026-11-12.zip` da conversa. Não é preciso copiá-los para o repositório até decidir uma pasta de referência apropriada, e não devem ser confundidos com assets de produção.
+Validar a F08.6C2, revisar `git diff`, publicar o checkpoint e
+iniciar o planejamento visual da F09.

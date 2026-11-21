@@ -227,6 +227,20 @@ async function SecaoResultado({
             />
           )}
 
+          {!geral && tipo === "albuns" && itens.length === 0 ? (
+            <p className={styles.message}>
+              Não encontrou o álbum?{" "}
+              <Link
+                href="https://musicbrainz.org/release/add"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Adicionar lançamento ao MusicBrainz
+              </Link>
+              .
+            </p>
+          ) : null}
+
           {!geral ? (
             <>
               <p className={styles.notaExploracao}>
@@ -259,7 +273,15 @@ async function AvisoSemResultados({
 
   return resultados.every(r => r.ok && r.dados.resultados.length === 0)
     ? <p className={styles.message}>
-        Nenhum resultado encontrado. Tente outro termo.
+        Nenhum resultado encontrado. Tente outro termo.{" "}
+        Se for um lançamento ausente do catálogo, você pode{" "}
+        <Link
+          href="https://musicbrainz.org/release/add"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          adicioná-lo ao MusicBrainz
+        </Link>.
       </p>
     : null;
 }

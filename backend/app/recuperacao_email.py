@@ -207,6 +207,18 @@ def confirmar_email(sessao: Session, segredo: str):
         )
 
     usuario.email_confirmado = True
+
+    # Um email confirmado nao precisa de outros links ativos.
+    sessao.execute(
+        update(TokenConta)
+        .where(
+            TokenConta.usuario_id == usuario.id,
+            TokenConta.finalidade == "verificacao",
+            TokenConta.usado_em.is_(None),
+        )
+        .values(usado_em=agora_utc())
+    )
+
     sessao.commit()
 
 

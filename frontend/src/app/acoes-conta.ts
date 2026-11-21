@@ -102,3 +102,61 @@ export async function atualizarSenha(
 
   return { sucesso: false, mensagem: "Não foi possível alterar a senha." };
 }
+
+export async function excluirConta(
+  _estado: EstadoAcao,
+  formulario: FormData,
+): Promise<EstadoAcao> {
+  const senha_atual = String(
+    formulario.get("senha_atual") ?? ""
+  );
+
+  const confirmacao = String(
+    formulario.get("confirmacao_exclusao") ?? ""
+  ).trim();
+
+  if (!senha_atual || confirmacao !== "EXCLUIR") {
+    return {
+      sucesso: false,
+      mensagem: "Informe sua senha e digite EXCLUIR.",
+    };
+  }
+
+  const token = await obterTokenSessao();
+
+  if (!token) {
+    return {
+      sucesso: false,
+      mensagem: "Entre novamente para excluir sua conta.",
+    };
+  }
+
+  try {
+    const resposta = await requisitarBackend("/auth/conta", {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ senha_atual }),
+    });
+
+    if (!resposta.ok) {
+      return {
+        sucesso: false,
+        mensagem: resposta.status === 400
+          ? "Senha atual incorreta."
+          : resposta.status === 401
+            ? "Sua sessão expirou. Entre novamente."
+            : "Não foi possível excluir sua conta.",
+      };
+    }
+  } catch {
+    return {
+      sucesso: false,
+      mensagem: "Falha de conexão. Tente novamente.",
+    };
+  }
+
+  const armazenamento = await cookies();
+  armazenamento.delete(NOME_COOKIE_SESSAO);
+  revalidatePath("/", "layout");
+  redirect("/");
+}

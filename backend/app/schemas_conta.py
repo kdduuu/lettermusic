@@ -26,3 +26,7 @@ class AtualizarContaEntrada(BaseModel):
 class AlterarSenhaEntrada(BaseModel):
     senha_atual: str = Field(min_length=1, max_length=128)
     senha_nova: str = Field(min_length=12, max_length=128)
+
+
+class ExcluirContaEntrada(BaseModel):
+    senha_atual: str = Field(min_length=1, max_length=128)

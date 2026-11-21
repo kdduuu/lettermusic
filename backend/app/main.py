@@ -8,12 +8,14 @@ from backend.app.rotas_conta import router as router_conta
 from backend.app.rotas_recuperacao import router as router_recuperacao
 from backend.app import recuperacao_email as rec
 from backend.app.erros_validacao import configurar_erros_validacao
+from backend.app.limites_cadastro import verificar_cadastro
 from backend.app.limites_login import (
     verificar,
     registrar_falha,
     registrar_sucesso,
 )
 from backend.app.rotas_feed import router as router_feed
+from backend.app.rotas_listas_publicas import router as router_listas_publicas
 from backend.app.rotas_exploracao import router as router_exploracao
 
 from backend.app.auth import (
@@ -134,6 +136,7 @@ app.include_router(router_detalhes)
 app.include_router(router_conta)
 app.include_router(router_recuperacao)
 app.include_router(router_feed)
+app.include_router(router_listas_publicas)
 app.include_router(router_exploracao)
 
 
@@ -209,8 +212,12 @@ def consultar_catalogo(
 def criar_usuario(
     dados: UsuarioCriar,
     tarefas: BackgroundTasks,
+    request: Request,
     sessao: Session = Depends(obter_sessao),
 ):
+    ip = request.client.host if request.client else "desconhecido"
+    verificar_cadastro(ip, str(dados.email))
+
     try:
         usuario = cadastrar_usuario(sessao, dados)
 

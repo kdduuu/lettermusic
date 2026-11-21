@@ -1,43 +1,55 @@
 # Lettermusic
 
-Rede social para descobrir música, registrar escutas, avaliar álbuns, escrever reviews e montar listas pessoais. Inspirada na ideia de um diário musical; **não é um serviço de streaming**.
+Rede social de música para descobrir álbuns, registrar escutas,
+avaliar, escrever reviews e compartilhar listas. Inspirada em
+diários culturais como o Letterboxd. **Não é streaming.**
 
-**Status:** backend funcional para desenvolvimento e integração com o frontend. A interface web ainda será construída. Este projeto não deve ser considerado pronto para produção pública sem revisão de segurança e implantação.
+**Status:** aplicação funcional em desenvolvimento local.
+F08.6 em fechamento; refinamento visual (F09) e publicação
+(F10) ainda pendentes. Não considerada pronta para produção.
 
 ## Tecnologias
 
-- **API:** Python 3.14, FastAPI, Pydantic, JWT e hash Argon2 (`pwdlib`).
-- **Persistência:** PostgreSQL, SQLAlchemy, Psycopg e Alembic.
-- **Catálogo externo:** MusicBrainz (obras identificadas por *release-group MBID*).
-- **Qualidade:** pytest (SQLite isolado nos testes rápidos; PostgreSQL dedicado na integração) e GitHub Actions.
+- Backend: Python 3.14, FastAPI, Pydantic, JWT e Argon2.
+- Banco: PostgreSQL, SQLAlchemy, Psycopg e Alembic.
+- Frontend: Next.js 16, React, TypeScript e CSS Modules.
+- Integrações: MusicBrainz, Cover Art Archive e ListenBrainz
+  opcional para indicadores de popularidade.
+- Qualidade: pytest, ESLint, TypeScript, build e GitHub Actions.
 
-## Funcionalidades do backend
+## Funcionalidades
 
-| Área | Comportamento |
-| --- | --- |
-| Catálogo | Busca no MusicBrainz; cadastro local somente quando houver interação; metadados oficiais |
-| Contas | Cadastro, login JWT, consulta de conta e perfis públicos |
-| Escutas | Marcação **Já ouvi** distinta de múltiplas escutas |
-| Avaliações | Uma avaliação atual de 0,5 a 5, editável; média da comunidade |
-| Reviews | Uma review por usuário e obra, editável; publicar registra escuta |
-| Biblioteca | Favoritos e **Quero ouvir**, independentes |
-| Listas | Públicas/privadas, itens ordenados e controle de acesso pelo proprietário |
-| Descoberta | Obras mais ouvidas e mais bem avaliadas |
-| Social | Perfil público, estatísticas, reviews e listas públicas recentes |
+- Cadastro, login, logout, gerenciamento e exclusão de conta.
+- Verificação de e-mail e recuperação de senha por link temporário.
+- Busca de artistas, álbuns e faixas pelo MusicBrainz.
+- Páginas de álbum e artista com metadados reais.
+- Marcação Já ouvi e histórico de múltiplas escutas.
+- Avaliações de 0,5 a 5 estrelas, em passos de 0,5.
+- Reviews criadas, editadas e excluídas pelo próprio autor.
+- Favoritos e Quero ouvir.
+- Biblioteca com paginação por categoria.
+- Listas públicas e privadas, edição e ordenação.
+- Exploração de listas públicas e identificação do autor.
+- Perfis públicos, feed de reviews, descoberta e Comunidade.
 
-### Regras de integridade
+## Regras de negócio
 
-- A busca no MusicBrainz **não** cadastra a obra automaticamente.
-- Ao criar uma interação, o cliente pode enviar apenas `id_musicbrainz`: o servidor consulta os metadados oficiais quando necessário.
-- Registrar uma avaliação ou publicar uma review cria uma escuta. Editá-las não cria escuta adicional.
-- Marcar **Já ouvi** não cria uma escuta. Favoritos, Quero ouvir e listas também não criam escutas.
-- Exclusão de favorito ou item de lista não exclui a obra do catálogo nem o histórico de escutas.
-- Regras de unicidade são protegidas no banco. Operações que afetam vários registros preservam transações.
-- Listas privadas e dados pessoais não são expostos nos endpoints públicos.
+1. Pesquisar não persiste uma obra no banco.
+2. A persistência acontece quando houver interação.
+3. O MusicBrainz é a fonte de identificação das obras.
+4. Já ouvi é único por usuário/obra; escutas podem ser múltiplas.
+5. Avaliar ou publicar review cria escuta; editar não cria outra.
+6. Favoritar e adicionar a listas não registra escuta.
+7. Uma avaliação e uma review por usuário/obra; ambas editáveis.
+8. Listas privadas ficam acessíveis somente ao proprietário.
+9. Dados pessoais não entram nas respostas públicas dos perfis.
 
-## Executar localmente (Windows / PowerShell)
+Obras não encontradas podem ser adicionadas ao MusicBrainz.
+A V1 não oferece cadastro manual independente de catálogo.
 
-Na raiz do repositório:
+## Executar localmente
+
+Na raiz, com Python e PostgreSQL instalados:
 
 ```powershell
 py -3.14 -m venv .venv
@@ -45,73 +57,96 @@ py -3.14 -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
-Configure `.env` copiando `.env.example` e preenchendo credenciais **locais** do PostgreSQL e uma chave JWT aleatória de pelo menos 32 caracteres. **Não publique `.env`, senhas ou tokens.**
+Copie `.env.example` para `.env`, preenchendo os dados do
+PostgreSQL e um `JWT_SECRET` forte. Mantenha o `.env` privado.
+
+Inicie o backend:
 
 ```powershell
 python -m alembic upgrade head
 python -m uvicorn backend.app.main:app --reload
 ```
 
-A API ficará em `http://127.0.0.1:8000` e a documentação interativa em `http://127.0.0.1:8000/docs`. A documentação OpenAPI completa permanece no Swagger.
+API: http://127.0.0.1:8000
+OpenAPI: http://127.0.0.1:8000/docs
 
-### Exemplos de requisições
+Em outro terminal, inicie o frontend:
 
-Pesquisar: `GET /catalogo/buscar?termo=Kid%20A&artista=Radiohead`.
-
-Favoritar (exige JWT): `POST /biblioteca/favoritos` com corpo:
-
-```json
-{
-  "obra": {
-    "id_musicbrainz": "b1392450-e666-3926-a536-22c65f834433"
-  }
-}
+```powershell
+cd frontend
+npm ci
+npm run dev
 ```
 
-Para consultar resultados paginados, use, por exemplo, `GET /catalogo/obras?pagina=2&por_pagina=10`. Nas listas de interações, o backend devolve também metadados da obra para facilitar as telas.
+Interface: http://localhost:3000
 
-O CORS é configurado por `CORS_ORIGINS` (origens separadas por vírgula). Em desenvolvimento, as origens padrão são `http://localhost:5173` e `http://127.0.0.1:5173`. **CORS não substitui autenticação ou autorização.**
+O servidor Next.js consulta a API por meio de `BACKEND_URL`,
+cujo padrão local é `http://127.0.0.1:8000`.
+A variável é usada no servidor, não em `NEXT_PUBLIC_*`.
+
+### E-mails
+
+Para testar recuperação e verificação, configure no `.env`:
+
+- `EMAIL_BASE_URL`
+- `EMAIL_REQUIRE_VERIFICATION`
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`
+- `SMTP_PASSWORD`, `SMTP_FROM`, `SMTP_SSL`
+
+No desenvolvimento, a verificação obrigatória pode ficar
+desativada. Para publicação, deve ser ativada e validada.
+
+A configuração SMTP local não deve ser copiada para o Git.
 
 ## Testes
 
-### Testes rápidos
+Backend:
 
 ```powershell
 python -m pytest backend/tests -q
 ```
 
-Os testes comuns usam banco SQLite isolado e simulam consultas ao MusicBrainz, evitando alterar o PostgreSQL de desenvolvimento.
-
-### Integração real com PostgreSQL
-
-O arquivo `backend/tests/test_integracao_postgresql.py` testa criação simultânea de obras, marcações **Já ouvi**, conflito de favoritos e rollback com conexões reais.
-
-Por segurança, esses testes **são ignorados** se `LETTERMUSIC_TEST_DATABASE_URL` não estiver configurada. Eles **recusam bancos cujo nome não termine em `_test`**, e criam/removem apenas um *schema* temporário por teste. Não reutilize sua base de desenvolvimento como base de testes.
-
-Exemplo para uma conta PostgreSQL de testes já criada e autorizada a criar schemas:
+Frontend:
 
 ```powershell
-$env:LETTERMUSIC_TEST_DATABASE_URL = "postgresql+psycopg://USUARIO:SENHA@localhost:5432/lettermusic_test"
-python -m pytest backend/tests/test_integracao_postgresql.py -q
-Remove-Item Env:\LETTERMUSIC_TEST_DATABASE_URL
+cd frontend
+npm run lint
+npm run build
+npx tsc --noEmit
 ```
 
-Substitua usuário e senha pelos valores de uma conta **exclusiva de testes**, nunca aponte para `lettermusic_dev`. Se a senha tiver caracteres especiais, codifique-os corretamente na URL.
+Testes rápidos usam SQLite isolado e MusicBrainz simulado.
+Quatro testes PostgreSQL locais são ignorados quando
+`LETTERMUSIC_TEST_DATABASE_URL` não está configurada.
 
-### CI — GitHub Actions
+Os workflows GitHub Actions executam testes e verificações
+em ambiente descartável. O sucesso local não substitui
+testes reais da aplicação publicada.
 
-O workflow `.github/workflows/backend.yml` executa testes automaticamente em alterações relevantes. Ele cria um **PostgreSQL descartável no próprio runner**, aplica as migrações Alembic e executa os testes rápidos e reais, sem acessar o seu computador ou seus bancos.
+### Limpeza administrativa de tokens
 
-No GitHub, confira **Actions → Backend - Testes** depois de publicar o workflow. O backend só será considerado **validado para iniciar o frontend** após uma execução verde no GitHub e uma revisão do resultado.
+Simulação, sem excluir registros:
 
-## Dependências e manutenção
+```powershell
+python -m backend.scripts.limpar_tokens_conta
+```
 
-`requirements.txt` conserva as versões fixadas no ambiente funcional. Alterações ou atualizações devem acontecer em um commit próprio, seguidas de testes completos. O aviso conhecido `StarletteDeprecationWarning` não impede a execução da suíte atual e não deve motivar uma atualização às cegas.
+Execução de limpeza:
 
-### O que fica fora do escopo desta fase
+```powershell
+python -m backend.scripts.limpar_tokens_conta --executar
+```
 
-A estrutura está preparada para começar a interface. Para colocar o serviço em produção pública serão necessárias medidas adicionais: hospedagem HTTPS, gestão de segredos, recuperação de conta, proteção contra abuso e tentativas repetidas de login, estratégia de backups e monitoramento.
+O agendamento dessa rotina pertence à configuração de produção.
+
+## Preparação para publicação
+
+Ainda necessários: hospedagem HTTPS, segredos seguros, proteção
+compartilhada contra abuso, e-mail confiável, backups, logs,
+monitoramento, revisão de privacidade e testes ponta a ponta.
+
+**Não publicar com o `.env` de desenvolvimento.**
 
 ## Repositório
 
-Desenvolvimento educacional e de portfólio: [kdduuu/lettermusic](https://github.com/kdduuu/lettermusic).
+https://github.com/kdduuu/lettermusic

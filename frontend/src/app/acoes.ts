@@ -320,3 +320,54 @@ export async function salvarReview(
     return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
   }
 }
+
+export async function removerReview(
+  _estado: EstadoAcao,
+  formulario: FormData,
+): Promise<EstadoAcao> {
+  const contexto = await contextoAlbum(formulario);
+
+  if (!contexto.ok) {
+    return { sucesso: false, mensagem: contexto.mensagem };
+  }
+
+  if (contexto.obraId === null || contexto.review === null) {
+    return {
+      sucesso: false,
+      mensagem: "Você não possui uma review desse álbum.",
+    };
+  }
+
+  try {
+    const resposta = await requisitarBackend(
+      `/interacoes/reviews/${contexto.obraId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${contexto.token}`,
+        },
+      },
+    );
+
+    if (!resposta.ok) {
+      return {
+        sucesso: false,
+        mensagem: mensagemFalha(resposta.status),
+      };
+    }
+
+    atualizarAlbum(contexto.id);
+    revalidatePath("/reviews");
+    revalidatePath("/biblioteca");
+
+    return {
+      sucesso: true,
+      mensagem: "Review excluída com sucesso.",
+    };
+  } catch {
+    return {
+      sucesso: false,
+      mensagem: "Falha de conexão. Tente novamente.",
+    };
+  }
+}

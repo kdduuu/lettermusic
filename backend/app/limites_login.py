@@ -16,9 +16,10 @@ LIMITE_ORIGEM = 40
 
 def _chaves(ip, identificador):
     conta = sha256(
-        f"{ip}|{identificador.strip().casefold()}".encode()
+        identificador.strip().casefold().encode()
     ).hexdigest()
     origem = sha256(ip.encode()).hexdigest()
+    # Um mesmo identificador compartilha o limite entre IPs.
     return (f"conta:{conta}", f"origem:{origem}")
 
 

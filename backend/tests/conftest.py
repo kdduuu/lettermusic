@@ -60,3 +60,20 @@ def simular_musicbrainz_no_catalogo(monkeypatch):
         "backend.app.catalogo.consultar_obra_por_id",
         consultar_obra_simulada,
     )
+
+
+@pytest.fixture(autouse=True)
+def impedir_smtp_real_em_testes(monkeypatch):
+    """Impedir envio acidental usando credenciais locais."""
+    monkeypatch.setattr(
+        "backend.app.recuperacao_email.enviar_mensagem",
+        lambda *args, **kwargs: None,
+    )
+
+
+@pytest.fixture(autouse=True)
+def isolar_limitadores(monkeypatch):
+    from backend.app import limites_login, limites_cadastro
+
+    monkeypatch.setattr(limites_login, "_falhas", {})
+    monkeypatch.setattr(limites_cadastro, "_eventos", {})

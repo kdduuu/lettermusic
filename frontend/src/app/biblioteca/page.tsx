@@ -5,6 +5,11 @@ import { requisitarBackend } from "@/lib/backend";
 import { obterTokenSessao, obterUsuarioAutenticado } from "@/lib/sessao";
 import styles from "./page.module.css";
 
+type Parametros = Promise<{
+  categoria?: string | string[];
+  pagina?: string | string[];
+}>;
+
 type Registro = {
   id: number;
   obra_id: number;
@@ -31,9 +36,9 @@ const CATEGORIAS: Categoria[] = [
   { titulo: "Minhas reviews", caminho: "/interacoes/reviews", tipo: "reviews" },
 ];
 
-async function buscarRegistros(caminho: string, token: string): Promise<Registro[] | null> {
+async function buscarRegistros(caminho: string, token: string, pagina: number): Promise<Registro[] | null> {
   try {
-    const resposta = await requisitarBackend(`${caminho}?pagina=1&por_pagina=50`, {
+    const resposta = await requisitarBackend(`${caminho}?pagina=${pagina}&por_pagina=20`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!resposta.ok) return null;
@@ -70,15 +75,34 @@ function Complemento({ registro, tipo }: { registro: Registro; tipo: Categoria["
   return null;
 }
 
-async function ConteudoBiblioteca() {
+async function ConteudoBiblioteca({
+  searchParams,
+}: {
+  searchParams: Parametros;
+}) {
   const usuario = await obterUsuarioAutenticado();
   if (!usuario) redirect("/entrar");
 
   const token = await obterTokenSessao();
   if (!token) redirect("/entrar");
 
+  const parametros = await searchParams;
+
+  const categoriaAtiva = typeof parametros.categoria === "string" &&
+    CATEGORIAS.some(c => c.tipo === parametros.categoria)
+    ? parametros.categoria
+    : "";
+
+  const numero = typeof parametros.pagina === "string"
+    ? parametros.pagina : "";
+
+  const pagina = /^[1-9]\d{0,4}$/.test(numero)
+    ? Math.min(10000, Number(numero)) : 1;
+
   const resultados = await Promise.all(
-    CATEGORIAS.map(({ caminho }) => buscarRegistros(caminho, token)),
+    CATEGORIAS.map(({ caminho, tipo }) =>
+      buscarRegistros(caminho, token, categoriaAtiva === tipo ? pagina : 1)
+    ),
   );
 
   return (
@@ -87,8 +111,16 @@ async function ConteudoBiblioteca() {
       <p className={styles.subtitulo}>Seus registros musicais, {usuario.nome_exibicao}.</p>
       {CATEGORIAS.map((categoria, indice) => {
         const itens = resultados[indice];
+        const paginaAtual = categoriaAtiva === categoria.tipo ? pagina : 1;
+        const temProxima = itens !== null && itens.length === 20;
+        const base = `/biblioteca?categoria=${categoria.tipo}&pagina=`;
+
         return (
-          <section key={categoria.caminho} className={styles.secao}>
+          <section
+            key={categoria.caminho}
+            id={`secao-${categoria.tipo}`}
+            className={styles.secao}
+          >
             <h2>{categoria.titulo}</h2>
             {itens === null ? (
               <p className={styles.mensagem}>Não foi possível carregar esta seção agora.</p>
@@ -111,19 +143,41 @@ async function ConteudoBiblioteca() {
                 ))}
               </ul>
             )}
+            {itens !== null && (paginaAtual > 1 || temProxima) ? (
+              <nav
+                className={styles.paginacao}
+                aria-label={`Paginação de ${categoria.titulo}`}
+              >
+                {paginaAtual > 1 ? (
+                  <Link href={`${base}${paginaAtual - 1}#secao-${categoria.tipo}`}>
+                    Anterior
+                  </Link>
+                ) : null}
+                <span>Página {paginaAtual}</span>
+                {temProxima ? (
+                  <Link href={`${base}${paginaAtual + 1}#secao-${categoria.tipo}`}>
+                    Próxima
+                  </Link>
+                ) : null}
+              </nav>
+            ) : null}
           </section>
         );
       })}
-      <p className={styles.limite}>Exibindo até 50 registros recentes por categoria.</p>
+      <p className={styles.limite}>20 registros por página em cada categoria.</p>
     </>
   );
 }
 
-export default function BibliotecaPage() {
+export default function BibliotecaPage({
+  searchParams,
+}: {
+  searchParams: Parametros;
+}) {
   return (
     <main className={styles.container}>
       <Suspense fallback={<p className={styles.mensagem}>Carregando biblioteca...</p>}>
-        <ConteudoBiblioteca />
+        <ConteudoBiblioteca searchParams={searchParams} />
       </Suspense>
     </main>
   );

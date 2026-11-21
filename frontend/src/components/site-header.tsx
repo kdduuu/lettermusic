@@ -72,7 +72,7 @@ export function SiteHeader() {
           <Link href="/">Descobrir</Link>
           <Link href="/albuns">Álbuns</Link>
           <Link href="/reviews">Reviews</Link>
-          <Link href="/listas">Listas</Link>
+          <Link href="/listas/explorar">Listas</Link>
           <Link href="/comunidade">Comunidade</Link>
         </nav>
         <SearchForm />
