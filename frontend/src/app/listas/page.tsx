@@ -23,7 +23,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
     <>
       <div className={styles.cabecalho}>
         <div>
-          <span className={styles.etiqueta}>Sua coleção</span>
+          
           <h1>Listas musicais</h1>
           
         </div>
@@ -36,7 +36,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
       </details>
 
       <section className={styles.listagem} aria-labelledby="minhas-listas">
-        <h2 id="minhas-listas">Minhas listas</h2>
+        <h2 id="minhas-listas">Coleções</h2>
         {!resultado.ok ? (
           <p role="alert" className={styles.erro}>{resultado.mensagem}</p>
         ) : resultado.dados.listas.length === 0 ? (
@@ -46,14 +46,10 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
             {resultado.dados.listas.map((lista) => (
               <li key={lista.id}>
                 <Link className={styles.cartao} href={`/listas/${lista.id}`}>
-                  {(
-                    <Suspense fallback={null}>
-                      <VitrineLista listaId={lista.id} token={token} titulo={lista.titulo} />
-                    </Suspense>
-                  )}
+                  <VitrineLista listaId={lista.id} titulo={lista.titulo} />
                   <span className={styles.visibilidade}>{lista.publica ? "Pública" : "Privada"}</span>
                   <h3>{lista.titulo}</h3>
-                  {lista.descricao ? <p>{lista.descricao}</p> : null}
+                  
                 </Link>
               </li>
             ))}

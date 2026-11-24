@@ -27,7 +27,7 @@ async function Conteudo({
     <>
       <div className={styles.cabecalho}>
         <div>
-          <span className={styles.etiqueta}>Comunidade</span>
+          
           <h1>Explorar listas</h1>
           
         </div>
@@ -55,17 +55,13 @@ async function Conteudo({
                   className={styles.cartao}
                   href={`/listas/${lista.id}`}
                 >
-                  {(
-                    <Suspense fallback={null}>
-                      <VitrineLista listaId={lista.id} titulo={lista.titulo} />
-                    </Suspense>
-                  )}
+                  <VitrineLista listaId={lista.id} titulo={lista.titulo} />
                   <span className={styles.visibilidade}>
                     {lista.total_itens} {lista.total_itens === 1
                       ? "álbum" : "álbuns"}
                   </span>
                   <h3>{lista.titulo}</h3>
-                  {lista.descricao ? <p>{lista.descricao}</p> : null}
+                  
                 </Link>
                 <p className={styles.autorPublico}>
                   Por{" "}

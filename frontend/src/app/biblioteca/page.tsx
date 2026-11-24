@@ -83,7 +83,7 @@ async function CapasDaColecao({ registros }: { registros: Registro[] }) {
       typeof r.id_musicbrainz === "string" &&
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(r.id_musicbrainz)
   ).slice(0, 5);
-  if (!albuns.length) return <p className={styles.mensagem}>Seus álbuns aparecerão aqui conforme você registrar músicas.</p>;
+  if (!albuns.length) return <p className={styles.mensagem}>Sem álbuns registrados.</p>;
   const urls = await Promise.all(albuns.map(a => obterCapaAlbum(a.id_musicbrainz)));
   return (
     <div className={styles.vitrineCapas}>
@@ -131,9 +131,9 @@ async function ConteudoBiblioteca({
   return (
     <>
       <header className={styles.topoBiblioteca}>
-        <p className={styles.etiqueta}>Seu arquivo musical</p>
+        
         <h1>Minha biblioteca</h1>
-        <p className={styles.subtitulo}>Álbuns que fazem parte da sua história, {usuario.nome_exibicao}.</p>
+        
         <nav className={styles.navegacaoCategorias} aria-label="Categorias da biblioteca">
           {CATEGORIAS.map(categoria => (
             <a key={categoria.tipo} href={"#secao-" + categoria.tipo}>{categoria.titulo}</a>
@@ -142,7 +142,7 @@ async function ConteudoBiblioteca({
       </header>
       <section className={styles.vitrine} aria-label="Capas da minha coleção">
         <div className={styles.vitrineCabecalho}>
-          <p className={styles.etiqueta}>Da sua coleção</p>
+          
           <h2>Os discos que ficam.</h2>
         </div>
         <Suspense fallback={<p className={styles.mensagem}>Carregando capas...</p>}>
@@ -206,7 +206,7 @@ async function ConteudoBiblioteca({
         );
       })}
       </div>
-      <p className={styles.limite}>20 registros por página em cada categoria.</p>
+      
     </>
   );
 }

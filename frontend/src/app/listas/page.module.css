@@ -58,3 +58,17 @@
 }
 .previaTipografica span { color: #e5a0ad; letter-spacing: .13em; font-size: 9px; font-weight: 700; }
 .previaTipografica strong { font: 700 24px/1.1 Georgia,serif; color: #f3eaed; overflow-wrap: anywhere; }
+
+/* F09.4 - coleções limpas, sem caixa de título duplicada. */
+.cabecalho {
+  background: transparent; border: 0; border-bottom: 1px solid #444149;
+  border-radius: 0; padding: 21px 0 30px; align-items: end;
+}
+.cabecalho h1 { font-size: clamp(48px, 6vw, 73px); margin: 0; }
+.listagem { margin-top: 35px; }
+.listagem h2 { font-size: 29px; }
+.cartao { padding: 20px; min-height: 0; }
+.cartao h3 { margin: 9px 0 0; font-size: 26px; }
+.visibilidade { font-size: 10px; }
+.autorPublico { padding: 9px 4px; }
+@media(max-width:650px) { .cabecalho { padding: 14px 0 24px; } .cabecalho h1 { font-size: 49px; } }

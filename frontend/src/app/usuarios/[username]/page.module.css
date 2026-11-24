@@ -186,3 +186,10 @@
   .conteudoReview .reviewAlbum { font-size: 20px; }
   .conteudoReview .reviewTopo time { font-size: 11px; }
 }
+
+/* F09.4 — títulos menos repetitivos e leitura mais leve. */
+.discografia { padding-top: 45px; padding-bottom: 50px; }
+.corpoEditorial { padding-top: 46px; }
+.corpoEditorial .tituloSecao { margin-bottom: 20px; }
+.perfilHero { padding-bottom: 33px; }
+.estatisticas { margin-top: 25px; }

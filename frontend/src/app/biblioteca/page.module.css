@@ -55,3 +55,13 @@
 .secao { scroll-margin-top: 30px; }
 @media (max-width: 900px) { .secoesGrid { grid-template-columns: 1fr; } .vitrineCapas { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @media (max-width: 650px) { .container { padding: 25px 17px 70px; } .topoBiblioteca { padding: 28px 22px; } .container h1 { font-size: 52px; } .vitrineCapas { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; } .secao { padding: 21px; } .subtitulo { font-size: 15px; } }
+
+/* F09.4 — biblioteca de consulta rápida. */
+.topoBiblioteca { padding: clamp(26px,3vw,38px); }
+.container h1 { font-size: clamp(50px,6vw,75px); margin-bottom: 23px; }
+.vitrine { padding: 45px 0 43px; }
+.vitrineCabecalho h2 { margin-bottom: 19px; }
+.secoesGrid { gap: 16px; }
+.secao { padding: 23px; }
+.navegacaoCategorias { gap: 8px; }
+.navegacaoCategorias a { padding: 8px 13px; font-size: 11px; }

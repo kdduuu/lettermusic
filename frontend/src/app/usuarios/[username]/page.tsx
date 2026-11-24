@@ -79,7 +79,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
         <div className={styles.identidade}>
           <div className={styles.avatar} aria-label={"Inicial de " + perfil.nome_exibicao} role="img">{inicial}</div>
           <div className={styles.informacoes}>
-            <p className={styles.sobretitulo}>Arquivo musical pessoal {ano ? " · Desde " + ano : ""}</p>
+            <p className={styles.sobretitulo}>{ano ? "DESDE " + ano : "ARQUIVO MUSICAL"}</p>
             <h1>{perfil.nome_exibicao}</h1>
             <p className={styles.username}>@{perfil.username}</p>
             {perfil.bio ? <p className={styles.bio}>{perfil.bio}</p> : null}
@@ -98,7 +98,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
             <p className={styles.sobretitulo}>Atividade musical recente</p>
             <h2 id="albuns-recentes">A música fala por si.</h2>
           </div>
-          <p className={styles.nota}>Até cinco álbuns das avaliações e reviews recentes.</p>
+          
         </div>
         {perfil.albuns_recentes.length ? (
           <Suspense fallback={<p className={styles.vazio}>Carregando capas...</p>}>
@@ -111,8 +111,8 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
         <section className={styles.reviews} aria-labelledby="reviews-recentes">
           <div className={styles.tituloSecao}>
             <div>
-              <p className={styles.sobretitulo}>Diário de escuta</p>
-              <h2 id="reviews-recentes">Palavras sobre música</h2>
+              
+              <h2 id="reviews-recentes">Reviews</h2>
             </div>
           </div>
           {perfil.reviews_recentes.length ? (
@@ -125,8 +125,8 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
         <aside className={styles.listas} aria-labelledby="listas-publicas">
           <div className={styles.tituloSecao}>
             <div>
-              <p className={styles.sobretitulo}>Coleções pessoais</p>
-              <h2 id="listas-publicas">Listas criadas</h2>
+              
+              <h2 id="listas-publicas">Listas</h2>
             </div>
           </div>
           {perfil.listas_publicas.length ? (
@@ -136,7 +136,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
                   <span className={styles.indice}>{String(indice + 1).padStart(2, "0")}</span>
                   <div className={styles.listaTexto}>
                     <h3><Link href={"/listas/" + lista.id}>{lista.titulo}</Link></h3>
-                    {lista.descricao ? <p>{lista.descricao}</p> : <p>Uma seleção musical pessoal.</p>}
+                    
                   </div>
                   <Link href={"/listas/" + lista.id} aria-label={"Abrir " + lista.titulo} className={styles.seta}>↗</Link>
                 </li>

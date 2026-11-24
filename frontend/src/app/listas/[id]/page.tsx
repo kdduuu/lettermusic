@@ -97,12 +97,10 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
       </nav>
 
       <section className={styles.hero} aria-labelledby="titulo-lista">
-        <Suspense fallback={<div className={styles.espera}>Carregando capas...</div>}>
-          <ColagemEditorialLista listaId={lista.id} titulo={lista.titulo} />
-        </Suspense>
+        <ColagemEditorialLista listaId={lista.id} titulo={lista.titulo} />
         <div className={styles.info}>
           <span className={styles.traco} aria-hidden="true" />
-          <p className={styles.etiqueta}>{lista.publica ? "Coleção pública" : "Coleção privada"}</p>
+          <p className={styles.etiqueta}>{lista.publica ? "Pública" : "Privada"}</p>
           <h1 id="titulo-lista">{lista.titulo}</h1>
           {lista.descricao ? <p className={styles.descricao}>{lista.descricao}</p> : null}
           
