@@ -29,9 +29,7 @@ async function Conteudo({
         <div>
           <span className={styles.etiqueta}>Comunidade</span>
           <h1>Explorar listas</h1>
-          <p>
-            Descubra coleções musicais criadas por outras pessoas.
-          </p>
+          
         </div>
         <Link href="/listas" className={styles.linkPerfil}>
           Minhas listas
@@ -51,23 +49,23 @@ async function Conteudo({
           </p>
         ) : (
           <ul className={styles.grade}>
-            {resultado.dados.resultados.map((lista, indice) => (
+            {resultado.dados.resultados.map((lista) => (
               <li key={lista.id}>
                 <Link
                   className={styles.cartao}
                   href={`/listas/${lista.id}`}
                 >
-                  {indice < 8 ? (
-                    <Suspense fallback={<div className={styles.icone} aria-hidden="true">♪</div>}>
+                  {(
+                    <Suspense fallback={null}>
                       <VitrineLista listaId={lista.id} titulo={lista.titulo} />
                     </Suspense>
-                  ) : <div className={styles.previaTipografica} aria-hidden="true"><span>LETTERMUSIC / LISTA</span><strong>{lista.titulo}</strong></div>}
+                  )}
                   <span className={styles.visibilidade}>
                     {lista.total_itens} {lista.total_itens === 1
                       ? "álbum" : "álbuns"}
                   </span>
                   <h3>{lista.titulo}</h3>
-                  <p>{lista.descricao || "Seleção musical"}</p>
+                  {lista.descricao ? <p>{lista.descricao}</p> : null}
                 </Link>
                 <p className={styles.autorPublico}>
                   Por{" "}

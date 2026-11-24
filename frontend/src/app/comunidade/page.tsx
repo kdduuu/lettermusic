@@ -9,9 +9,7 @@ function formatarData(data: string) {
   const partes = /^(\d{4})-(\d{2})-(\d{2})/.exec(data);
   return partes ? `${partes[3]}/${partes[2]}/${partes[1]}` : "";
 }
-function plural(n: number, singular: string, plural: string) {
-  return `${n} ${n === 1 ? singular : plural}`;
-}
+function plural(n: number, singular: string, pluralTexto: string) { return `${n} ${n === 1 ? singular : pluralTexto}`; }
 function perfil(username: string) {
   return `/usuarios/${encodeURIComponent(username)}`;
 }
@@ -47,7 +45,7 @@ async function ItemAtividade({ item }: { item: Atividade }) {
               <h3><Link href={album(item.id_musicbrainz)}>{item.titulo}</Link></h3>
               {item.artista ? <p className={styles.meta}>{item.artista}</p> : null}
               {item.tipo === "review" ? (
-                <><p className={styles.resumo}>{item.texto}</p><Link className={styles.linkSecundario} href={album(item.id_musicbrainz)}>Ver álbum e reviews ↗</Link></>
+                <p className={styles.resumo}>{item.texto}</p>
               ) : <p className={styles.nota}>★ {item.nota.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}/5</p>}
             </div>
           </div>
@@ -66,7 +64,7 @@ async function EmAlta({ obras }: { obras: ObraEmAlta[] }) {
           <CapaAlbum url={capas[i]} titulo={obra.titulo} className={styles.capa} />
           <div><strong>{obra.titulo}</strong><p>{obra.artista ?? "Artista não informado"}</p></div>
         </Link>
-        <p className={styles.meta}>{plural(obra.contribuicoes, "contribuição", "contribuições")} · {plural(obra.membros, "membro", "membros")}</p>
+        
       </li>
     ))}
   </ul>;
@@ -83,12 +81,12 @@ async function ConteudoComunidade() {
         {dados.atividades.length ? <ul className={styles.atividades}>
           {dados.atividades.map((item) => <ItemAtividade key={`${item.tipo}-${item.id}`} item={item} />)}
         </ul> : <p className={styles.mensagem}>Ainda não há atividades públicas.</p>}
-        <Link href="/reviews" className={styles.linkSecundario}>Ver todas as reviews</Link>
+        
       </section>
       <aside className={styles.lateral} aria-label="Destaques da comunidade">
         <section aria-labelledby="membros">
           <h2 id="membros">Membros ativos</h2>
-          <p className={styles.mensagem}>Contribuições públicas nos últimos {dados.janela_dias} dias.</p>
+          
           {dados.membros_ativos.length ? <ul className={styles.membros}>
             {dados.membros_ativos.map((membro) => (
               <li key={membro.username}>
@@ -100,7 +98,7 @@ async function ConteudoComunidade() {
         </section>
         <section aria-labelledby="em-alta">
           <h2 id="em-alta">Em alta</h2>
-          <p className={styles.mensagem}>Avaliações e reviews dos últimos {dados.janela_dias} dias.</p>
+          
           {dados.em_alta.length ? <Suspense fallback={<p className={styles.mensagem}>Carregando capas...</p>}><EmAlta obras={dados.em_alta} /></Suspense> : <p className={styles.mensagem}>Nenhum destaque no período.</p>}
         </section>
       </aside>
@@ -116,7 +114,7 @@ export default function ComunidadePage() {
           <p className={styles.etiqueta}>Pessoas, discos e conversas</p>
           <h1>Comunidade</h1>
         </div>
-        <p>O que a comunidade anda ouvindo, avaliando e compartilhando.</p>
+        
       </header>
       <Suspense fallback={<p className={styles.mensagem}>Carregando comunidade...</p>}>
         <ConteudoComunidade />

@@ -86,7 +86,7 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
     if (resultado.status === 404) notFound();
     return <p role="alert" className={styles.erro}>{resultado.mensagem}</p>;
   }
-  const { lista, itens, destaques, dono, temProxima } = resultado.dados;
+  const { lista, itens, dono, temProxima } = resultado.dados;
   const ultimaPosicao = itens.length ? itens[itens.length - 1].posicao : 0;
 
   return (
@@ -98,15 +98,15 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
 
       <section className={styles.hero} aria-labelledby="titulo-lista">
         <Suspense fallback={<div className={styles.espera}>Carregando capas...</div>}>
-          <ColagemEditorialLista itens={destaques} titulo={lista.titulo} />
+          <ColagemEditorialLista listaId={lista.id} titulo={lista.titulo} />
         </Suspense>
         <div className={styles.info}>
           <span className={styles.traco} aria-hidden="true" />
           <p className={styles.etiqueta}>{lista.publica ? "Coleção pública" : "Coleção privada"}</p>
           <h1 id="titulo-lista">{lista.titulo}</h1>
           {lista.descricao ? <p className={styles.descricao}>{lista.descricao}</p> : null}
-          <p className={styles.meta}>Página {pagina} · {itens.length} álbuns exibidos</p>
-          <a className={styles.ancoraAlbuns} href="#albuns-lista">Explorar álbuns <span aria-hidden="true">↘</span></a>
+          
+          
         </div>
       </section>
 
@@ -123,7 +123,7 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
             <input type="hidden" name="lista" value={lista.id} />
             <label htmlFor="buscar-lista">Adicionar um álbum à coleção</label>
             <div className={styles.buscarLinha}>
-              <input id="buscar-lista" name="termo" type="search" minLength={2} maxLength={100} required placeholder="Pesquise um álbum no MusicBrainz..." />
+              <input id="buscar-lista" name="termo" type="search" minLength={2} maxLength={100} required placeholder="Álbum ou artista" />
               <button type="submit">Buscar</button>
             </div>
           </form>
@@ -133,10 +133,10 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
       <section className={styles.conteudo} aria-labelledby="albuns-lista">
         <div className={styles.cabecalhoGrade}>
           <div>
-            <p className={styles.etiqueta}>Seleção musical</p>
+            
             <h2 id="albuns-lista">Álbuns da lista</h2>
           </div>
-          <span className={styles.contagem}>Ordem da coleção · página {pagina}</span>
+          
         </div>
         {itens.length ? (
           <Suspense fallback={<p className={styles.vazio}>Carregando grade de álbuns...</p>}>

@@ -25,7 +25,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
         <div>
           <span className={styles.etiqueta}>Sua coleção</span>
           <h1>Listas musicais</h1>
-          <p>Organize álbuns e compartilhe suas descobertas com a comunidade.</p>
+          
         </div>
         <Link href={`/usuarios/${encodeURIComponent(usuario.username)}`} className={styles.linkPerfil}>Meu perfil</Link>
       </div>
@@ -43,17 +43,17 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
           <p className={styles.vazio}>{pagina > 1 ? "Não há mais listas nesta página." : "Nenhuma lista ainda. Crie a primeira acima!"}</p>
         ) : (
           <ul className={styles.grade}>
-            {resultado.dados.listas.map((lista, indice) => (
+            {resultado.dados.listas.map((lista) => (
               <li key={lista.id}>
                 <Link className={styles.cartao} href={`/listas/${lista.id}`}>
-                  {indice < 8 ? (
-                    <Suspense fallback={<div className={styles.icone} aria-hidden="true">♪</div>}>
+                  {(
+                    <Suspense fallback={null}>
                       <VitrineLista listaId={lista.id} token={token} titulo={lista.titulo} />
                     </Suspense>
-                  ) : <div className={styles.previaTipografica} aria-hidden="true"><span>LETTERMUSIC / LISTA</span><strong>{lista.titulo}</strong></div>}
+                  )}
                   <span className={styles.visibilidade}>{lista.publica ? "Pública" : "Privada"}</span>
                   <h3>{lista.titulo}</h3>
-                  {lista.descricao ? <p>{lista.descricao}</p> : <p>Seleção de álbuns</p>}
+                  {lista.descricao ? <p>{lista.descricao}</p> : null}
                 </Link>
               </li>
             ))}

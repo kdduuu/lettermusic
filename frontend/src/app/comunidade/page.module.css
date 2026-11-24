@@ -65,3 +65,13 @@
 .cabecalho > p { margin: 0 0 6px; max-width: 345px; color: #b8adb5; }
 .etiqueta { margin: 0 0 15px; color: #ea909e; font-weight: 700; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
 @media (max-width: 760px) { .cabecalho { flex-direction: column; align-items: start; gap: 12px; padding: 18px 0 30px; margin-bottom: 34px; } .cabecalho h1 { font-size: 51px; } }
+
+/* F09.4: um feed social compacto e legivel. */
+.cabecalho { margin-bottom: 27px; padding-bottom: 24px; }
+.atividade { padding: 22px 0; }
+.atividadeMusical { grid-template-columns: 83px minmax(0, 1fr); gap: 16px; }
+.capaFeed { width: 83px; }
+.atividadeMusical h3 { font-size: 21px; }
+.atividade .meta:first-child { margin-bottom: 8px; }
+.lateral h2 { font-size: 23px; }
+@media (max-width: 760px) { .atividadeMusical { grid-template-columns: 72px minmax(0, 1fr); } .capaFeed { width: 72px; } }
