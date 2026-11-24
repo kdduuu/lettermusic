@@ -1,102 +1,20 @@
 .arte {
-  position: relative; isolation: isolate; display: block;
-  overflow: hidden; width: 100%; color: #f0ede7;
-  border-radius: 8px; border: 1px solid #ffffff1a;
-  background: var(--fundo); --fundo: #393b40; --forma: #7b8180; --linha: #d5d5c8;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  width: 100%;
+  color: var(--lm-text);
+  border-radius: 7px;
+  border: 1px solid #ffffff1a;
+  background: #373a40;
 }
-.miniatura { height: 172px; margin-bottom: 20px; }
-.ampla { width: 100%; aspect-ratio: 1; border-radius: 10px; box-shadow: 0 18px 38px #0005; }
-.grafite { --fundo: #373a40; --forma: #737b82; --linha: #aeb9ba; }
-.azul { --fundo: #293d4a; --forma: #6e8c96; --linha: #b6d0ca; }
-.oliva { --fundo: #3b423b; --forma: #8a9577; --linha: #d6d2ac; }
-.ameixa { --fundo: #42343d; --forma: #926d83; --linha: #d7b1b9; }
-.areia { --fundo: #484039; --forma: #968879; --linha: #e2d2bd; }
-.marca {
-  position: absolute; top: 10%; left: 9%; font: 700 clamp(15px, 2.5vw, 27px)/1 Georgia, serif;
-  letter-spacing: -.07em; z-index: 2;
-}
-.forma {
-  position: absolute; display: block; width: 64%; aspect-ratio: 1;
-  background: var(--forma); border-radius: 50%; top: 12%; left: 42%;
-  transform: rotate(-16deg) scaleX(.86);
-}
-.forma::after {
-  content: ""; position: absolute; inset: 20%; border: 1px solid #ffffff33; border-radius: 50%;
-}
-.anel {
-  position: absolute; width: 56%; aspect-ratio: 1; top: 36%; left: -9%;
-  border: 2px solid var(--linha); border-radius: 50%;
-  opacity: .78; transform: rotate(20deg) scaleY(.78);
-}
-.risco {
-  position: absolute; width: 2px; height: 66%; top: 12%; left: 65%;
-  background: var(--linha); opacity: .65; transform: rotate(27deg);
-  transform-origin: center;
-}
-.edicao {
-  position: absolute; bottom: 9%; left: 9%; right: 9%; display: flex;
-  align-items: baseline; justify-content: space-between;
-  font: 600 9px/1 Arial, sans-serif; letter-spacing: .16em;
-  color: #f3eee8; z-index: 2;
-}
-.edicao span:last-child { font-family: Georgia, serif; font-size: 12px; letter-spacing: .08em; }
-.ampla .marca { font-size: clamp(26px, 3vw, 42px); }
-.ampla .edicao { font-size: 12px; }
-.ampla .edicao span:last-child { font-size: 19px; }
-@media (max-width: 600px) { .miniatura { height: 160px; } .ampla .edicao { font-size: 10px; } }
-
-/* F09.5 — mesma paleta grafite para todas as coleções. */
-.arte { --fundo: #373a40; --forma: #737b82; --linha: #aeb9ba; }
-.compacta {
-  flex: 0 0 78px; width: 78px; height: 78px; min-width: 78px;
-  margin: 0; border-radius: 7px;
-}
-.compacta .marca { font-size: 16px; top: 10%; left: 10%; }
-.compacta .edicao { display: none; }
-.compacta .forma { width: 76%; top: 18%; }
-@media (max-width: 600px) {
-  .compacta { width: 65px; height: 65px; min-width: 65px; flex-basis: 65px; }
-}
-
-/* F09.5 — cada coleção tem geometria própria dentro da mesma paleta aprovada. */
-.variacaoDois .forma { width: 70%; top: -7%; left: 49%; transform: rotate(22deg) scaleX(.95); }
-.variacaoDois .anel { width: 64%; top: 43%; left: -16%; transform: rotate(-22deg) scaleY(.8); }
-.variacaoDois .risco { left: 46%; top: 17%; transform: rotate(-29deg); }
-.variacaoTres .forma { width: 60%; top: 24%; left: 51%; transform: rotate(31deg) scaleX(.91); }
-.variacaoTres .anel { width: 75%; top: 13%; left: -25%; transform: rotate(20deg) scaleY(.78); }
-.variacaoTres .risco { left: 80%; top: 4%; transform: rotate(16deg); height: 78%; }
-
-
-/* F09.6 — capas de coleção menores, mesma arte grafite autoral. */
+.marca { font: 700 37px/1 var(--lm-serif); letter-spacing: -.06em; }
 .miniatura { height: 140px; margin-bottom: 11px; }
-.ampla .marca { font-size: clamp(23px,3vw,36px); }
-@media(max-width:600px) { .miniatura { height: 154px; } }
-
-
-/* F09.6 — miniaturas usadas no feed e perfil, sem extrapolar suas colunas. */
-.compacta { width: 68px; height: 68px; min-width: 68px; flex-basis: 68px; }
-@media(max-width:600px) { .compacta { width: 62px; height: 62px; min-width: 62px; flex-basis: 62px; } }
-
-
-/* F09.7 — cinco composições geométricas na MESMA paleta grafite.
-   IDs 5 e 2 deixam de repetir a mesma ilustração. */
-.variacaoQuatro .forma {
-  width: 78%; top: 46%; left: 31%;
-  border-radius: 47% 53% 10% 90%;
-  transform: rotate(-29deg) scaleX(.85);
+.ampla { width: 100%; aspect-ratio: 1; border-radius: 9px; }
+.ampla .marca { font-size: clamp(42px, 5vw, 76px); }
+.compacta { width: 68px; height: 68px; min-width: 68px; flex: 0 0 68px; margin: 0; }
+.compacta .marca { font-size: 21px; }
+@media(max-width:600px) {
+  .miniatura { height: 154px; }
+  .compacta { width: 62px; height: 62px; min-width: 62px; flex-basis: 62px; }
 }
-.variacaoQuatro .anel {
-  width: 67%; top: -29%; left: -21%;
-  transform: rotate(22deg) scaleY(.9);
-}
-.variacaoQuatro .risco { top: 8%; left: 84%; height: 87%; transform: rotate(39deg); }
-.variacaoCinco .forma {
-  width: 58%; top: 15%; left: -18%;
-  border-radius: 50%;
-  transform: rotate(15deg) scaleX(.74);
-}
-.variacaoCinco .anel {
-  width: 91%; top: 20%; left: 39%;
-  transform: rotate(9deg) scaleY(.63);
-}
-.variacaoCinco .risco { left: 42%; top: -13%; height: 111%; transform: rotate(-17deg); }

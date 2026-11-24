@@ -19,7 +19,7 @@ async function DestaqueReal() {
     ? catalogo.dados.resultados.find((item) => !idsEmDestaque.has(item.id_musicbrainz))
     : null) ?? (ouvintes.ok ? ouvintes.dados[0] : null);
   if (!obra) {
-    return <p className={styles.destaqueVazio}>As descobertas da comunidade aparecem aqui quando houver registros públicos.</p>;
+    return <p className={styles.destaqueVazio}>Sem destaques.</p>;
   }
   const capa = await obterCapaAlbum(obra.id_musicbrainz);
   return (
@@ -98,7 +98,7 @@ export default function Home() {
       <section className={styles.descobertaSecao} aria-labelledby="reviews-recentes">
         <div className={styles.tituloDescoberta}>
           <div className={styles.shelfInfo}>
-            <h2 id="reviews-recentes">O que andam dizendo</h2>
+            <h2 id="reviews-recentes">Reviews recentes</h2>
             
           </div>
           <Link href="/reviews">Todas as reviews ↗</Link>

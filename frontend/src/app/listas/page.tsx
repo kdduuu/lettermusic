@@ -24,7 +24,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
       <div className={styles.cabecalho}>
         <div>
           
-          <h1>Listas musicais</h1>
+          <h1>Minhas listas</h1>
           
         </div>
         <Link href={`/usuarios/${encodeURIComponent(usuario.username)}`} className={styles.linkPerfil}>Meu perfil</Link>
@@ -36,7 +36,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
       </details>
 
       <section className={styles.listagem} aria-labelledby="minhas-listas">
-        <h2 id="minhas-listas">Coleções</h2>
+        <h2 id="minhas-listas">Listas</h2>
         {!resultado.ok ? (
           <p role="alert" className={styles.erro}>{resultado.mensagem}</p>
         ) : resultado.dados.listas.length === 0 ? (

@@ -7,37 +7,23 @@ type Props = {
   compacta?: boolean;
 };
 
-function ArteDaLista({ listaId, titulo = "Coleção musical", ampla = false, compacta = false }: Props & { ampla?: boolean }) {
-  const tom = "grafite";
+function ArteDaLista({ titulo, ampla = false, compacta = false }: { titulo?: string; ampla?: boolean; compacta?: boolean }) {
   return (
     <div
       role="img"
-      aria-label={"Capa ilustrada da lista " + titulo}
-      className={[styles.arte, styles[tom], [
-        styles.variacaoUm,
-        styles.variacaoDois,
-        styles.variacaoTres,
-        styles.variacaoQuatro,
-        styles.variacaoCinco,
-      ][listaId % 5], ampla ? styles.ampla : compacta ? styles.compacta : styles.miniatura].join(" ")}
+      aria-label={"Capa da lista " + (titulo ?? "musical")}
+      className={[styles.arte, ampla ? styles.ampla : compacta ? styles.compacta : styles.miniatura].join(" ")}
     >
       <span className={styles.marca} aria-hidden="true">LM.</span>
-      <span className={styles.forma} aria-hidden="true" />
-      <span className={styles.anel} aria-hidden="true" />
-      <span className={styles.risco} aria-hidden="true" />
-      <span className={styles.edicao} aria-hidden="true">
-        <span>COLLECTION</span>
-        <span>{String(listaId).padStart(3, "0")}</span>
-      </span>
     </div>
   );
 }
 
-// As listas têm identidade própria; as capas dos álbuns permanecem dentro da coleção.
-export function VitrineLista({ listaId, titulo, compacta = false }: Props) {
-  return <ArteDaLista listaId={listaId} titulo={titulo} compacta={compacta} />;
+// Identidade neutra; as capas dos álbuns permanecem dentro da lista.
+export function VitrineLista({ titulo, compacta = false }: Props) {
+  return <ArteDaLista titulo={titulo} compacta={compacta} />;
 }
 
-export function ColagemEditorialLista({ listaId, titulo }: Props) {
-  return <ArteDaLista listaId={listaId} titulo={titulo} ampla />;
+export function ColagemEditorialLista({ titulo }: Props) {
+  return <ArteDaLista titulo={titulo} ampla />;
 }

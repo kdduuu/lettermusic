@@ -42,3 +42,71 @@ select:not([multiple]):not([size]) {
 }
 select option { background: var(--lm-panel-raised); color: var(--lm-text); }
 select:not(:disabled) { cursor: pointer; }
+
+
+/* F09.9 — mesmo menu de seleção em todos os formulários.
+   Melhoria progressiva: preserva o select nativo, inclusive teclado e validação. */
+select:not([multiple]):not([size]) {
+  min-height: 38px;
+  border-radius: 6px;
+  border: 1px solid #56505a;
+  background-color: var(--lm-panel-raised);
+  color: var(--lm-text);
+}
+select:not([multiple]):not([size]):hover:not(:disabled) { border-color: #807681; }
+@supports (appearance: base-select) and selector(::picker(select)) {
+  select:not([multiple]):not([size]) {
+    appearance: base-select;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background-image: none;
+  }
+  select:not([multiple]):not([size])::picker(select) {
+    appearance: base-select;
+    margin-block: 5px;
+    padding: 4px;
+    border: 1px solid #56505a;
+    border-radius: 7px;
+    background: var(--lm-panel);
+    color: var(--lm-text);
+    box-shadow: 0 8px 24px #0006;
+    max-block-size: min(320px, 55vh);
+    overflow: auto;
+  }
+  select:not([multiple]):not([size])::picker-icon {
+    color: var(--lm-muted);
+    font-size: 12px;
+  }
+  select:not([multiple]):not([size]):open::picker-icon { rotate: 180deg; }
+  select:not([multiple]):not([size]) option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 34px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--lm-text);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  select:not([multiple]):not([size]) option:checked {
+    background: #3b383f;
+    color: var(--lm-text);
+  }
+  select:not([multiple]):not([size]) option:is(:hover, :focus-visible):not(:disabled) {
+    background: #464149;
+    color: var(--lm-text);
+  }
+  select:not([multiple]):not([size]) option::checkmark {
+    order: 1;
+    margin-inline-start: auto;
+    color: var(--lm-accent);
+  }
+  select:not([multiple]):not([size]) option:disabled {
+    color: var(--lm-muted);
+    opacity: .65;
+    cursor: default;
+  }
+}

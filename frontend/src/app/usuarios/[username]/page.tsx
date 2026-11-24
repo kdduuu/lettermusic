@@ -80,7 +80,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
         <div className={styles.identidade}>
           <div className={styles.avatar} aria-label={"Inicial de " + perfil.nome_exibicao} role="img">{inicial}</div>
           <div className={styles.informacoes}>
-            <p className={styles.sobretitulo}>{ano ? "DESDE " + ano : "ARQUIVO MUSICAL"}</p>
+            {ano ? <p className={styles.sobretitulo}>Desde {ano}</p> : null}
             <h1>{perfil.nome_exibicao}</h1>
             <p className={styles.username}>@{perfil.username}</p>
             {perfil.bio ? <p className={styles.bio}>{perfil.bio}</p> : null}
@@ -96,8 +96,8 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
       <section className={styles.discografia} aria-labelledby="albuns-recentes">
         <div className={styles.tituloSecao}>
           <div>
-            <p className={styles.sobretitulo}>Atividade musical recente</p>
-            <h2 id="albuns-recentes">A música fala por si.</h2>
+            
+            <h2 id="albuns-recentes">Atividade recente</h2>
           </div>
           
         </div>
@@ -105,7 +105,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
           <Suspense fallback={<p className={styles.vazio}>Carregando capas...</p>}>
             <CapasRecentes albuns={perfil.albuns_recentes} />
           </Suspense>
-        ) : <p className={styles.vazio}>Ainda não há avaliações ou reviews públicas com álbuns para mostrar.</p>}
+        ) : <p className={styles.vazio}>Sem atividade recente.</p>}
       </section>
 
       <div className={styles.corpoEditorial}>
@@ -120,7 +120,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
             <Suspense fallback={<p className={styles.vazio}>Carregando reviews...</p>}>
               <ReviewsPerfil reviews={perfil.reviews_recentes} />
             </Suspense>
-          ) : <p className={styles.vazio}>Ainda não há reviews públicas.</p>}
+          ) : <p className={styles.vazio}>Sem reviews.</p>}
         </section>
 
         <aside className={styles.listas} aria-labelledby="listas-publicas">
@@ -145,7 +145,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
                 </li>
               ))}
             </ol>
-          ) : <p className={styles.vazio}>Nenhuma lista pública criada por enquanto.</p>}
+          ) : <p className={styles.vazio}>Sem listas públicas.</p>}
         </aside>
       </div>
     </>
