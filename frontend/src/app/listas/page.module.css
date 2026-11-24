@@ -25,3 +25,26 @@
 .autorPublico { font-size: 12px; color: #aaa; padding: 5px 3px; }
 .autorPublico a { color: #e8e8e8; text-decoration: none; }
 .autorPublico a:hover { text-decoration: underline; }
+
+/* F09 - catálogo de coleções com identidade própria. */
+.container { max-width: 1250px; padding: 45px 28px 110px; }
+.cabecalho { padding: 44px clamp(26px,4vw,50px); border: 1px solid #3d3a41; border-radius: 15px; background: #26252a; align-items: center; }
+.cabecalho h1 { font-size: clamp(56px,6vw,84px); line-height: 1; }
+.cabecalho p { max-width: 520px; color: #bcb2b9; font-size: 16px; line-height: 1.6; }
+.etiqueta { color: #ef8996; }
+.linkPerfil { color: #f2ecec; border-bottom: 1px solid #8a818a; padding-bottom: 7px; text-decoration: none; font-size: 13px; }
+.linkPerfil:hover { color: #ef8996; }
+.nova { margin-top: 28px; border-color: #3e3a42; padding: 24px 0; }
+.listagem { margin-top: 55px; }
+.listagem h2 { font-size: 36px; margin-bottom: 25px; }
+.grade { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 22px; }
+.cartao { min-height: 305px; padding: 27px; border-radius: 13px; background: #26252a; border: 1px solid #3e3942; transition: transform .18s ease,border-color .18s ease; }
+.cartao:hover, .cartao:focus-visible { transform: translateY(-3px); border-color: #a58d98; }
+.icone { width: 100%; height: 137px; margin-bottom: 22px; border: 0; border-radius: 8px; display: grid; place-items: center; font: 64px var(--lm-serif); color: #aca2aa; background: #37343b; }
+.cartao h3 { font-size: 29px; letter-spacing: -.035em; overflow-wrap: anywhere; }
+.visibilidade { color: #e7a1ab; text-transform: uppercase; font-size: 10px; font-weight: 700; letter-spacing: .12em; }
+.cartao p { color: #bdb3ba; font-size: 14px; line-height: 1.6; }
+.autorPublico { padding: 12px 4px; }
+@media (max-width: 920px) { .grade { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 650px) { .container { padding: 25px 17px 70px; } .cabecalho { padding: 30px 24px; } .cabecalho h1 { font-size: 52px; } .grade { grid-template-columns: 1fr; } .cartao { min-height: 260px; } }
+@media (prefers-reduced-motion: reduce) { .cartao { transition: none; } .cartao:hover { transform: none; } }

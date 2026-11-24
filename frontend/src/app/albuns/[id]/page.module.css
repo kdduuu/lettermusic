@@ -46,3 +46,27 @@
 
 .listasDoAlbum { border-bottom: 1px solid #404040; padding: 28px 0; }
 .listasDoAlbum h2 { font: bold 22px/1.2 Georgia, serif; margin: 0 0 6px; }
+
+/* F09 - capa protagonista, faixas e comunidade em colunas. */
+.container { max-width: 1280px; padding: 44px 28px 112px; }
+.back { color: #aaa1a9; font-size: 13px; }
+.album { grid-template-columns: minmax(260px, 375px) minmax(0, 1fr); align-items: center; gap: clamp(35px,5vw,75px); padding: clamp(24px,3.6vw,46px); border: 1px solid #3d3b42; background: #26252a; border-radius: 15px; }
+.cover { border-radius: 9px; box-shadow: 0 20px 42px #00000055; background: #333139; }
+.info h1 { font-size: clamp(56px,6vw,88px); line-height: 1; letter-spacing: -.05em; overflow-wrap: anywhere; }
+.artist { color: #e6dde1; font-size: clamp(20px,2vw,28px); }
+.meta { color: #aaa0a8; font-size: 14px; }
+.accent { background: #ef8996; }
+.corpoAlbum { display: grid; grid-template-columns: minmax(0,1.12fr) minmax(330px,.88fr); gap: clamp(36px,5vw,78px); align-items: start; margin-top: 60px; }
+.colunaFaixas, .colunaSocial { min-width: 0; }
+.colunaSocial { padding: 28px; border: 1px solid #3d3a41; border-radius: 13px; background: #252429; }
+.social { max-width: none; margin-top: 0; padding-top: 0; border: 0; }
+.social h2 { font: 700 28px var(--lm-serif); }
+.resumo { border-bottom: 1px solid #3e3b43; padding-bottom: 25px; margin-bottom: 22px; }
+.resumo strong { font: 700 33px var(--lm-serif); }
+.resumo span, .muted { color: #b1a7ae; }
+.interacoes, .listasDoAlbum { border-color: #3c3941; }
+.reviews { margin-top: 30px; }
+.reviewLista li { padding: 22px 0; border-color: #3e3a43; }
+.reviewTexto { color: #d9d1d6; }
+@media (max-width: 950px) { .corpoAlbum { grid-template-columns: 1fr; gap: 33px; } }
+@media (max-width: 700px) { .container { padding: 25px 18px 70px; } .album { grid-template-columns: 1fr; padding: 24px; } .cover { width: min(100%,370px); } .info h1 { font-size: clamp(44px,11vw,67px); } .corpoAlbum { margin-top: 35px; } .colunaSocial { padding: 22px; } }
