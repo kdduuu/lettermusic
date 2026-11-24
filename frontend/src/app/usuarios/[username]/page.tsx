@@ -55,7 +55,7 @@ async function ReviewsPerfil({ reviews }: { reviews: ReviewRecente[] }) {
             </div>
             <p className={styles.reviewArtista}>{review.artista ?? "Artista não informado"}</p>
             <p className={styles.reviewTexto}>{review.texto}</p>
-            <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.reviewLink}>Ver álbum <span aria-hidden="true">↗</span></Link>
+
           </div>
         </li>
       ))}

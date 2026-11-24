@@ -169,3 +169,6 @@
   .search { width: 100%; }
   .search input, .search button { padding: 10px 12px; }
 }
+
+/* F09.10 — foco visível sem moldura vermelha agressiva. */
+.nav a:focus-visible, .brand:focus-visible, .conta a:focus-visible, .conta button:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 3px; border-radius: 4px; }

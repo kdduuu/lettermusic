@@ -244,3 +244,9 @@
   .reviewsPagina .review:first-child h3 { font-size: 21px; }
   .reviewsPagina .texto { font-size: 13px; }
 }
+
+/* F09.10 — escala consistente, independente do número de registros. */
+.grade, .grade[data-count] { grid-template-columns: repeat(5,minmax(0,1fr)); max-width: none; gap: 15px; }
+@media(max-width:1070px) { .grade, .grade[data-count] { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+@media(max-width:780px) { .grade, .grade[data-count] { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width:560px) { .grade, .grade[data-count] { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; } }

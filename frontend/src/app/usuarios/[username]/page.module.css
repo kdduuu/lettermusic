@@ -301,3 +301,9 @@
   .capaReview { width: 76px; }
   .capaColecao { width: 62px; flex-basis: 62px; }
 }
+
+/* F09.10 — mesma escala das capas do catálogo. */
+.gradeCapas, .gradeCapas[data-count] { grid-template-columns: repeat(5,minmax(0,1fr)); max-width: none; gap: 15px; }
+@media(max-width:1070px) { .gradeCapas, .gradeCapas[data-count] { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+@media(max-width:780px) { .gradeCapas, .gradeCapas[data-count] { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width:560px) { .gradeCapas, .gradeCapas[data-count] { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; } }

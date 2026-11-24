@@ -138,3 +138,9 @@
   font-size: 13px;
   line-height: 1.58;
 }
+
+/* F09.10 — links discretos e feed mais compacto. */
+.layout a { text-decoration: none; }
+.layout a:hover, .layout a:focus-visible { text-decoration: underline; }
+.atividade { padding: 13px 0; }
+.listaAtividade { padding: 7px 0; }

@@ -383,7 +383,6 @@ export default function BuscarPage({ searchParams }: { searchParams: Parametros 
   return (
     <main className={styles.container}>
       <section className={styles.searchPage}>
-        <span className={styles.accent} aria-hidden="true" />
         <h1>Buscar</h1>
         <Suspense fallback={<p className={styles.message}>Carregando pesquisa...</p>}>
           <Conteudo searchParams={searchParams} />

@@ -6,6 +6,7 @@ import { FaixasInterativas } from "@/components/faixas-interativas";
 import { BotaoAdicionarBusca } from "@/components/formularios-listas";
 import { faixasAlbum, type Categoria, type Item } from "@/lib/exploracao";
 import styles from "./exploracao-musical.module.css";
+import { tipoMusicalEmPortugues } from "@/lib/visual-metadados";
 
 export function ResultadosMusicais({
   itens, categoria, listaId, apresentacao = "lista", avaliacoes,
@@ -36,7 +37,7 @@ export function ResultadosMusicais({
                 <h3><Link href={endereco}>{item.titulo}</Link></h3>
                 <p>{item.artista ?? "Artista não informado"}</p>
                 <div className={styles.dadosLinha}>
-                  <span>{[item.tipo, item.data?.slice(0, 4)].filter(Boolean).join(" · ")}</span>
+                  <span>{[tipoMusicalEmPortugues(item.tipo), item.data?.slice(0, 4)].filter(Boolean).join(" · ")}</span>
                   {avaliacoes?.[item.id_musicbrainz] ? (
                     <strong className={styles.notaGaleria} title={
                       String(avaliacoes[item.id_musicbrainz].quantidade) +
@@ -81,7 +82,7 @@ export function ResultadosMusicais({
               )}
             </h3>
 
-            <p>{[item.artista, item.tipo, item.data?.slice(0, 4), item.subtitulo].filter(Boolean).join(" · ")}</p>
+            <p>{[item.artista, tipoMusicalEmPortugues(item.tipo), item.data?.slice(0, 4), item.subtitulo].filter(Boolean).join(" · ")}</p>
 
             {categoria === "albuns" && listaId ? (
               <BotaoAdicionarBusca id={item.id_musicbrainz} listaId={listaId} />

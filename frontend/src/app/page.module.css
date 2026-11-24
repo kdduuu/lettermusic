@@ -234,3 +234,15 @@
 .buscaCategorias a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border: 1px solid transparent; border-radius: 6px; text-decoration: none; }
 .buscaCategorias a:hover { background: var(--lm-panel-raised); color: var(--lm-text); }
 .buscaCategorias a[aria-current="page"] { color: var(--lm-text); background: var(--lm-panel-raised); border-color: #74616a; }
+
+/* F09.10 — abertura mais compacta, sem caixas aninhadas. */
+.hero.heroEditorial { background: transparent; border: 0; padding: 12px 0 16px; margin-bottom: 0; gap: 24px; }
+.heroEditorial .heroMain h1 { font-size: clamp(43px,5vw,58px); margin-bottom: 12px; }
+.heroEditorial .heroAside { background: transparent; border: 0; padding: 0; }
+.destaqueObra { grid-template-columns: 106px minmax(0,1fr); gap: 16px; padding: 0; }
+.heroLinks a, .catalogoHero a { border-bottom: 0; text-decoration: none; }
+.heroLinks a:hover, .heroLinks a:focus-visible, .catalogoHero a:hover, .catalogoHero a:focus-visible { text-decoration: underline; }
+.searchPage { background: transparent; border: 0; border-radius: 0; padding: 0; min-height: 0; }
+.searchPage h1 { font-size: clamp(43px,5vw,58px); margin-bottom: 16px; }
+.catalogoHero { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+@media(max-width:680px) { .hero.heroEditorial { padding: 8px 0 14px; gap: 18px; } .destaqueObra { grid-template-columns: 88px minmax(0,1fr); } }

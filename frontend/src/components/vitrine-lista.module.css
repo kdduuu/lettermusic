@@ -1,20 +1,23 @@
 .arte {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   overflow: hidden;
   width: 100%;
   color: var(--lm-text);
   border-radius: 7px;
   border: 1px solid #ffffff1a;
   background: #373a40;
+  padding: 18px 21px;
 }
-.marca { font: 700 37px/1 var(--lm-serif); letter-spacing: -.06em; }
-.miniatura { height: 140px; margin-bottom: 11px; }
-.ampla { width: 100%; aspect-ratio: 1; border-radius: 9px; }
-.ampla .marca { font-size: clamp(42px, 5vw, 76px); }
-.compacta { width: 68px; height: 68px; min-width: 68px; flex: 0 0 68px; margin: 0; }
+.marca { font: 700 32px/1 var(--lm-serif); letter-spacing: -.06em; }
+.rodape { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; font-size: 10px; letter-spacing: .12em; font-weight: 600; }
+.rodape span:last-child { font: 700 15px/1 var(--lm-serif); letter-spacing: .08em; }
+.miniatura { aspect-ratio: 1.85; margin-bottom: 12px; }
+.ampla { aspect-ratio: 1; padding: clamp(18px, 3vw, 30px); border-radius: 9px; }
+.ampla .marca { font-size: clamp(38px, 4vw, 58px); }
+.compacta { width: 68px; height: 68px; min-width: 68px; flex: 0 0 68px; margin: 0; padding: 0; justify-content: center; align-items: center; }
 .compacta .marca { font-size: 21px; }
 @media(max-width:600px) {
-  .miniatura { height: 154px; }
   .compacta { width: 62px; height: 62px; min-width: 62px; flex-basis: 62px; }
 }

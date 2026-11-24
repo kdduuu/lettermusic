@@ -7,6 +7,7 @@ import { MBID_VALIDO } from "@/lib/estado-album";
 import styles from "../../page.module.css";
 import controles from "@/components/controles.module.css";
 import { CapaArtista } from "@/components/capa-artista";
+import { tipoMusicalEmPortugues } from "@/lib/visual-metadados";
 import visual from "./page.module.css";
 
 type Props = {
@@ -51,7 +52,7 @@ async function Conteudo({ params, searchParams }: Props) {
         <CapaArtista nome={perfil.dados.titulo} id={id} tamanho="grande" />
         <div className={visual.identidade}>
           <h1>{perfil.dados.titulo}</h1>
-          <p>{[perfil.dados.tipo, perfil.dados.subtitulo].filter(Boolean).join(" · ")}</p>
+          <p>{[tipoMusicalEmPortugues(perfil.dados.tipo), perfil.dados.subtitulo].filter(Boolean).join(" · ")}</p>
         </div>
       </section>
 

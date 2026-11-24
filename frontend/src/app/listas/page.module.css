@@ -88,3 +88,12 @@
 .nova { padding: 16px 0; margin-top: 19px; }
 @media(max-width:800px) { .grade { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media(max-width:600px) { .container { padding: 22px 16px 55px; } .grade { grid-template-columns: 1fr; } .cabecalho h1 { font-size: 43px; } }
+
+/* F09.10 — a capa é o cartão; metadados diretamente no fundo. */
+.cartao { padding: 0; background: transparent; border: 0; border-radius: 7px; }
+.cartao:hover, .cartao:focus-visible { transform: none; }
+.cartao:hover h3, .cartao:focus-visible h3 { text-decoration: underline; }
+.cartao h3 { margin: 5px 0 0; }
+.autorPublico { padding: 4px 0; margin: 0; }
+.linkPerfil { border-bottom: 0; padding-bottom: 0; }
+.linkPerfil:hover, .linkPerfil:focus-visible { text-decoration: underline; }

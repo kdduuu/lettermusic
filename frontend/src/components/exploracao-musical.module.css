@@ -89,3 +89,8 @@
 .dadosLinha { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; justify-content: space-between; }
 .dadosLinha span { font-size: 11px; color: #a79ea6; }
 .notaGaleria { font: 700 12px/1.2 Arial,sans-serif; color: #e1cb9d; white-space: nowrap; }
+
+/* F09.10 — títulos alinhados e links com estados consistentes. */
+.dadosGaleria h3 { min-height: 2.44em; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+.info a { text-decoration: none; }
+.info a:hover, .info a:focus-visible { text-decoration: underline; }

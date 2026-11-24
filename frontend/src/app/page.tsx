@@ -27,6 +27,7 @@ async function DestaqueReal() {
       <CapaAlbum url={capa} titulo={obra.titulo} className={styles.destaqueCapa} />
       <div className={styles.destaqueInfo}>
         
+        <span>Em destaque</span>
         <h2>{obra.titulo}</h2>
         <p>{obra.artista ?? "Artista não informado"}</p>
         
