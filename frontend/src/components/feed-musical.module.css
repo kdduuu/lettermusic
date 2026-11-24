@@ -99,3 +99,38 @@
   .grade[data-count="1"] { grid-template-columns: minmax(0,1fr); max-width: 280px; }
   .grade[data-count="2"], .grade[data-count="3"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; }
 }
+
+/* F09.5 — regras no módulo do próprio componente, sem seletor CSS isolado. */
+.reviewsPagina { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; gap: 0 38px; }
+.reviewsPagina .review,
+.reviewsPagina .review:first-child {
+  grid-template-columns: 120px minmax(0,1fr);
+  gap: 18px; align-items: start; padding: 30px 0;
+  border-bottom: 1px solid #46414a;
+}
+.reviewsPagina .capaReview,
+.reviewsPagina .review:first-child .capaReview { width: 120px; border-radius: 7px; }
+.reviewsPagina .review h3,
+.reviewsPagina .review:first-child h3 {
+  font: 700 26px/1.13 Georgia,serif;
+  letter-spacing: -.025em;
+}
+.reviewsPagina .artista { font-size: 13px; }
+.reviewsPagina .meta { font-size: 12px; line-height: 1.5; margin: 10px 0 0; }
+.reviewsPagina .texto { font-size: 15px; line-height: 1.6; margin: 12px 0 0; }
+@media(max-width: 900px) {
+  .reviewsPagina { grid-template-columns: 1fr; }
+  .reviewsPagina .review,
+  .reviewsPagina .review:first-child { grid-template-columns: 128px minmax(0,1fr); gap: 22px; }
+  .reviewsPagina .capaReview,
+  .reviewsPagina .review:first-child .capaReview { width: 128px; }
+}
+@media(max-width: 460px) {
+  .reviewsPagina .review,
+  .reviewsPagina .review:first-child { grid-template-columns: 95px minmax(0,1fr); gap: 14px; }
+  .reviewsPagina .capaReview,
+  .reviewsPagina .review:first-child .capaReview { width: 95px; }
+  .reviewsPagina .review h3,
+  .reviewsPagina .review:first-child h3 { font-size: 21px; }
+  .reviewsPagina .texto { font-size: 14px; }
+}
