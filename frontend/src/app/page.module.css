@@ -212,3 +212,18 @@
   .catalogoHero h1 { font-size: 46px; }
   .secaoRankings { grid-template-columns: 1fr; gap: 12px; }
 }
+
+/* F09.6 — avaliacoes só aparecem quando acrescentam informação nova. */
+.avaliacoesLista { list-style: none; padding: 0; margin: 0; }
+.avaliacoesLista li {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 0; border-top: 1px solid #444047;
+}
+.avaliacoesLista li:last-child { border-bottom: 1px solid #444047; }
+.avaliacoesLista div { min-width: 0; display: grid; gap: 3px; }
+.avaliacoesLista a { color: #f3eded; text-decoration: none; font: 700 17px/1.2 Georgia,serif; overflow-wrap: anywhere; }
+.avaliacoesLista a:hover { text-decoration: underline; }
+.avaliacoesLista span { color: #aca2aa; font-size: 11px; }
+.avaliacoesLista strong { font-size: 13px; color: #dec89a; white-space: nowrap; }
+
+.linkExternoCatalogo { display: inline-block; margin-top: 2px; }

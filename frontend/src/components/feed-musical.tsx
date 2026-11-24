@@ -19,10 +19,16 @@ function formatarData(data: string) {
 }
 
 export async function DestaquesMusicais({ tipo }: { tipo: TipoDestaque }) {
-  const resultado = await consultarDestaques(tipo);
+  const [resultado, avaliacoes] = await Promise.all([
+    consultarDestaques(tipo),
+    tipo === "mais-ouvidas" ? consultarDestaques("melhor-avaliadas") : Promise.resolve(null),
+  ]);
   if (!resultado.ok) return <p role="alert" className={styles.mensagem}>{resultado.mensagem}</p>;
   if (!resultado.dados.length) return <p className={styles.mensagem}>Os destaques aparecerão conforme a comunidade registrar suas atividades.</p>;
   const capas = await consultarCapas(resultado.dados);
+  const notas = new Map(avaliacoes?.ok
+    ? avaliacoes.dados.map((obra) => [obra.id_musicbrainz, obra.media] as const)
+    : []);
   return (
     <ul className={styles.grade} data-count={Math.min(resultado.dados.length, 4)}>
       {resultado.dados.map((obra) => (
@@ -32,7 +38,14 @@ export async function DestaquesMusicais({ tipo }: { tipo: TipoDestaque }) {
             <strong>{obra.titulo}</strong>
           </Link>
           <p>{obra.artista ?? "Artista não informado"}</p>
-          <p>{tipo === "mais-ouvidas" ? `${obra.total_escutas} ${obra.total_escutas === 1 ? "escuta" : "escutas"}` : obra.media !== undefined ? `${formatarNota(obra.media)}/5 · ${obra.quantidade_avaliacoes} ${obra.quantidade_avaliacoes === 1 ? "avaliação" : "avaliações"}` : ""}</p>
+          <div className={styles.dadosScore}>
+            {notas.get(obra.id_musicbrainz) !== undefined || obra.media !== undefined ? (
+              <strong className={styles.scoreAlbum}>★ {formatarNota(notas.get(obra.id_musicbrainz) ?? obra.media ?? 0)}</strong>
+            ) : null}
+            {tipo === "mais-ouvidas" && obra.total_escutas !== undefined ? (
+              <span>{obra.total_escutas} {obra.total_escutas === 1 ? "escuta" : "escutas"}</span>
+            ) : null}
+          </div>
         </li>
       ))}
     </ul>
@@ -55,17 +68,21 @@ export async function CardsReviews({
           <Link href={`/albuns/${encodeURIComponent(review.id_musicbrainz)}`} aria-label={`Abrir álbum ${review.titulo}`}>
             <CapaAlbum url={capas.get(review.id_musicbrainz) ?? null} titulo={review.titulo} className={styles.capaReview} />
           </Link>
-          <article>
-            <h3><Link href={`/albuns/${encodeURIComponent(review.id_musicbrainz)}`}>{review.titulo}</Link></h3>
+          <article className={styles.reviewConteudo}>
+            <div className={styles.reviewTituloLinha}>
+              <h3><Link href={`/albuns/${encodeURIComponent(review.id_musicbrainz)}`}>{review.titulo}</Link></h3>
+              {review.nota !== null ? (
+                <strong className={styles.reviewNota} aria-label={`Nota ${formatarNota(review.nota)} de 5`}>
+                  ★ {formatarNota(review.nota)}
+                </strong>
+              ) : null}
+            </div>
             <p className={styles.artista}>{review.artista ?? "Artista não informado"}</p>
             <p className={styles.meta}>
               <Link href={`/usuarios/${encodeURIComponent(review.username)}`}>{review.nome_exibicao}</Link>
               {" · "}<time dateTime={review.criada_em}>{formatarData(review.criada_em)}</time>
-              {review.nota !== null ? <span> · ★ {formatarNota(review.nota)}/5</span> : null}
-              
             </p>
             <p className={resumo ? styles.resumo : styles.texto}>{review.texto}</p>
-            
           </article>
         </li>
       ))}

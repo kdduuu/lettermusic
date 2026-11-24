@@ -175,3 +175,17 @@
   .reviewsPagina .capaReview,.reviewsPagina .review:first-child .capaReview { width: 86px; }
   .reviewsPagina .review h3,.reviewsPagina .review:first-child h3 { font-size: 20px; }
 }
+
+/* F09.6 — score verdadeiro e organização editorial inspirada no AOTY. */
+.dadosScore { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; margin-top: 6px; min-height: 18px; }
+.dadosScore span { color: #a69ea6; font-size: 11px; }
+.scoreAlbum { font: 700 12px/1.2 Arial,sans-serif; color: #d7c28d; }
+.reviewConteudo { min-width: 0; }
+.reviewTituloLinha { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.reviewTituloLinha h3 { min-width: 0; }
+.reviewNota {
+  flex-shrink: 0; display: inline-flex; padding: 4px 7px;
+  font: 700 12px/1.1 Arial,sans-serif; color: #e5cf9f;
+  background: #343036; border: 1px solid #4c464c; border-radius: 4px;
+}
+@media(max-width:520px) { .reviewNota { font-size: 11px; padding: 4px 5px; } }

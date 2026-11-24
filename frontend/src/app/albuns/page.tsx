@@ -58,7 +58,7 @@ export default function AlbunsPage({ searchParams }: { searchParams: Parametros 
         
         <h1>Álbuns</h1>
         
-        <p><Link href="/buscar">Buscar no MusicBrainz ↗</Link></p>
+        <Link href="/buscar" className={styles.linkExternoCatalogo}>MusicBrainz ↗</Link>
       </section>
       <Suspense fallback={<p className={styles.message}>Carregando catálogo...</p>}>
         <Conteudo searchParams={searchParams} />

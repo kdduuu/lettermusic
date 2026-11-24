@@ -20,11 +20,11 @@ async function ConteudoReviews({ searchParams }: { searchParams: Parametros }) {
   return (
     <>
       <CardsReviews reviews={dados.resultados} apresentacao="editorial" />
-      <nav className={styles.paginacao} aria-label="Páginas de reviews">
+      {(pagina > 1 || dados.tem_proxima) ? <nav className={styles.paginacao} aria-label="Páginas de reviews">
         {pagina > 1 ? <Link href={`/reviews?pagina=${pagina - 1}`}>Anterior</Link> : null}
         <span>Página {pagina}</span>
         {dados.tem_proxima && pagina < 10000 ? <Link href={`/reviews?pagina=${pagina + 1}`}>Próxima</Link> : null}
-      </nav>
+      </nav> : null}
     </>
   );
 }
@@ -34,7 +34,6 @@ export default function ReviewsPage({ searchParams }: { searchParams: Parametros
     <main className={styles.container}>
       <header className={styles.cabecalhoEditorial}>
         <div>
-          <p className={styles.etiqueta}>DIÁRIO COLETIVO</p>
           <h1>Reviews</h1>
         </div>
         
