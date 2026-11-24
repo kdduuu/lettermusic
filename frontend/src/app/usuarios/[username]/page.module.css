@@ -1,42 +1,42 @@
 .container {
   width: 100%;
   min-height: calc(100vh - 74px);
-  background: #f7f5f1;
-  color: #1c1b1a;
+  background: #1c1c1f;
+  color: #f3eeeb;
   padding: 34px 28px 112px;
 }
 .interior { max-width: 1230px; margin: 0 auto; }
 .breadcrumb {
   display: flex; gap: 11px; align-items: center;
-  font-size: 13px; color: #8a8580; margin-bottom: 50px;
+  font-size: 13px; color: #aba3a7; margin-bottom: 50px;
 }
-.breadcrumb a { color: #514d49; text-decoration: none; }
+.breadcrumb a { color: #d3cbd0; text-decoration: none; }
 .breadcrumb a:hover { text-decoration: underline; }
-.perfilHero { padding: 0 0 52px; border-bottom: 1px solid #d8d3cc; }
+.perfilHero { padding: 0 0 52px; border-bottom: 1px solid #3b393e; }
 .identidade { display: flex; align-items: center; gap: clamp(28px, 4vw, 60px); }
 .avatar {
   width: clamp(148px, 18vw, 220px);
   height: clamp(148px, 18vw, 220px);
   flex: 0 0 auto; display: grid; place-items: center;
-  border: 2px solid #373331; border-radius: 50%;
-  background: #d9d4ce; color: #3b3735;
+  border: 2px solid #777079; border-radius: 50%;
+  background: #35343b; color: #f0e8e7;
   font: 700 clamp(70px, 8vw, 112px)/1 Georgia, "Times New Roman", serif;
 }
 .informacoes { min-width: 0; flex: 1; }
 .sobretitulo {
-  margin: 0 0 16px; color: #a03e48; text-transform: uppercase;
+  margin: 0 0 16px; color: #e7808c; text-transform: uppercase;
   letter-spacing: .15em; font-size: 11px; font-weight: 700;
 }
 .informacoes h1 {
   font: 700 clamp(52px, 8vw, 102px)/.97 Georgia, "Times New Roman", serif;
   letter-spacing: -.055em; margin: 0; overflow-wrap: anywhere;
 }
-.username { color: #5e5853; margin: 13px 0 0; font-size: 16px; }
+.username { color: #b7b0b6; margin: 13px 0 0; font-size: 16px; }
 .bio, .bioAlternativa {
   margin: 22px 0 0; max-width: 660px;
   line-height: 1.65; font-size: 17px; overflow-wrap: anywhere; white-space: pre-wrap;
 }
-.bioAlternativa { color: #918a83; font-style: italic; }
+.bioAlternativa { color: #afa7ae; font-style: italic; }
 .estatisticas {
   display: flex; align-items: start; flex-wrap: wrap;
   gap: clamp(28px, 5vw, 80px); padding: 34px 0 0; margin: 0;
@@ -46,8 +46,8 @@
   order: 0; margin: 0; font: 700 clamp(27px, 3vw, 39px)/1 Georgia, serif;
   letter-spacing: -.04em;
 }
-.estatisticas dt { order: 1; font-size: 15px; color: #5c5651; }
-.discografia { padding: 54px 0 62px; border-bottom: 1px solid #d8d3cc; }
+.estatisticas dt { order: 1; font-size: 15px; color: #b6abb1; }
+.discografia { padding: 54px 0 62px; border-bottom: 1px solid #3b393e; }
 .tituloSecao {
   display: flex; align-items: end; justify-content: space-between;
   gap: 28px; margin-bottom: 26px;
@@ -56,49 +56,49 @@
   margin: 0; font: 700 clamp(29px, 3.2vw, 43px)/1.13 Georgia, serif;
   letter-spacing: -.035em;
 }
-.nota { max-width: 240px; margin: 0; color: #746e68; font-size: 13px; line-height: 1.5; text-align: right; }
+.nota { max-width: 240px; margin: 0; color: #ada4a9; font-size: 13px; line-height: 1.5; text-align: right; }
 .gradeCapas { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; }
-.itemCapa { text-decoration: none; color: #1d1b19; min-width: 0; }
+.itemCapa { text-decoration: none; color: #f4efeb; min-width: 0; }
 .capa {
   position: relative; aspect-ratio: 1; width: 100%;
   display: grid; place-items: center; overflow: hidden;
-  border-radius: 7px; background: #e6e0d9; color: #77706b; font-size: 46px;
+  border-radius: 7px; background: #323038; color: #a99fa7; font-size: 46px;
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .capa img { object-fit: cover; }
 .itemCapa:hover .capa, .itemCapa:focus-visible .capa {
-  transform: translateY(-4px); box-shadow: 0 12px 24px #241c171e;
+  transform: translateY(-4px); box-shadow: 0 12px 24px #00000066;
 }
 .nomeAlbum { display: block; margin-top: 13px; font: 700 18px/1.25 Georgia, serif; overflow-wrap: anywhere; }
-.artistaAlbum { display: block; margin-top: 4px; font-size: 13px; color: #736c66; overflow-wrap: anywhere; }
+.artistaAlbum { display: block; margin-top: 4px; font-size: 13px; color: #a89fa5; overflow-wrap: anywhere; }
 .corpoEditorial { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: clamp(42px, 7vw, 110px); padding-top: 60px; }
 .corpoEditorial .tituloSecao { margin-bottom: 32px; }
 .feed, .listaColecoes { list-style: none; margin: 0; padding: 0; }
-.feed li { border-top: 1px solid #ddd8d0; padding: 27px 0 30px; }
-.feed li:last-child { border-bottom: 1px solid #ddd8d0; }
+.feed li { border-top: 1px solid #3b3940; padding: 27px 0 30px; }
+.feed li:last-child { border-bottom: 1px solid #3b3940; }
 .reviewTopo { display: flex; gap: 18px; align-items: baseline; justify-content: space-between; }
-.reviewAlbum { font: 700 23px/1.25 Georgia, serif; color: #171615; text-decoration: none; }
+.reviewAlbum { font: 700 23px/1.25 Georgia, serif; color: #f4efeb; text-decoration: none; }
 .reviewAlbum:hover { text-decoration: underline; }
-.reviewTopo time { white-space: nowrap; color: #8c847d; font-size: 12px; }
-.reviewArtista { margin: 5px 0 15px; color: #77716b; font-size: 14px; }
+.reviewTopo time { white-space: nowrap; color: #a99fa7; font-size: 12px; }
+.reviewArtista { margin: 5px 0 15px; color: #a89fa5; font-size: 14px; }
 .reviewTexto {
-  color: #3d3835; font-size: 15px; line-height: 1.75; margin: 0 0 13px;
+  color: #d4ccd0; font-size: 15px; line-height: 1.75; margin: 0 0 13px;
   white-space: pre-wrap; overflow-wrap: anywhere;
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden;
 }
-.reviewLink { color: #9d3847; font-size: 12px; font-weight: 700; text-decoration: none; }
+.reviewLink { color: #ef8895; font-size: 12px; font-weight: 700; text-decoration: none; }
 .reviewLink:hover { text-decoration: underline; }
-.listaColecoes li { display: flex; gap: 15px; padding: 22px 0; border-top: 1px solid #ddd8d0; }
-.listaColecoes li:last-child { border-bottom: 1px solid #ddd8d0; }
-.indice { color: #a79e95; font: 21px Georgia, serif; }
+.listaColecoes li { display: flex; gap: 15px; padding: 22px 0; border-top: 1px solid #3b3940; }
+.listaColecoes li:last-child { border-bottom: 1px solid #3b3940; }
+.indice { color: #938b95; font: 21px Georgia, serif; }
 .listaTexto { min-width: 0; flex: 1; }
 .listaTexto h3 { font: 700 22px/1.2 Georgia, serif; margin: 0; }
-.listaTexto h3 a { color: #1b1918; text-decoration: none; }
+.listaTexto h3 a { color: #f4efeb; text-decoration: none; }
 .listaTexto h3 a:hover { text-decoration: underline; }
-.listaTexto p { margin: 7px 0 0; color: #726b64; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
-.seta { color: #1a1918; font-size: 20px; text-decoration: none; }
-.vazio { color: #756e67; line-height: 1.6; padding: 18px 0; }
-.erro { color: #b13944; padding: 18px 0; }
+.listaTexto p { margin: 7px 0 0; color: #a99fa6; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.seta { color: #f4efeb; font-size: 20px; text-decoration: none; }
+.vazio { color: #b2a9af; line-height: 1.6; padding: 18px 0; }
+.erro { color: #ff9da7; padding: 18px 0; }
 @media (max-width: 900px) {
   .corpoEditorial { grid-template-columns: 1fr; gap: 54px; }
   .gradeCapas { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -125,4 +125,39 @@
 @media (prefers-reduced-motion: reduce) {
   .capa { transition: none; }
   .itemCapa:hover .capa, .itemCapa:focus-visible .capa { transform: none; }
+}
+/* F09.2 — noite editorial: a composição permanece, a atmosfera acompanha o site. */
+.perfilHero {
+  padding: 40px clamp(26px, 4vw, 52px) 42px;
+  border: 1px solid #39363d;
+  border-radius: 15px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(143, 56, 78, .16), transparent 58%),
+    linear-gradient(135deg, #29272d 0%, #222227 78%);
+}
+.avatar {
+  border-color: #777078;
+  background: linear-gradient(140deg, #444047, #34343a);
+  box-shadow: 0 12px 28px #00000030;
+}
+.estatisticas {
+  margin-top: 37px;
+  border-top: 1px solid #474148;
+  padding-top: 28px;
+}
+.discografia { border-color: #39373e; }
+.capa { box-shadow: 0 0 0 1px #ffffff0b; }
+.corpoEditorial .tituloSecao h2 { color: #f2eae8; }
+.feed li, .listaColecoes li { border-color: #3b3940; }
+.itemCapa:focus-visible,
+.reviewLink:focus-visible,
+.reviewAlbum:focus-visible,
+.listaTexto a:focus-visible,
+.seta:focus-visible {
+  outline: 2px solid #e7808c;
+  outline-offset: 4px;
+}
+@media (max-width: 600px) {
+  .perfilHero { padding: 25px 18px 28px; border-radius: 12px; }
+  .estatisticas { margin-top: 26px; }
 }
