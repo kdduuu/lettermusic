@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CapaAlbum } from "@/components/capa-album";
+import { CapaArtista } from "@/components/capa-artista";
 import { obterCapaAlbum } from "@/lib/catalogo";
 import { FaixasInterativas } from "@/components/faixas-interativas";
 import { BotaoAdicionarBusca } from "@/components/formularios-listas";
@@ -67,7 +68,9 @@ export function ResultadosMusicais({
               className={styles.capa}
               url={`https://coverartarchive.org/release-group/${item.id_musicbrainz.toLowerCase()}/front-500`}
             />
-          ) : <div className={styles.icone} aria-hidden="true">{categoria === "artistas" ? "◎" : "♪"}</div>}
+          ) : categoria === "artistas" ? (
+            <CapaArtista nome={item.titulo} id={item.id_musicbrainz} />
+          ) : <div className={styles.icone} aria-hidden="true">♪</div>}
 
           <div className={styles.info}>
             <h3>

@@ -227,3 +227,10 @@
 .avaliacoesLista strong { font-size: 13px; color: #dec89a; white-space: nowrap; }
 
 .linkExternoCatalogo { display: inline-block; margin-top: 2px; }
+
+
+/* F09.8 — categorias da pesquisa: controles discretos, sem aparência padrão. */
+.buscaCategorias { gap: 8px; flex-wrap: wrap; }
+.buscaCategorias a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border: 1px solid transparent; border-radius: 6px; text-decoration: none; }
+.buscaCategorias a:hover { background: var(--lm-panel-raised); color: var(--lm-text); }
+.buscaCategorias a[aria-current="page"] { color: var(--lm-text); background: var(--lm-panel-raised); border-color: #74616a; }

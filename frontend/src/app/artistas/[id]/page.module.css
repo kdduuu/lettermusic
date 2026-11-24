@@ -1,0 +1,14 @@
+
+.voltar { display: inline-block; color: var(--lm-muted); text-decoration: none; font-size: 12px; margin-bottom: 18px; }
+.voltar:hover { color: var(--lm-text); text-decoration: underline; }
+.artistaHero { display: flex; align-items: center; gap: 28px; padding: 24px; border: 1px solid var(--lm-line); background: var(--lm-panel); border-radius: 9px; }
+.identidade { min-width: 0; }
+.identidade h1 { font: 700 clamp(34px,5vw,62px)/1.05 var(--lm-serif); letter-spacing: -.045em; overflow-wrap: anywhere; margin: 0; }
+.identidade p { font-size: 13px; color: var(--lm-muted); margin: 10px 0 0; overflow-wrap: anywhere; }
+.discografia { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--lm-line); }
+.discografia h2 { font: 700 29px/1.15 var(--lm-serif); margin: 0 0 16px; }
+@media(max-width:560px) {
+  .artistaHero { padding: 16px; gap: 15px; }
+  .identidade h1 { font-size: clamp(27px,7vw,39px); }
+  .discografia { margin-top: 23px; }
+}

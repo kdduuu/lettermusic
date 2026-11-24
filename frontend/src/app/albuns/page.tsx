@@ -4,6 +4,7 @@ import { Paginacao, ResultadosMusicais } from "@/components/exploracao-musical";
 import { catalogoLocal, obterPagina } from "@/lib/exploracao";
 import { consultarDestaques } from "@/lib/feed";
 import styles from "../page.module.css";
+import controles from "@/components/controles.module.css";
 
 type Parametros = Promise<{
   termo?: string | string[];
@@ -32,20 +33,18 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
 
   return (
     <>
-      <form action="/albuns" className={styles.buscaLista}>
+      <form action="/albuns" className={controles.formulario}>
         <label htmlFor="termo-catalogo" className={styles.visuallyHidden}>Pesquisar álbuns</label>
-        <div>
-          <input id="termo-catalogo" name="termo" type="search" maxLength={100} defaultValue={termo} placeholder="Título ou artista" />
-          <button type="submit">Filtrar</button>
-        </div>
-        <div className={styles.filtroCatalogo}>
-          <label htmlFor="tipo-catalogo">Tipo</label>
-          <select id="tipo-catalogo" name="tipo" defaultValue={tipo}>
+        <div className={controles.linha + " " + controles.catalogo}>
+          <input className={controles.campo} id="termo-catalogo" name="termo" type="search" maxLength={100} defaultValue={termo} placeholder="Título ou artista" />
+          <label htmlFor="tipo-catalogo" className={styles.visuallyHidden}>Tipo de lançamento</label>
+          <select className={controles.selecao} id="tipo-catalogo" name="tipo" defaultValue={tipo}>
             <option value="todos">Todos</option>
             <option value="Album">Álbuns</option>
             <option value="Single">Singles</option>
             <option value="EP">EPs</option>
           </select>
+          <button className={controles.primario} type="submit">Filtrar</button>
         </div>
       </form>
 

@@ -1,0 +1,23 @@
+
+.capa {
+  position: relative; display: grid; place-items: center; isolation: isolate;
+  overflow: hidden; border: 1px solid #56565d; border-radius: 7px;
+  background: #34363b; color: var(--lm-text);
+}
+.capa::before, .capa::after { content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: 50%; }
+.capa::before { width: 90%; aspect-ratio: 1; border: 1px solid #92969c66; right: -35%; top: -22%; }
+.capa::after { width: 75%; aspect-ratio: 1; border: 1px solid #92969c44; left: -34%; bottom: -40%; background: #83889118; }
+.capa[data-variacao="1"]::before { right: -22%; top: 40%; }
+.capa[data-variacao="1"]::after { left: -40%; bottom: 40%; }
+.capa[data-variacao="2"]::before { right: 40%; top: -45%; }
+.capa[data-variacao="2"]::after { left: 45%; bottom: -30%; }
+.mini { width: 80px; height: 80px; flex: 0 0 80px; }
+.grande { width: 156px; height: 156px; flex: 0 0 156px; border-radius: 9px; }
+.monograma { font: 700 28px/1 var(--lm-serif); letter-spacing: -.055em; max-width: 90%; }
+.grande .monograma { font-size: 61px; }
+@media(max-width:560px) {
+  .mini { width: 65px; height: 65px; flex-basis: 65px; }
+  .mini .monograma { font-size: 23px; }
+  .grande { width: 108px; height: 108px; flex-basis: 108px; }
+  .grande .monograma { font-size: 43px; }
+}

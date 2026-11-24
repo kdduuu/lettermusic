@@ -28,3 +28,17 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
 /* F09.6 — escala AOTY: densidade nativa em 100%, nunca zoom global. */
 :root { --lm-content: 1120px; --lm-content-compact: 1030px; }
 body { font-size: 14px; line-height: 1.45; }
+
+
+/* F09.8 — controles nativos, com seta e estados coerentes em todo o site. */
+select:not([multiple]):not([size]) {
+  appearance: none;
+  color-scheme: dark;
+  padding-inline-end: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%23b4abb1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+}
+select option { background: var(--lm-panel-raised); color: var(--lm-text); }
+select:not(:disabled) { cursor: pointer; }
