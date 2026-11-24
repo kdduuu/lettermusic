@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { FormularioCriarLista } from "@/components/formularios-listas";
+import { VitrineLista } from "@/components/vitrine-lista";
 import { minhasListas } from "@/lib/listas";
 import { obterTokenSessao, obterUsuarioAutenticado } from "@/lib/sessao";
 import styles from "./page.module.css";
@@ -42,10 +43,14 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
           <p className={styles.vazio}>{pagina > 1 ? "Não há mais listas nesta página." : "Nenhuma lista ainda. Crie a primeira acima!"}</p>
         ) : (
           <ul className={styles.grade}>
-            {resultado.dados.listas.map((lista) => (
+            {resultado.dados.listas.map((lista, indice) => (
               <li key={lista.id}>
                 <Link className={styles.cartao} href={`/listas/${lista.id}`}>
-                  <div className={styles.icone} aria-hidden="true">♪</div>
+                  {indice < 8 ? (
+                    <Suspense fallback={<div className={styles.icone} aria-hidden="true">♪</div>}>
+                      <VitrineLista listaId={lista.id} token={token} />
+                    </Suspense>
+                  ) : <div className={styles.icone} aria-hidden="true">♪</div>}
                   <span className={styles.visibilidade}>{lista.publica ? "Pública" : "Privada"}</span>
                   <h3>{lista.titulo}</h3>
                   {lista.descricao ? <p>{lista.descricao}</p> : <p>Seleção de álbuns</p>}

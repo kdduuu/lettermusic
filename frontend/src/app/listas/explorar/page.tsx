@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { obterListasPublicas } from "@/lib/listas-publicas";
+import { VitrineLista } from "@/components/vitrine-lista";
 import styles from "../page.module.css";
 
 type Parametros = Promise<{
@@ -50,15 +51,17 @@ async function Conteudo({
           </p>
         ) : (
           <ul className={styles.grade}>
-            {resultado.dados.resultados.map((lista) => (
+            {resultado.dados.resultados.map((lista, indice) => (
               <li key={lista.id}>
                 <Link
                   className={styles.cartao}
                   href={`/listas/${lista.id}`}
                 >
-                  <div className={styles.icone} aria-hidden="true">
-                    ♪
-                  </div>
+                  {indice < 8 ? (
+                    <Suspense fallback={<div className={styles.icone} aria-hidden="true">♪</div>}>
+                      <VitrineLista listaId={lista.id} />
+                    </Suspense>
+                  ) : <div className={styles.icone} aria-hidden="true">♪</div>}
                   <span className={styles.visibilidade}>
                     {lista.total_itens} {lista.total_itens === 1
                       ? "álbum" : "álbuns"}
