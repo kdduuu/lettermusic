@@ -48,9 +48,9 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
                 <Link className={styles.cartao} href={`/listas/${lista.id}`}>
                   {indice < 8 ? (
                     <Suspense fallback={<div className={styles.icone} aria-hidden="true">♪</div>}>
-                      <VitrineLista listaId={lista.id} token={token} />
+                      <VitrineLista listaId={lista.id} token={token} titulo={lista.titulo} />
                     </Suspense>
-                  ) : <div className={styles.icone} aria-hidden="true">♪</div>}
+                  ) : <div className={styles.previaTipografica} aria-hidden="true"><span>LETTERMUSIC / LISTA</span><strong>{lista.titulo}</strong></div>}
                   <span className={styles.visibilidade}>{lista.publica ? "Pública" : "Privada"}</span>
                   <h3>{lista.titulo}</h3>
                   {lista.descricao ? <p>{lista.descricao}</p> : <p>Seleção de álbuns</p>}

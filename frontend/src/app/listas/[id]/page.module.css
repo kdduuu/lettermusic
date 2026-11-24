@@ -170,3 +170,7 @@
 @media (max-width: 600px) {
   .hero { padding: 24px; border-radius: 12px; }
 }
+
+/* F09.3 — mesma composição adaptativa usada nas prévias das listas. */
+.hero > :first-child { min-width: 0; }
+@media (max-width: 600px) { .hero > :first-child { width: min(100%,330px); } }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CapaAlbum } from "@/components/capa-album";
+import { ColagemEditorialLista } from "@/components/vitrine-lista";
 import {
   ControlesItemLista,
   FormularioEditarLista,
@@ -14,28 +15,6 @@ import styles from "./page.module.css";
 
 type Parametros = Promise<{ id: string }>;
 type Filtros = Promise<{ pagina?: string | string[] }>;
-
-async function Colagem({ itens }: { itens: ItemLista[] }) {
-  const capas = itens.slice(0, 4);
-  const urls = await Promise.all(capas.map((item) =>
-    item.id_musicbrainz ? obterCapaAlbum(item.id_musicbrainz) : Promise.resolve(null)
-  ));
-  return (
-    <div className={styles.colagem} aria-label="Capas dos primeiros álbuns da lista">
-      {Array.from({ length: 4 }, (_, i) => {
-        const item = capas[i];
-        if (!item?.id_musicbrainz) {
-          return <div key={i} className={styles.capaColagem} aria-hidden="true">♪</div>;
-        }
-        return (
-          <Link key={item.id} href={"/albuns/" + encodeURIComponent(item.id_musicbrainz)}>
-            <CapaAlbum url={urls[i]} titulo={item.titulo ?? "Álbum"} className={styles.capaColagem} />
-          </Link>
-        );
-      })}
-    </div>
-  );
-}
 
 async function GradeDeAlbuns({
   itens, dono, listaId, ultimaPosicao, temProxima, pagina,
@@ -119,7 +98,7 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
 
       <section className={styles.hero} aria-labelledby="titulo-lista">
         <Suspense fallback={<div className={styles.espera}>Carregando capas...</div>}>
-          <Colagem itens={destaques} />
+          <ColagemEditorialLista itens={destaques} titulo={lista.titulo} />
         </Suspense>
         <div className={styles.info}>
           <span className={styles.traco} aria-hidden="true" />

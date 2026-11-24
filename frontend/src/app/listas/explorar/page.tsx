@@ -59,9 +59,9 @@ async function Conteudo({
                 >
                   {indice < 8 ? (
                     <Suspense fallback={<div className={styles.icone} aria-hidden="true">♪</div>}>
-                      <VitrineLista listaId={lista.id} />
+                      <VitrineLista listaId={lista.id} titulo={lista.titulo} />
                     </Suspense>
-                  ) : <div className={styles.icone} aria-hidden="true">♪</div>}
+                  ) : <div className={styles.previaTipografica} aria-hidden="true"><span>LETTERMUSIC / LISTA</span><strong>{lista.titulo}</strong></div>}
                   <span className={styles.visibilidade}>
                     {lista.total_itens} {lista.total_itens === 1
                       ? "álbum" : "álbuns"}
