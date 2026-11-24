@@ -174,3 +174,10 @@
 /* F09.3 — mesma composição adaptativa usada nas prévias das listas. */
 .hero > :first-child { min-width: 0; }
 @media (max-width: 600px) { .hero > :first-child { width: min(100%,330px); } }
+
+/* F09.4 — capa propria, menos rotulos entre criador e musica. */
+.hero { padding: clamp(25px,3.3vw,42px); }
+.info h1 { font-size: clamp(52px,6vw,82px); }
+.conteudo { padding-top: 43px; }
+.cabecalhoGrade { padding-bottom: 20px; }
+@media(max-width:600px) { .hero { padding: 23px; } .conteudo { padding-top: 30px; } }

@@ -51,7 +51,7 @@ async function Conteudo({ params, searchParams }: Props) {
 
       <section className={styles.descobertaSecao}>
         <h2>Discografia</h2>
-        <p>Álbuns, singles e outros lançamentos vinculados ao artista.</p>
+        
         <form action={`/artistas/${id}`} className={styles.filtroCatalogo}>
           <label htmlFor="tipo-discografia">Lançamentos</label>
           <select id="tipo-discografia" name="tipo" defaultValue={tipo}>
@@ -62,7 +62,7 @@ async function Conteudo({ params, searchParams }: Props) {
             <option value="compilation">Coletâneas</option>
             <option value="live">Ao vivo</option>
           </select>
-          <label htmlFor="ordem-discografia">Ordem nesta página</label>
+          <label htmlFor="ordem-discografia">Ordem</label>
           <select id="ordem-discografia" name="ordem" defaultValue={ordem}>
             <option value="catalogo">Catálogo</option>
             <option value="antigos">Mais antigos</option>
@@ -72,7 +72,7 @@ async function Conteudo({ params, searchParams }: Props) {
         </form>
         {obras.ok ? (
           <>
-            <ResultadosMusicais itens={itens} categoria="albuns" />
+            <ResultadosMusicais itens={itens} categoria="albuns" apresentacao="galeria" />
             <Paginacao pagina={pagina} temProxima={obras.dados.tem_proxima} endereco={endereco} />
           </>
         ) : <p role="alert" className={styles.message}>{obras.mensagem}</p>}

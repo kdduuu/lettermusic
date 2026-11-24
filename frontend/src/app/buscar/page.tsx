@@ -74,7 +74,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
             <Resultados termo={termo} categoria={categoria} pagina={pagina} listaId={permitida?.id} listaContexto={listaId ?? undefined} artistaId={artistaId} />
           </Suspense>
         </>
-      ) : <p className={styles.message}>Informe entre 2 e 100 caracteres para pesquisar.</p>}
+      ) : }
     </>
   );
 }
@@ -243,9 +243,7 @@ async function SecaoResultado({
 
           {!geral ? (
             <>
-              <p className={styles.notaExploracao}>
-                Até 60 resultados relevantes. Refine a pesquisa para encontrar outros.
-              </p>
+
               <Paginacao
                 pagina={pagina}
                 temProxima={resultado.dados.tem_proxima}

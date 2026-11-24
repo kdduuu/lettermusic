@@ -68,9 +68,7 @@ async function ConteudoConta() {
   return (
     <main className={styles.container}>
       <h1>Minha conta</h1>
-      <p className={styles.introducao}>
-        Dados pessoais e segurança do seu perfil.
-      </p>
+
 
       <section>
         <h2>Dados pessoais</h2>

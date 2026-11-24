@@ -70,3 +70,11 @@
 .reviewTexto { color: #d9d1d6; }
 @media (max-width: 950px) { .corpoAlbum { grid-template-columns: 1fr; gap: 33px; } }
 @media (max-width: 700px) { .container { padding: 25px 18px 70px; } .album { grid-template-columns: 1fr; padding: 24px; } .cover { width: min(100%,370px); } .info h1 { font-size: clamp(44px,11vw,67px); } .corpoAlbum { margin-top: 35px; } .colunaSocial { padding: 22px; } }
+
+/* F09.4 — capa e tracklist prioritarias, area social discreta. */
+.album { padding: clamp(23px,3vw,36px); gap: clamp(30px,4vw,60px); }
+.corpoAlbum { margin-top: 42px; grid-template-columns: minmax(0,1.25fr) minmax(300px,.75fr); gap: clamp(26px,4vw,56px); }
+.colunaSocial { background: transparent; padding: 0 0 0 30px; border: 0; border-left: 1px solid #403c42; border-radius: 0; }
+.social h2 { font-size: 24px; }
+.resumo { padding-bottom: 18px; margin-bottom: 20px; }
+@media(max-width:950px) { .colunaSocial { border-left:0; border-top:1px solid #403c42; padding:26px 0 0; } }
