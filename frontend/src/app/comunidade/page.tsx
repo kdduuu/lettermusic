@@ -112,8 +112,11 @@ export default function ComunidadePage() {
   return (
     <main className={styles.container}>
       <header className={styles.cabecalho}>
-        <h1>Comunidade</h1>
-        <p>Descubra o que outras pessoas estão avaliando, escrevendo e compartilhando.</p>
+        <div>
+          <p className={styles.etiqueta}>Pessoas, discos e conversas</p>
+          <h1>Comunidade</h1>
+        </div>
+        <p>O que a comunidade anda ouvindo, avaliando e compartilhando.</p>
       </header>
       <Suspense fallback={<p className={styles.mensagem}>Carregando comunidade...</p>}>
         <ConteudoComunidade />

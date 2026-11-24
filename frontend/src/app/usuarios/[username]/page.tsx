@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CapaAlbum } from "@/components/capa-album";
 import { obterCapaAlbum } from "@/lib/catalogo";
-import { consultarPerfilPublico, type AlbumRecente } from "@/lib/perfis";
+import { consultarPerfilPublico, type AlbumRecente, type ReviewRecente } from "@/lib/perfis";
 import styles from "./page.module.css";
 
 type ParametrosPerfil = Promise<{ username: string }>;
@@ -20,7 +20,7 @@ function dataResumida(data: string): string {
 async function CapasRecentes({ albuns }: { albuns: AlbumRecente[] }) {
   const urls = await Promise.all(albuns.map((album) => obterCapaAlbum(album.id_musicbrainz)));
   return (
-    <div className={styles.gradeCapas}>
+    <div className={styles.gradeCapas} data-count={albuns.length}>
       {albuns.map((album, indice) => (
         <Link
           key={album.id_musicbrainz}
@@ -34,6 +34,31 @@ async function CapasRecentes({ albuns }: { albuns: AlbumRecente[] }) {
         </Link>
       ))}
     </div>
+  );
+}
+
+
+async function ReviewsPerfil({ reviews }: { reviews: ReviewRecente[] }) {
+  const urls = await Promise.all(reviews.map(review => obterCapaAlbum(review.id_musicbrainz)));
+  return (
+    <ul className={styles.feed}>
+      {reviews.map((review, indice) => (
+        <li key={review.id} className={styles.itemReview}>
+          <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.linkCapaReview} aria-label={"Abrir " + review.titulo}>
+            <CapaAlbum url={urls[indice]} titulo={review.titulo} className={styles.capaReview} />
+          </Link>
+          <div className={styles.conteudoReview}>
+            <div className={styles.reviewTopo}>
+              <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.reviewAlbum}>{review.titulo}</Link>
+              <time dateTime={review.criada_em}>{dataResumida(review.criada_em)}</time>
+            </div>
+            <p className={styles.reviewArtista}>{review.artista ?? "Artista não informado"}</p>
+            <p className={styles.reviewTexto}>{review.texto}</p>
+            <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.reviewLink}>Ver álbum <span aria-hidden="true">↗</span></Link>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -91,19 +116,9 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
             </div>
           </div>
           {perfil.reviews_recentes.length ? (
-            <ul className={styles.feed}>
-              {perfil.reviews_recentes.map((review) => (
-                <li key={review.id}>
-                  <div className={styles.reviewTopo}>
-                    <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.reviewAlbum}>{review.titulo}</Link>
-                    <time dateTime={review.criada_em}>{dataResumida(review.criada_em)}</time>
-                  </div>
-                  <p className={styles.reviewArtista}>{review.artista ?? "Artista não informado"}</p>
-                  <p className={styles.reviewTexto}>{review.texto}</p>
-                  <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.reviewLink}>Ver álbum <span aria-hidden="true">↗</span></Link>
-                </li>
-              ))}
-            </ul>
+            <Suspense fallback={<p className={styles.vazio}>Carregando reviews...</p>}>
+              <ReviewsPerfil reviews={perfil.reviews_recentes} />
+            </Suspense>
           ) : <p className={styles.vazio}>Ainda não há reviews públicas.</p>}
         </section>
 

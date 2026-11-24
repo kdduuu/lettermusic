@@ -159,3 +159,30 @@
   .perfilHero { padding: 25px 18px 28px; border-radius: 12px; }
   .estatisticas { margin-top: 26px; }
 }
+
+/* F09.3 - o perfil preenche o espaço de acordo com os registros disponíveis. */
+.gradeCapas[data-count="1"] { grid-template-columns: minmax(0,300px); }
+.gradeCapas[data-count="2"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: 650px; }
+.gradeCapas[data-count="3"] { grid-template-columns: repeat(3,minmax(0,1fr)); max-width: 940px; }
+.gradeCapas[data-count="4"] { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.feed .itemReview {
+  display: grid; grid-template-columns: 112px minmax(0,1fr); gap: 22px;
+  align-items: start; padding: 28px 0;
+}
+.linkCapaReview { display: block; }
+.capaReview { width: 112px; aspect-ratio: 1; position: relative; overflow: hidden; display: grid; place-items: center; border-radius: 7px; background: #38343d; color: #a99fa7; }
+.capaReview img { object-fit: cover; }
+.conteudoReview { min-width: 0; }
+.conteudoReview .reviewTopo { flex-wrap: wrap; gap: 8px 17px; }
+.conteudoReview .reviewAlbum { font-size: 24px; }
+.conteudoReview .reviewTexto { margin: 12px 0; }
+@media (max-width: 900px) {
+  .gradeCapas[data-count="3"] { max-width: 100%; }
+}
+@media (max-width: 600px) {
+  .gradeCapas[data-count="3"], .gradeCapas[data-count="4"] { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .feed .itemReview { grid-template-columns: 75px minmax(0,1fr); gap: 14px; }
+  .capaReview { width: 75px; }
+  .conteudoReview .reviewAlbum { font-size: 20px; }
+  .conteudoReview .reviewTopo time { font-size: 11px; }
+}

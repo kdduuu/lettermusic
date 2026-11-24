@@ -53,3 +53,15 @@
 .linkSecundario { color: #ef8996 !important; }
 @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .lateral { border-left: 0; border-top: 1px solid #3d3942; padding: 30px 0 0; } }
 @media (max-width: 760px) { .container { padding: 25px 17px 70px; } .cabecalho { padding: 30px 24px; margin-bottom: 35px; } .cabecalho h1 { font-size: 56px; } .atividadeMusical { grid-template-columns: 85px minmax(0,1fr); gap: 13px; } .capaFeed { width: 85px; } .atividadeMusical h3 { font-size: 20px; } }
+
+/* F09.3 - comunidade tem abertura própria, não uma cópia dos cards das outras páginas. */
+.cabecalho {
+  display: flex; justify-content: space-between; align-items: end;
+  gap: 36px; padding: 23px 0 35px; background: transparent;
+  border: 0; border-radius: 0; border-bottom: 1px solid #48434a;
+  margin-bottom: 48px;
+}
+.cabecalho h1 { font-size: clamp(52px,7vw,76px); }
+.cabecalho > p { margin: 0 0 6px; max-width: 345px; color: #b8adb5; }
+.etiqueta { margin: 0 0 15px; color: #ea909e; font-weight: 700; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+@media (max-width: 760px) { .cabecalho { flex-direction: column; align-items: start; gap: 12px; padding: 18px 0 30px; margin-bottom: 34px; } .cabecalho h1 { font-size: 51px; } }
