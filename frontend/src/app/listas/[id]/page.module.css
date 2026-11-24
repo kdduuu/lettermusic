@@ -138,9 +138,7 @@
   padding: clamp(24px, 4vw, 48px);
   border: 1px solid #3d3941;
   border-radius: 15px;
-  background:
-    radial-gradient(ellipse at 100% 0%, rgba(132, 55, 78, .16), transparent 57%),
-    #252329;
+  background: #26252a;
 }
 .colagem { box-shadow: 0 24px 50px #00000073; }
 .capaColagem { background: #35323b; }

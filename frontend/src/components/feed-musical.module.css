@@ -24,3 +24,24 @@
   .capaReview { width: 64px; }
   .review h3 { font-size: 19px; }
 }
+/* F09 - capas e atividade são os elementos dominantes. */
+.grade { gap: clamp(14px, 2vw, 25px); }
+.album { gap: 8px; }
+.album strong { font: 700 19px/1.23 var(--lm-serif); letter-spacing: -.015em; }
+.grade p { font-size: 13px; color: #b3aab1; margin: 4px 0 0; }
+.capaDestaque { border-radius: 7px; background: #353239; box-shadow: 0 0 0 1px #ffffff0b; transition: transform .2s ease; }
+.album:hover .capaDestaque { transform: translateY(-3px); }
+.reviews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 36px; }
+.review { grid-template-columns: 90px minmax(0, 1fr); gap: 18px; padding: 28px 0; border-color: var(--lm-line); }
+.capaReview { width: 90px; border-radius: 7px; }
+.review h3 { font-size: 23px; }
+.artista, .meta { color: #aba3ab; }
+.texto, .resumo { color: #d7cfd3; }
+@media (max-width: 740px) { .reviews { grid-template-columns: 1fr; } }
+@media (max-width: 650px) {
+  .grade { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .album strong { font-size: 17px; }
+  .capaReview { width: 70px; }
+  .review { grid-template-columns: 70px minmax(0,1fr); }
+}
+@media (prefers-reduced-motion: reduce) { .capaDestaque { transition: none; } .album:hover .capaDestaque { transform: none; } }

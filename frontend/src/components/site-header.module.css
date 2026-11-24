@@ -123,3 +123,25 @@
   .search { width: 100%; order: 4; }
   .nav { font-size: 12px; }
 }
+/* F09 - cabeçalho consistente em todas as rotas. */
+.header { background: #171719; border-bottom: 1px solid #302d33; }
+.inner { max-width: 1360px; padding: 18px 28px; gap: clamp(16px, 2vw, 32px); }
+.brand { font-size: 29px; letter-spacing: -.045em; }
+.brand span { color: #ef8996; }
+.nav { gap: clamp(12px, 1.6vw, 25px); }
+.nav a { position: relative; padding: 7px 0; font-size: 13px; color: #ddd6da; transition: color .2s ease; }
+.nav a:hover, .nav a:focus-visible { color: #fff; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 2px; background: #ef8996; transition: right .2s ease; }
+.nav a:hover::after, .nav a:focus-visible::after { right: 0; }
+.search input { background: #29272e; border-color: #48444c; border-radius: 7px; }
+.search button { background: #302e34; border-color: #4a464f; border-radius: 7px; }
+.search button:hover { background: #3b3840; }
+.heroSearch { width: min(100%, 560px); }
+.heroSearch input { background: #29272e; color: #f4eff1; border-color: #57505a; }
+.heroSearch input::placeholder { color: #a9a0a7; }
+.heroSearch button { background: #eee7e9; color: #1e1c20; border-color: #eee7e9; }
+.heroSearch button:hover { background: #fff; }
+.conta { gap: 15px; }
+.conta a { color: #d9d1d6; }
+.conta a:hover { color: #fff; }
+@media (max-width: 650px) { .inner { padding: 15px 18px; } .nav { row-gap: 10px; } .nav a { font-size: 12px; } }

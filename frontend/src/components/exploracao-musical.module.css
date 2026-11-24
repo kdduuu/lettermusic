@@ -19,3 +19,19 @@
   .capa, .icone { width: 62px; height: 62px; flex-basis: 62px; }
   .info h3 { font-size: 18px; }
 }
+
+/* F09 - catálogo consistente com capa e tipografia editorial. */
+.resultados { max-width: none; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 30px; }
+.resultados > li { border-color: #3e3c42; gap: 18px; padding: 22px 0; }
+.capa, .icone { width: 105px; height: 105px; flex-basis: 105px; border-radius: 7px; background: #333138; }
+.info h3 { font: 700 23px/1.15 var(--lm-serif); }
+.info p { color: #afa6ad; }
+.faixas { max-width: none; margin-top: 0; border-color: var(--lm-line); padding-top: 25px; }
+.faixas h2 { font: 700 31px var(--lm-serif); margin: 0 0 20px; }
+.faixas li { grid-template-columns: 34px minmax(0, 1fr) 55px; border-color: var(--lm-line); padding: 15px 0; gap: 10px; }
+.faixas li strong { font-size: 14px; font-weight: 500; }
+@media (max-width: 860px) { .resultados { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  .capa, .icone { width: 70px; height: 70px; flex-basis: 70px; }
+  .info h3 { font-size: 19px; }
+}

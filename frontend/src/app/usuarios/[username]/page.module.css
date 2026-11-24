@@ -131,9 +131,7 @@
   padding: 40px clamp(26px, 4vw, 52px) 42px;
   border: 1px solid #39363d;
   border-radius: 15px;
-  background:
-    radial-gradient(ellipse at 100% 0%, rgba(143, 56, 78, .16), transparent 58%),
-    linear-gradient(135deg, #29272d 0%, #222227 78%);
+  background: #26252a;
 }
 .avatar {
   border-color: #777078;

@@ -51,3 +51,64 @@
 .filtroCatalogo { align-items: center; }
 .filtroCatalogo button { background: #ededed; color: #151515; border: 0; border-radius: 6px; padding: 10px 14px; font: inherit; cursor: pointer; }
 .notaExploracao { color: #bdbdbd; font-size: 13px; margin-top: 20px; }
+/* F09 - páginas editoriais e busca / catálogo. */
+.container { max-width: 1300px; padding: 45px 28px 110px; }
+.hero { min-height: unset; padding: 42px 0 52px; border-bottom: 1px solid var(--lm-line); }
+.heroEditorial {
+  min-height: 0;
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(370px, .95fr);
+  gap: clamp(32px, 5vw, 78px); align-items: center;
+  padding: clamp(28px, 4vw, 50px); border: 1px solid #3d3a41;
+  border-radius: 15px; background: #26252a; margin-bottom: 64px;
+}
+.heroMain { min-width: 0; }
+.heroEyebrow { color: #ef8996; font-size: 11px; letter-spacing: .16em; font-weight: 700; text-transform: uppercase; margin: 0 0 16px; }
+.hero h1, .searchPage h1 { font-size: clamp(56px, 7vw, 96px); letter-spacing: -.055em; line-height: .98; }
+.hero > p, .heroMain > p { color: #c3babf; font-size: 17px; line-height: 1.65; }
+.heroMain > p { max-width: 510px; margin: 22px 0 0; }
+.heroMain .heroLinks { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 25px; font-size: 13px; }
+.heroLinks a { color: #f3edec; text-decoration: none; border-bottom: 1px solid #817980; padding-bottom: 6px; }
+.heroLinks a:hover { color: #ef8996; border-color: #ef8996; }
+.heroAside { min-width: 0; padding: 10px; border: 1px solid #444149; border-radius: 12px; background: #201f23; }
+.destaqueObra { display: grid; grid-template-columns: minmax(130px, 45%) minmax(0, 1fr); gap: 22px; align-items: center; padding: 12px; color: #f1ebeb; text-decoration: none; }
+.destaqueObra:hover h2, .destaqueObra:focus-visible h2 { text-decoration: underline; }
+.destaqueCapa { width: 100%; aspect-ratio: 1; position: relative; display: grid; place-items: center; background: #37343b; border-radius: 7px; overflow: hidden; font-size: 42px; color: #a9a0a7; }
+.destaqueCapa img { object-fit: cover; }
+.destaqueInfo { min-width: 0; }
+.destaqueInfo span { color: #ee8795; text-transform: uppercase; letter-spacing: .13em; font-size: 10px; font-weight: 700; }
+.destaqueInfo h2 { margin: 12px 0 10px; font: 700 clamp(24px, 2.6vw, 40px)/1.08 var(--lm-serif); letter-spacing: -.025em; overflow-wrap: anywhere; }
+.destaqueInfo p { color: #b5abb1; font-size: 13px; line-height: 1.5; }
+.destaqueVazio { margin: 0; padding: 32px; line-height: 1.6; color: #aca4aa; }
+.shelfInfo { margin-bottom: 26px; }
+.shelfInfo h2 { margin: 0 0 7px; }
+.shelfInfo p { color: #b4abb1; font-size: 14px; }
+.descobertaSecao { margin-top: 58px; padding-top: 38px; border-top: 1px solid #3c3a40; }
+.descobertaSecao h2 { font: 700 clamp(29px, 3.4vw, 43px)/1.1 var(--lm-serif); letter-spacing: -.035em; }
+.descobertaSecao > p { color: #b4abb1; }
+.tituloDescoberta { margin-bottom: 24px; }
+.tituloDescoberta a { text-decoration: none; color: #ef8996; }
+.tituloDescoberta a:hover { text-decoration: underline; }
+.searchPage { padding: 42px clamp(22px, 4vw, 48px); border: 1px solid var(--lm-line); background: #26252a; border-radius: 14px; }
+.searchPage h1 { margin-bottom: 24px; }
+.results { max-width: none; padding-top: 4px; }
+.results h2 { font: 700 30px var(--lm-serif); }
+.buscaLista { max-width: 750px; margin-top: 16px; }
+.buscaLista input, .filtroCatalogo select { color: #f6efef; background: #2d2b31; border-color: #5d5661; }
+.buscaLista button, .filtroCatalogo button { background: #eae3e6; color: #19171b; font-weight: 700; }
+.buscaLista button:hover, .filtroCatalogo button:hover { background: #fff; }
+.buscaCategorias { border-bottom-color: #49444c; }
+.buscaCategorias a[aria-current="page"] { border-color: #ee8995; }
+.notaExploracao { color: #ada4ac; }
+@media (max-width: 900px) {
+  .heroEditorial { grid-template-columns: 1fr; }
+  .heroAside { max-width: 680px; }
+}
+@media (max-width: 600px) {
+  .container { padding: 25px 17px 70px; }
+  .heroEditorial { padding: 26px 20px; gap: 25px; margin-bottom: 40px; }
+  .hero h1, .searchPage h1 { font-size: clamp(46px, 12vw, 64px); }
+  .destaqueObra { grid-template-columns: 110px minmax(0,1fr); gap: 15px; }
+  .destaqueInfo h2 { font-size: 22px; }
+  .descobertaSecao { margin-top: 38px; padding-top: 28px; }
+  .searchPage { padding: 25px 18px; }
+}

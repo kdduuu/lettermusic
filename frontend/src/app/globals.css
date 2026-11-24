@@ -1,13 +1,25 @@
-/* Paleta base intencional: evita depender do modo escuro forcado pelo navegador. */
-:root { color-scheme: dark; }
+/* Identidade editorial Lettermusic F09: grafite neutro, sem fundos vermelhos. */
+:root {
+  color-scheme: dark;
+  --lm-bg: #1c1c1f;
+  --lm-panel: #26252a;
+  --lm-panel-raised: #2d2b31;
+  --lm-header: #171719;
+  --lm-line: #3d3b42;
+  --lm-text: #f2eeec;
+  --lm-muted: #b4abb1;
+  --lm-accent: #ef8996;
+  --lm-serif: Georgia, "Times New Roman", serif;
+}
 * { box-sizing: border-box; }
-html { min-height: 100%; background: #1b1b1b; }
+html { min-height: 100%; background: var(--lm-bg); scroll-behavior: smooth; }
 body {
-  min-height: 100vh;
-  margin: 0;
-  color: #f2f2f2;
-  background: #1b1b1b;
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  margin: 0; min-height: 100vh;
+  background: var(--lm-bg); color: var(--lm-text);
+  font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased;
 }
 button, input, textarea, select { font-family: inherit; }
+button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+::selection { background: #83505b; color: #fff; }
+:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
