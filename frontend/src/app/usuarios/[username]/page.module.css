@@ -1,56 +1,128 @@
-.container { max-width: 1080px; margin: 0 auto; padding: 44px 28px 100px; color: #f3f3f3; }
-.voltar { display: inline-block; color: #b8b8b8; font-size: 14px; text-decoration: none; margin-bottom: 44px; }
-.voltar:hover { text-decoration: underline; }
-.cabecalho { display: flex; align-items: center; gap: 32px; }
+.container {
+  width: 100%;
+  min-height: calc(100vh - 74px);
+  background: #f7f5f1;
+  color: #1c1b1a;
+  padding: 34px 28px 112px;
+}
+.interior { max-width: 1230px; margin: 0 auto; }
+.breadcrumb {
+  display: flex; gap: 11px; align-items: center;
+  font-size: 13px; color: #8a8580; margin-bottom: 50px;
+}
+.breadcrumb a { color: #514d49; text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.perfilHero { padding: 0 0 52px; border-bottom: 1px solid #d8d3cc; }
+.identidade { display: flex; align-items: center; gap: clamp(28px, 4vw, 60px); }
 .avatar {
-  width: 124px; height: 124px; flex: 0 0 124px;
-  border: 1px solid #555; border-radius: 50%;
-  background: #303030; color: #fafafa;
-  display: grid; place-items: center; font: bold 62px/1 Georgia, "Times New Roman", serif;
+  width: clamp(148px, 18vw, 220px);
+  height: clamp(148px, 18vw, 220px);
+  flex: 0 0 auto; display: grid; place-items: center;
+  border: 2px solid #373331; border-radius: 50%;
+  background: #d9d4ce; color: #3b3735;
+  font: 700 clamp(70px, 8vw, 112px)/1 Georgia, "Times New Roman", serif;
 }
-.apresentacao { min-width: 0; }
-.etiqueta { margin: 0 0 6px; color: #e47686; text-transform: uppercase; letter-spacing: 1.4px; font-size: 11px; font-weight: 700; }
-.apresentacao h1 { font: bold clamp(36px, 5.5vw, 64px)/1.04 Georgia, "Times New Roman", serif; letter-spacing: -1px; margin: 0 0 8px; overflow-wrap: anywhere; }
-.username { color: #bdbdbd; margin: 0; font-size: 14px; }
-.bio { margin: 18px 0 0; max-width: 660px; font-size: 16px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
-.estatisticas { display: flex; flex-wrap: wrap; gap: 36px; margin: 34px 0 0; padding: 24px 0; border-top: 1px solid #464646; border-bottom: 1px solid #464646; }
-.estatisticas div { display: flex; flex-direction: column-reverse; gap: 4px; }
-.estatisticas dt { color: #b5b5b5; font-size: 13px; }
-.estatisticas dd { margin: 0; font: bold 27px/1.2 Georgia, "Times New Roman", serif; }
-.secao { margin-top: 56px; }
-.tituloSecao { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
-.tituloSecao h2 { margin: 0; font: bold 28px/1.2 Georgia, "Times New Roman", serif; }
-.tituloSecao span, .vazio { color: #b6b6b6; font-size: 14px; }
-.gradeCapas { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 16px; }
-.itemCapa { display: block; min-width: 0; color: #f2f2f2; text-decoration: none; font-size: 14px; line-height: 1.4; }
-.itemCapa > span { display: block; margin-top: 10px; overflow-wrap: anywhere; }
-.itemCapa:hover > span, .itemCapa:focus-visible > span { text-decoration: underline; }
-.capa { position: relative; display: grid; place-items: center; overflow: hidden; aspect-ratio: 1; width: 100%; border-radius: 8px; background: #333; color: #bdbdbd; font-size: 42px; }
+.informacoes { min-width: 0; flex: 1; }
+.sobretitulo {
+  margin: 0 0 16px; color: #a03e48; text-transform: uppercase;
+  letter-spacing: .15em; font-size: 11px; font-weight: 700;
+}
+.informacoes h1 {
+  font: 700 clamp(52px, 8vw, 102px)/.97 Georgia, "Times New Roman", serif;
+  letter-spacing: -.055em; margin: 0; overflow-wrap: anywhere;
+}
+.username { color: #5e5853; margin: 13px 0 0; font-size: 16px; }
+.bio, .bioAlternativa {
+  margin: 22px 0 0; max-width: 660px;
+  line-height: 1.65; font-size: 17px; overflow-wrap: anywhere; white-space: pre-wrap;
+}
+.bioAlternativa { color: #918a83; font-style: italic; }
+.estatisticas {
+  display: flex; align-items: start; flex-wrap: wrap;
+  gap: clamp(28px, 5vw, 80px); padding: 34px 0 0; margin: 0;
+}
+.estatisticas div { display: flex; align-items: baseline; gap: 10px; }
+.estatisticas dd {
+  order: 0; margin: 0; font: 700 clamp(27px, 3vw, 39px)/1 Georgia, serif;
+  letter-spacing: -.04em;
+}
+.estatisticas dt { order: 1; font-size: 15px; color: #5c5651; }
+.discografia { padding: 54px 0 62px; border-bottom: 1px solid #d8d3cc; }
+.tituloSecao {
+  display: flex; align-items: end; justify-content: space-between;
+  gap: 28px; margin-bottom: 26px;
+}
+.tituloSecao h2 {
+  margin: 0; font: 700 clamp(29px, 3.2vw, 43px)/1.13 Georgia, serif;
+  letter-spacing: -.035em;
+}
+.nota { max-width: 240px; margin: 0; color: #746e68; font-size: 13px; line-height: 1.5; text-align: right; }
+.gradeCapas { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; }
+.itemCapa { text-decoration: none; color: #1d1b19; min-width: 0; }
+.capa {
+  position: relative; aspect-ratio: 1; width: 100%;
+  display: grid; place-items: center; overflow: hidden;
+  border-radius: 7px; background: #e6e0d9; color: #77706b; font-size: 46px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
 .capa img { object-fit: cover; }
-.feed, .listas { list-style: none; padding: 0; margin: 0; }
-.feed li { padding: 19px 0; border-top: 1px solid #494949; }
-.feed li:last-child { border-bottom: 1px solid #494949; }
-.tituloReview { display: flex; gap: 12px; flex-wrap: wrap; align-items: baseline; }
-.tituloReview a { color: #f3f3f3; font-weight: 700; text-decoration: none; }
-.tituloReview a:hover { text-decoration: underline; }
-.tituloReview span { color: #b5b5b5; font-size: 13px; }
-.feed li p { margin: 10px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.65; color: #dedede; }
-.listas { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
-.listas li { padding: 20px; border: 1px solid #494949; border-radius: 8px; }
-.listas h3 { margin: 0; font: bold 20px/1.25 Georgia, "Times New Roman", serif; }
-.listas p { margin: 12px 0 0; color: #bcbcbc; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
-.erro { color: #ffb0b4; }
-@media (max-width: 750px) {
-  .container { padding: 28px 16px 70px; }
-  .cabecalho { gap: 18px; align-items: flex-start; }
-  .avatar { width: 86px; height: 86px; flex-basis: 86px; font-size: 43px; }
-  .gradeCapas { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-  .listas { grid-template-columns: 1fr; }
-  .estatisticas { gap: 26px; }
+.itemCapa:hover .capa, .itemCapa:focus-visible .capa {
+  transform: translateY(-4px); box-shadow: 0 12px 24px #241c171e;
 }
-@media (max-width: 450px) {
-  .cabecalho { flex-direction: column; }
-  .gradeCapas { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.nomeAlbum { display: block; margin-top: 13px; font: 700 18px/1.25 Georgia, serif; overflow-wrap: anywhere; }
+.artistaAlbum { display: block; margin-top: 4px; font-size: 13px; color: #736c66; overflow-wrap: anywhere; }
+.corpoEditorial { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: clamp(42px, 7vw, 110px); padding-top: 60px; }
+.corpoEditorial .tituloSecao { margin-bottom: 32px; }
+.feed, .listaColecoes { list-style: none; margin: 0; padding: 0; }
+.feed li { border-top: 1px solid #ddd8d0; padding: 27px 0 30px; }
+.feed li:last-child { border-bottom: 1px solid #ddd8d0; }
+.reviewTopo { display: flex; gap: 18px; align-items: baseline; justify-content: space-between; }
+.reviewAlbum { font: 700 23px/1.25 Georgia, serif; color: #171615; text-decoration: none; }
+.reviewAlbum:hover { text-decoration: underline; }
+.reviewTopo time { white-space: nowrap; color: #8c847d; font-size: 12px; }
+.reviewArtista { margin: 5px 0 15px; color: #77716b; font-size: 14px; }
+.reviewTexto {
+  color: #3d3835; font-size: 15px; line-height: 1.75; margin: 0 0 13px;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden;
 }
-.listas h3 a { color: #f3f3f3; text-decoration: none; }
-.listas h3 a:hover, .listas h3 a:focus-visible { text-decoration: underline; }
+.reviewLink { color: #9d3847; font-size: 12px; font-weight: 700; text-decoration: none; }
+.reviewLink:hover { text-decoration: underline; }
+.listaColecoes li { display: flex; gap: 15px; padding: 22px 0; border-top: 1px solid #ddd8d0; }
+.listaColecoes li:last-child { border-bottom: 1px solid #ddd8d0; }
+.indice { color: #a79e95; font: 21px Georgia, serif; }
+.listaTexto { min-width: 0; flex: 1; }
+.listaTexto h3 { font: 700 22px/1.2 Georgia, serif; margin: 0; }
+.listaTexto h3 a { color: #1b1918; text-decoration: none; }
+.listaTexto h3 a:hover { text-decoration: underline; }
+.listaTexto p { margin: 7px 0 0; color: #726b64; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.seta { color: #1a1918; font-size: 20px; text-decoration: none; }
+.vazio { color: #756e67; line-height: 1.6; padding: 18px 0; }
+.erro { color: #b13944; padding: 18px 0; }
+@media (max-width: 900px) {
+  .corpoEditorial { grid-template-columns: 1fr; gap: 54px; }
+  .gradeCapas { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .nota { display: none; }
+}
+@media (max-width: 600px) {
+  .container { padding: 24px 18px 72px; }
+  .breadcrumb { margin-bottom: 35px; }
+  .identidade { align-items: flex-start; gap: 20px; }
+  .avatar { width: 98px; height: 98px; font-size: 58px; }
+  .informacoes h1 { font-size: clamp(38px, 11vw, 58px); }
+  .sobretitulo { margin-bottom: 12px; font-size: 9px; }
+  .username { margin-top: 7px; font-size: 13px; }
+  .bio, .bioAlternativa { font-size: 14px; margin-top: 14px; }
+  .estatisticas { gap: 22px; }
+  .estatisticas div { flex-direction: column; gap: 4px; }
+  .estatisticas dt { font-size: 12px; }
+  .discografia { padding: 38px 0 45px; }
+  .gradeCapas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .nomeAlbum { font-size: 16px; }
+  .tituloSecao h2 { font-size: 29px; }
+  .corpoEditorial { padding-top: 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .capa { transition: none; }
+  .itemCapa:hover .capa, .itemCapa:focus-visible .capa { transform: none; }
+}
