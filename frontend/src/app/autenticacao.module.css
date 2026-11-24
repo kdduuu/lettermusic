@@ -48,3 +48,20 @@
 .alternativa a { color: #f2f2f2; }
 
 .sucesso { color: #d9d9d9; margin: 0; font-size: 14px; }
+
+/* F09 - autenticação e configurações com mesma identidade grafite. */
+.container {
+  max-width: 600px; margin: 55px auto 110px;
+  padding: clamp(28px,5vw,54px); border: 1px solid #3e3b42;
+  border-radius: 15px; background: #26252a;
+}
+.container h1 { font-size: clamp(43px,6vw,68px); letter-spacing: -.05em; }
+.container h2 { font: 700 28px var(--lm-serif); padding-bottom: 14px; border-bottom: 1px solid #423e45; }
+.introducao { color: #bcb2b9; line-height: 1.7; }
+.form { gap: 13px; }
+.form input { background: #2e2b32; color: #f4edef; border-color: #57515b; }
+.form input:focus-visible { border-color: #eb8a97; }
+.form button { background: #eae3e6; color: #1b191c; }
+.form button:hover { background: #fff; }
+.alternativa a { color: #f4edf0; }
+@media (max-width: 650px) { .container { margin: 22px 17px 60px; padding: 25px 20px; } }

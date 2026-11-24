@@ -21,3 +21,10 @@
 
 .review .botaoExcluir { color: #f1afb6; border-color: #82545b; background: transparent; }
 .review .botaoExcluir:hover { border-color: #e3a1ab; }
+
+/* F09 - avaliar e escrever uma review sem mudar a lógica. */
+.container { max-width: none; }
+.avaliacao select, .review textarea { background: #302e35; border-color: #5c5660; color: #f4eef0; }
+.avaliacao button, .review button { background: #38353c; border-color: #68616b; }
+.avaliacao button:hover, .review button:hover { background: #45414a; }
+.nota { color: #ada3aa; }

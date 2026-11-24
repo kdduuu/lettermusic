@@ -33,3 +33,10 @@
 .form input:focus-visible, .form textarea:focus-visible, .form button:focus-visible,
 .adicionar select:focus-visible, .adicionar button:focus-visible, .controles button:focus-visible,
 .botaoBusca button:focus-visible { outline: 2px solid #e05b70; outline-offset: 2px; }
+
+/* F09 - inputs e ações sempre dentro da paleta neutra. */
+.form input:not([type="checkbox"]), .form textarea, .adicionar select { background: #302d34; color: #f1edef; border-color: #625962; border-radius: 7px; }
+.form button, .adicionar button, .botaoBusca button, .controles button, .excluir button { background: #37333a; color: #f2eaee; border-color: #625b65; }
+.form .primario { background: #ede5e8; color: #232026; border-color: #ede5e8; }
+.ajuda { color: #b3aab1; }
+.excluir { border-color: #49454e; }
