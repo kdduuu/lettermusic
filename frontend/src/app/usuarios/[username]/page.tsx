@@ -12,20 +12,25 @@ function anoCadastro(data: string): string {
   const ano = Number(data.slice(0, 4));
   return ano >= 2000 && ano <= 2100 ? String(ano) : "";
 }
+function dataResumida(data: string): string {
+  const partes = /^(\d{4})-(\d{2})-(\d{2})/.exec(data);
+  return partes ? partes[3] + "/" + partes[2] + "/" + partes[1] : "";
+}
 
-async function CapasPublicas({ albuns }: { albuns: AlbumRecente[] }) {
+async function CapasRecentes({ albuns }: { albuns: AlbumRecente[] }) {
   const urls = await Promise.all(albuns.map((album) => obterCapaAlbum(album.id_musicbrainz)));
   return (
     <div className={styles.gradeCapas}>
       {albuns.map((album, indice) => (
         <Link
           key={album.id_musicbrainz}
+          href={"/albuns/" + encodeURIComponent(album.id_musicbrainz)}
           className={styles.itemCapa}
-          href={`/albuns/${encodeURIComponent(album.id_musicbrainz)}`}
-          title={`${album.titulo} — ${album.artista ?? "Artista não informado"}`}
+          title={album.titulo + " — " + (album.artista ?? "Artista não informado")}
         >
           <CapaAlbum url={urls[indice]} titulo={album.titulo} className={styles.capa} />
-          <span>{album.titulo}</span>
+          <span className={styles.nomeAlbum}>{album.titulo}</span>
+          <span className={styles.artistaAlbum}>{album.artista ?? "Artista não informado"}</span>
         </Link>
       ))}
     </div>
@@ -39,70 +44,94 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
     if (resultado.status === 404) notFound();
     return <p role="alert" className={styles.erro}>{resultado.mensagem}</p>;
   }
-
   const { perfil } = resultado;
-  const iniciais = Array.from(perfil.nome_exibicao.trim()).slice(0, 1).join("").toLocaleUpperCase("pt-BR") || "♪";
+  const inicial = Array.from(perfil.nome_exibicao.trim()).slice(0, 1).join("").toLocaleUpperCase("pt-BR") || "♪";
   const ano = anoCadastro(perfil.criado_em);
+
   return (
     <>
-      <section className={styles.cabecalho} aria-label="Apresentação do perfil">
-        <div className={styles.avatar} aria-hidden="true">{iniciais}</div>
-        <div className={styles.apresentacao}>
-          <p className={styles.etiqueta}>Perfil musical</p>
-          <h1>{perfil.nome_exibicao}</h1>
-          <p className={styles.username}>@{perfil.username}{ano ? ` · Desde ${ano}` : ""}</p>
-          {perfil.bio ? <p className={styles.bio}>{perfil.bio}</p> : null}
+      <header className={styles.perfilHero}>
+        <div className={styles.identidade}>
+          <div className={styles.avatar} aria-label={"Inicial de " + perfil.nome_exibicao} role="img">{inicial}</div>
+          <div className={styles.informacoes}>
+            <p className={styles.sobretitulo}>Arquivo musical pessoal {ano ? " · Desde " + ano : ""}</p>
+            <h1>{perfil.nome_exibicao}</h1>
+            <p className={styles.username}>@{perfil.username}</p>
+            {perfil.bio ? <p className={styles.bio}>{perfil.bio}</p> : (
+              <p className={styles.bioAlternativa}>Uma história contada através de álbuns, reviews e listas.</p>
+            )}
+          </div>
         </div>
-      </section>
+        <dl className={styles.estatisticas} aria-label="Atividade pública do perfil">
+          <div><dd>{perfil.estatisticas.avaliacoes}</dd><dt>Avaliações</dt></div>
+          <div><dd>{perfil.estatisticas.reviews}</dd><dt>Reviews</dt></div>
+          <div><dd>{perfil.estatisticas.listas_publicas}</dd><dt>Listas públicas</dt></div>
+        </dl>
+      </header>
 
-      <dl className={styles.estatisticas} aria-label="Estatísticas públicas">
-        <div><dt>Avaliações</dt><dd>{perfil.estatisticas.avaliacoes}</dd></div>
-        <div><dt>Reviews</dt><dd>{perfil.estatisticas.reviews}</dd></div>
-        <div><dt>Listas públicas</dt><dd>{perfil.estatisticas.listas_publicas}</dd></div>
-      </dl>
-
-      <section className={styles.secao} aria-labelledby="titulo-albuns">
+      <section className={styles.discografia} aria-labelledby="albuns-recentes">
         <div className={styles.tituloSecao}>
-          <h2 id="titulo-albuns">Álbuns recentes</h2>
-          <span>Até 5 avaliações e reviews públicas</span>
+          <div>
+            <p className={styles.sobretitulo}>Últimos registros públicos</p>
+            <h2 id="albuns-recentes">A música fala por si.</h2>
+          </div>
+          <p className={styles.nota}>Até cinco álbuns das avaliações e reviews recentes.</p>
         </div>
         {perfil.albuns_recentes.length ? (
           <Suspense fallback={<p className={styles.vazio}>Carregando capas...</p>}>
-            <CapasPublicas albuns={perfil.albuns_recentes} />
+            <CapasRecentes albuns={perfil.albuns_recentes} />
           </Suspense>
-        ) : <p className={styles.vazio}>Este perfil ainda não tem álbuns avaliados ou resenhados.</p>}
+        ) : <p className={styles.vazio}>Ainda não há avaliações ou reviews públicas com álbuns para mostrar.</p>}
       </section>
 
-      <section className={styles.secao} aria-labelledby="titulo-reviews">
-        <div className={styles.tituloSecao}><h2 id="titulo-reviews">Reviews recentes</h2></div>
-        {perfil.reviews_recentes.length ? (
-          <ul className={styles.feed}>
-            {perfil.reviews_recentes.map((review) => (
-              <li key={review.id}>
-                <div className={styles.tituloReview}>
-                  <Link href={`/albuns/${encodeURIComponent(review.id_musicbrainz)}`}>{review.titulo}</Link>
-                  <span>{review.artista ?? "Artista não informado"}</span>
-                </div>
-                <p>{review.texto}</p>
-              </li>
-            ))}
-          </ul>
-        ) : <p className={styles.vazio}>Nenhuma review pública por enquanto.</p>}
-      </section>
+      <div className={styles.corpoEditorial}>
+        <section className={styles.reviews} aria-labelledby="reviews-recentes">
+          <div className={styles.tituloSecao}>
+            <div>
+              <p className={styles.sobretitulo}>Diário de escuta</p>
+              <h2 id="reviews-recentes">Palavras sobre música</h2>
+            </div>
+          </div>
+          {perfil.reviews_recentes.length ? (
+            <ul className={styles.feed}>
+              {perfil.reviews_recentes.map((review) => (
+                <li key={review.id}>
+                  <div className={styles.reviewTopo}>
+                    <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.reviewAlbum}>{review.titulo}</Link>
+                    <time dateTime={review.criada_em}>{dataResumida(review.criada_em)}</time>
+                  </div>
+                  <p className={styles.reviewArtista}>{review.artista ?? "Artista não informado"}</p>
+                  <p className={styles.reviewTexto}>{review.texto}</p>
+                  <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.reviewLink}>Ver álbum <span aria-hidden="true">↗</span></Link>
+                </li>
+              ))}
+            </ul>
+          ) : <p className={styles.vazio}>Ainda não há reviews públicas.</p>}
+        </section>
 
-      <section className={styles.secao} aria-labelledby="titulo-listas">
-        <div className={styles.tituloSecao}><h2 id="titulo-listas">Listas públicas</h2></div>
-        {perfil.listas_publicas.length ? (
-          <ul className={styles.listas}>
-            {perfil.listas_publicas.map((lista) => (
-              <li key={lista.id}>
-                <h3><Link href={`/listas/${lista.id}`}>{lista.titulo}</Link></h3>
-                {lista.descricao ? <p>{lista.descricao}</p> : null}
-              </li>
-            ))}
-          </ul>
-        ) : <p className={styles.vazio}>Nenhuma lista pública criada ainda.</p>}
-      </section>
+        <aside className={styles.listas} aria-labelledby="listas-publicas">
+          <div className={styles.tituloSecao}>
+            <div>
+              <p className={styles.sobretitulo}>Coleções pessoais</p>
+              <h2 id="listas-publicas">Listas criadas</h2>
+            </div>
+          </div>
+          {perfil.listas_publicas.length ? (
+            <ol className={styles.listaColecoes}>
+              {perfil.listas_publicas.map((lista, indice) => (
+                <li key={lista.id}>
+                  <span className={styles.indice}>{String(indice + 1).padStart(2, "0")}</span>
+                  <div className={styles.listaTexto}>
+                    <h3><Link href={"/listas/" + lista.id}>{lista.titulo}</Link></h3>
+                    {lista.descricao ? <p>{lista.descricao}</p> : <p>Uma seleção musical pessoal.</p>}
+                  </div>
+                  <Link href={"/listas/" + lista.id} aria-label={"Abrir " + lista.titulo} className={styles.seta}>↗</Link>
+                </li>
+              ))}
+            </ol>
+          ) : <p className={styles.vazio}>Nenhuma lista pública criada por enquanto.</p>}
+        </aside>
+      </div>
     </>
   );
 }
@@ -110,10 +139,14 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
 export default function PerfilPage({ params }: { params: ParametrosPerfil }) {
   return (
     <main className={styles.container}>
-      <Link href="/" className={styles.voltar}>Descobrir</Link>
-      <Suspense fallback={<p className={styles.vazio}>Carregando perfil...</p>}>
-        <ConteudoPerfil params={params} />
-      </Suspense>
+      <div className={styles.interior}>
+        <nav className={styles.breadcrumb} aria-label="Navegação">
+          <Link href="/">Descobrir</Link><span aria-hidden="true">/</span><span>Perfil</span>
+        </nav>
+        <Suspense fallback={<p className={styles.vazio}>Carregando perfil...</p>}>
+          <ConteudoPerfil params={params} />
+        </Suspense>
+      </div>
     </main>
   );
 }
