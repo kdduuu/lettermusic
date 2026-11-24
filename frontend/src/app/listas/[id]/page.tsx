@@ -125,9 +125,7 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
           <span className={styles.traco} aria-hidden="true" />
           <p className={styles.etiqueta}>{lista.publica ? "Coleção pública" : "Coleção privada"}</p>
           <h1 id="titulo-lista">{lista.titulo}</h1>
-          {lista.descricao ? <p className={styles.descricao}>{lista.descricao}</p> : (
-            <p className={styles.descricaoAlternativa}>Uma seleção de álbuns reunidos em um só lugar.</p>
-          )}
+          {lista.descricao ? <p className={styles.descricao}>{lista.descricao}</p> : null}
           <p className={styles.meta}>Página {pagina} · {itens.length} álbuns exibidos</p>
           <a className={styles.ancoraAlbuns} href="#albuns-lista">Explorar álbuns <span aria-hidden="true">↘</span></a>
         </div>
