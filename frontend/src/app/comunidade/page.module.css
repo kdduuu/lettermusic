@@ -127,3 +127,14 @@
 
 /* F09.6 — lateral informativa acompanha o conteúdo, sem prender em telas estreitas. */
 @media(min-width:901px) { .lateral { top: 15px; } }
+
+
+/* F09.7 — relatos escritos são visualmente diferentes de uma nota rápida. */
+.atividadeMusical .resumo {
+  border-left: 2px solid #756872;
+  padding-left: 11px;
+  margin-top: 10px;
+  color: #eee5e9;
+  font-size: 13px;
+  line-height: 1.58;
+}

@@ -256,3 +256,48 @@
 /* F09.6 — largura da miniatura coerente com a arte compacta. */
 .capaColecao { width: 68px; flex-basis: 68px; }
 @media(max-width:600px) { .capaColecao { width: 62px; flex-basis: 62px; } }
+
+
+/* F09.7 — corrigido: a moldura ocupa a página; somente o interior fica limitado.
+   O max-width no .container da F09.6 deixava Perfil grudado à esquerda. */
+.container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 27px 22px 72px;
+}
+.interior {
+  width: 100%;
+  max-width: calc(var(--lm-content) - 44px);
+  margin-inline: auto;
+}
+.perfilHero { padding: 33px 36px 30px; }
+.identidade { gap: 32px; }
+.avatar { width: 164px; height: 164px; font-size: 86px; }
+.informacoes h1 { font-size: clamp(50px, 5.7vw, 75px); }
+.estatisticas { margin-top: 23px; padding-top: 18px; }
+.discografia { padding: 34px 0 37px; }
+.gradeCapas[data-count="3"] { max-width: 870px; gap: 17px; }
+.gradeCapas[data-count="2"] { max-width: 590px; }
+.corpoEditorial { grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr); gap: 40px; padding-top: 31px; }
+.feed .itemReview { grid-template-columns: 84px minmax(0, 1fr); gap: 15px; padding: 17px 0; }
+.capaReview { width: 84px; }
+.conteudoReview .reviewAlbum { font-size: 19px; }
+.reviewTexto { font-size: 13px; line-height: 1.58; }
+.capaColecao { width: 68px; flex-basis: 68px; }
+@media (max-width: 900px) {
+  .corpoEditorial { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .gradeCapas[data-count="3"] { max-width: 100%; }
+}
+@media (max-width: 650px) {
+  .container { padding: 20px 16px 58px; }
+  .interior { max-width: none; }
+  .perfilHero { padding: 22px 20px; }
+  .avatar { width: 103px; height: 103px; font-size: 58px; }
+  .identidade { gap: 15px; align-items: center; }
+  .informacoes h1 { font-size: clamp(37px, 10vw, 48px); }
+  .gradeCapas[data-count="3"] { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+  .feed .itemReview { grid-template-columns: 76px minmax(0, 1fr); }
+  .capaReview { width: 76px; }
+  .capaColecao { width: 62px; flex-basis: 62px; }
+}

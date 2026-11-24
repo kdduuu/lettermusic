@@ -189,3 +189,58 @@
   background: #343036; border: 1px solid #4c464c; border-radius: 4px;
 }
 @media(max-width:520px) { .reviewNota { font-size: 11px; padding: 4px 5px; } }
+
+
+/* F09.7 — presença editorial para reviews, sem cartões decorativos. */
+.grade[data-count="1"] { grid-template-columns: minmax(0, 260px); }
+.grade[data-count="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 550px; }
+.grade[data-count="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 835px; }
+.album strong { font-size: 17px; }
+.reviewsPagina { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0 28px; }
+.reviewsPagina .review,
+.reviewsPagina .review:first-child {
+  grid-template-columns: 124px minmax(0,1fr);
+  gap: 17px;
+  padding: 26px 0 30px;
+  align-items: start;
+}
+.reviewsPagina .capaReview,
+.reviewsPagina .review:first-child .capaReview { width: 124px; }
+.reviewsPagina .review h3,
+.reviewsPagina .review:first-child h3 { font-size: 24px; line-height: 1.17; }
+.reviewsPagina .artista { font-size: 12px; margin: 6px 0; }
+.reviewsPagina .meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 12px;
+  margin: 11px 0 0;
+}
+.autorMarca {
+  display: inline-grid; place-items: center;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1px solid #615b63;
+  background: #37343b;
+  color: #f3ecee;
+  font: 700 12px/1 Georgia,serif;
+  margin-right: 2px;
+}
+.reviewsPagina .meta a { color: #eee5e8; font-weight: 700; }
+.reviewsPagina .texto { font-size: 14px; line-height: 1.62; margin-top: 13px; color: #e8dfe2; }
+@media(max-width: 900px) {
+  .reviewsPagina { grid-template-columns: 1fr; }
+  .reviewsPagina .review,
+  .reviewsPagina .review:first-child { grid-template-columns: 124px minmax(0,1fr); }
+}
+@media(max-width: 650px) {
+  .grade[data-count="2"], .grade[data-count="3"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; }
+  .reviewsPagina .review,
+  .reviewsPagina .review:first-child { grid-template-columns: 91px minmax(0,1fr); gap: 13px; padding: 22px 0; }
+  .reviewsPagina .capaReview,
+  .reviewsPagina .review:first-child .capaReview { width: 91px; }
+  .reviewsPagina .review h3,
+  .reviewsPagina .review:first-child h3 { font-size: 21px; }
+  .reviewsPagina .texto { font-size: 13px; }
+}

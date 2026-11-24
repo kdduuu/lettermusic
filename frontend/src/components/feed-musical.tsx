@@ -79,8 +79,14 @@ export async function CardsReviews({
             </div>
             <p className={styles.artista}>{review.artista ?? "Artista não informado"}</p>
             <p className={styles.meta}>
+              {apresentacao === "editorial" ? (
+                <span className={styles.autorMarca} aria-hidden="true">
+                  {Array.from(review.nome_exibicao.trim())[0]?.toLocaleUpperCase("pt-BR") || "♪"}
+                </span>
+              ) : null}
               <Link href={`/usuarios/${encodeURIComponent(review.username)}`}>{review.nome_exibicao}</Link>
-              {" · "}<time dateTime={review.criada_em}>{formatarData(review.criada_em)}</time>
+              <span aria-hidden="true">·</span>
+              <time dateTime={review.criada_em}>{formatarData(review.criada_em)}</time>
             </p>
             <p className={resumo ? styles.resumo : styles.texto}>{review.texto}</p>
           </article>
