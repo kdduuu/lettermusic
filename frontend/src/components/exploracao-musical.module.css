@@ -12,7 +12,7 @@
 .faixas { max-width: 860px; margin-top: 44px; border-top: 1px solid #484848; padding-top: 24px; }
 .faixas h2 { font: 600 25px Georgia, serif; }
 .faixas ul { padding: 0; list-style: none; }
-.faixas li { display: grid; grid-template-columns: 42px minmax(0, 1fr) 56px; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid #393939; }
+.faixas > ul > li { display: grid; grid-template-columns: 42px minmax(0, 1fr) 56px; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid #393939; }
 .faixas li span { color: #c6c6c6; font-size: 13px; }
 .mensagem { color: #c6c6c6; line-height: 1.65; }
 @media (max-width: 600px) {
@@ -28,8 +28,8 @@
 .info p { color: #afa6ad; }
 .faixas { max-width: none; margin-top: 0; border-color: var(--lm-line); padding-top: 25px; }
 .faixas h2 { font: 700 31px var(--lm-serif); margin: 0 0 20px; }
-.faixas li { grid-template-columns: 34px minmax(0, 1fr) 55px; border-color: var(--lm-line); padding: 15px 0; gap: 10px; }
-.faixas li strong { font-size: 14px; font-weight: 500; }
+.faixas > ul > li { grid-template-columns: 34px minmax(0, 1fr) 55px; border-color: var(--lm-line); padding: 15px 0; gap: 10px; }
+.faixas > ul > li strong { font-size: 14px; font-weight: 500; }
 @media (max-width: 860px) { .resultados { grid-template-columns: 1fr; } }
 @media (max-width: 600px) {
   .capa, .icone { width: 70px; height: 70px; flex-basis: 70px; }

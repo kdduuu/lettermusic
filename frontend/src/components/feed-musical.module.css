@@ -90,3 +90,12 @@
 .albumRanking a { font-size: 20px; }
 .notaRanking { color: #d6bea1; }
 .review .meta { color: #aaa0a8; font-size: 12px; }
+
+/* F09.5 — a vitrine se ajusta ao número real de álbuns. */
+.grade[data-count="1"] { grid-template-columns: minmax(0,290px); }
+.grade[data-count="2"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: 710px; }
+.grade[data-count="3"] { grid-template-columns: repeat(3,minmax(0,1fr)); max-width: 1050px; }
+@media (max-width: 650px) {
+  .grade[data-count="1"] { grid-template-columns: minmax(0,1fr); max-width: 280px; }
+  .grade[data-count="2"], .grade[data-count="3"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; }
+}

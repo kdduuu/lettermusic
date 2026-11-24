@@ -69,6 +69,7 @@ export function FaixasInterativas({
             <>
               <CapaAlbum url={capa} titulo={selecionada.titulo} className={styles.capa} />
               <div className={styles.info}>
+                <span className={styles.numeroModal}>{String(selecionada.numero).padStart(2, "0")}</span>
                 <h3 id="titulo-faixa-modal">{selecionada.titulo}</h3>
                 <p className={styles.artista}>{artista}</p>
                 {duracao(selecionada.duracao_ms) ? (

@@ -42,3 +42,34 @@
 .container header.cabecalhoEditorial { padding-bottom: 20px; margin-bottom: 0; }
 .cabecalhoEditorial .etiqueta { margin-bottom: 9px; }
 .container > ul > li { padding: 25px 0; }
+
+/* F09.5 — leitura editorial mais equilibrada, sem um card desproporcional. */
+.container > ul { max-width: none; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 38px; }
+.container > ul > li { padding: 26px 0 30px; }
+.reviewsPagina .review,
+.reviewsPagina .review:first-child {
+  grid-template-columns: 122px minmax(0,1fr);
+  gap: 20px; align-items: start; padding: 30px 0;
+  border-bottom: 1px solid #46414a;
+}
+.reviewsPagina .capaReview,
+.reviewsPagina .review:first-child .capaReview { width: 122px; border-radius: 7px; }
+.reviewsPagina .review h3,
+.reviewsPagina .review:first-child h3 { font: 700 27px/1.12 Georgia,serif; letter-spacing: -.025em; }
+.reviewsPagina .artista { font-size: 13px; }
+.reviewsPagina .meta { font-size: 12px; line-height: 1.5; margin: 10px 0 0; }
+.reviewsPagina .texto { font-size: 15px; line-height: 1.6; margin: 12px 0 0; }
+.container header.cabecalhoEditorial { padding-top: 16px; padding-bottom: 18px; }
+@media (max-width: 900px) {
+  .container > ul { grid-template-columns: 1fr; }
+  .reviewsPagina .review, .reviewsPagina .review:first-child {
+    grid-template-columns: 128px minmax(0,1fr); gap: 22px;
+  }
+  .reviewsPagina .capaReview,.reviewsPagina .review:first-child .capaReview { width: 128px; }
+}
+@media (max-width: 460px) {
+  .reviewsPagina .review, .reviewsPagina .review:first-child { grid-template-columns: 95px minmax(0,1fr); gap: 14px; }
+  .reviewsPagina .capaReview,.reviewsPagina .review:first-child .capaReview { width: 95px; }
+  .reviewsPagina .review h3, .reviewsPagina .review:first-child h3 { font-size: 22px; }
+  .reviewsPagina .texto { font-size: 14px; }
+}
