@@ -74,7 +74,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
             <Resultados termo={termo} categoria={categoria} pagina={pagina} listaId={permitida?.id} listaContexto={listaId ?? undefined} artistaId={artistaId} />
           </Suspense>
         </>
-      ) : }
+      ) : null}
     </>
   );
 }
