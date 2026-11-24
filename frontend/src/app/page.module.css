@@ -112,3 +112,16 @@
   .descobertaSecao { margin-top: 38px; padding-top: 28px; }
   .searchPage { padding: 25px 18px; }
 }
+
+
+/* F09.3 — catálogo visual, sem repetir os painéis de destaque da home. */
+.catalogoHero { min-height: 0; border-bottom: 0; padding: 34px 0 20px; }
+.catalogoHero h1 { font-size: clamp(57px, 7vw, 82px); }
+.catalogoHero > p { color: #bfb3bb; }
+.catalogoHero a { color: #e8dfe4; text-underline-offset: 5px; font-size: 14px; }
+.catalogoHero a:hover { color: #ef8996; }
+.catalogoResultados { border-top: 1px solid #454048; padding-top: 40px; }
+.catalogoTitulo { display: flex; align-items: baseline; justify-content: space-between; gap: 22px; margin-bottom: 27px; }
+.catalogoTitulo h2 { font: 700 clamp(29px,3.3vw,40px)/1.1 Georgia,serif; margin: 0; }
+.catalogoTitulo p { color: #a9a0a8; font-size: 13px; margin: 0; }
+@media (max-width: 650px) { .catalogoHero { padding-top: 25px; } .catalogoTitulo { align-items: start; flex-direction: column; gap: 10px; } .catalogoResultados { padding-top: 28px; } }

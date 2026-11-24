@@ -35,3 +35,27 @@
   .capa, .icone { width: 70px; height: 70px; flex-basis: 70px; }
   .info h3 { font-size: 19px; }
 }
+
+
+/* F09.3 — o catálogo é uma coleção de capas, não uma tabela de miniaturas. */
+.galeria { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 40px 21px; }
+.albumGaleria { min-width: 0; }
+.linkCapaGaleria { display: block; color: inherit; text-decoration: none; }
+.capaGaleria {
+  width: 100%; aspect-ratio: 1; display: grid; position: relative;
+  overflow: hidden; border-radius: 8px; place-items: center;
+  background: #39363c; color: #b4aab1; font-size: 45px;
+  box-shadow: 0 0 0 1px #ffffff12;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.capaGaleria img { object-fit: cover; }
+.linkCapaGaleria:hover .capaGaleria, .linkCapaGaleria:focus-visible .capaGaleria { transform: translateY(-4px); box-shadow: 0 15px 27px #00000055; }
+.dadosGaleria { min-width: 0; margin-top: 14px; }
+.dadosGaleria h3 { margin: 0 0 5px; font: 700 21px/1.22 Georgia,serif; overflow-wrap: anywhere; }
+.dadosGaleria h3 a { color: #f4eeef; text-decoration: none; }
+.dadosGaleria h3 a:hover { text-decoration: underline; }
+.dadosGaleria p { margin: 0 0 6px; color: #c1b7be; font-size: 13px; overflow-wrap: anywhere; }
+.dadosGaleria span { color: #9f969f; font-size: 12px; }
+@media (max-width: 1020px) { .galeria { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media (max-width: 650px) { .galeria { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 27px 13px; } .dadosGaleria h3 { font-size: 17px; } .dadosGaleria p { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .capaGaleria { transition: none; } .linkCapaGaleria:hover .capaGaleria { transform: none; } }

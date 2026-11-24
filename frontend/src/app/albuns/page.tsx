@@ -40,7 +40,13 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
       <section className={styles.results}>
         {resultado.ok ? (
           <>
-            <ResultadosMusicais itens={resultado.dados.resultados} categoria="albuns" />
+            <div className={styles.catalogoResultados}>
+              <div className={styles.catalogoTitulo}>
+                <h2>Álbuns da comunidade</h2>
+                <p>Página {pagina} · {resultado.dados.resultados.length} lançamentos exibidos</p>
+              </div>
+              <ResultadosMusicais itens={resultado.dados.resultados} categoria="albuns" apresentacao="galeria" />
+            </div>
             <Paginacao pagina={pagina} temProxima={resultado.dados.tem_proxima} endereco={`/albuns?${p}`} />
           </>
         ) : <p role="alert" className={styles.message}>{resultado.mensagem}</p>}
@@ -52,8 +58,8 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
 export default function AlbunsPage({ searchParams }: { searchParams: Parametros }) {
   return (
     <main className={styles.container}>
-      <section className={styles.hero}>
-        <span className={styles.accent} aria-hidden="true" />
+      <section className={styles.hero + " " + styles.catalogoHero}>
+        <p className={styles.heroEyebrow}>Discoteca / Acervo público</p>
         <h1>Álbuns</h1>
         <p>Explore os lançamentos registrados pela comunidade.</p>
         <p><Link href="/buscar">Pesquisar no catálogo completo do MusicBrainz</Link></p>

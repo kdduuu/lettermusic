@@ -5,13 +5,40 @@ import { faixasAlbum, type Categoria, type Item } from "@/lib/exploracao";
 import styles from "./exploracao-musical.module.css";
 
 export function ResultadosMusicais({
-  itens, categoria, listaId,
+  itens, categoria, listaId, apresentacao = "lista",
 }: {
   itens: Item[];
   categoria: Categoria;
   listaId?: number;
+  apresentacao?: "lista" | "galeria";
 }) {
   if (!itens.length) return <p className={styles.mensagem}>Nenhum resultado encontrado.</p>;
+
+  if (categoria === "albuns" && apresentacao === "galeria") {
+    return (
+      <ul className={styles.galeria}>
+        {itens.map((item) => {
+          const endereco = "/albuns/" + encodeURIComponent(item.id_musicbrainz);
+          return (
+            <li key={item.id_musicbrainz} className={styles.albumGaleria}>
+              <Link href={endereco} className={styles.linkCapaGaleria} aria-label={"Abrir " + item.titulo}>
+                <CapaAlbum
+                  url={"https://coverartarchive.org/release-group/" + item.id_musicbrainz.toLowerCase() + "/front-500"}
+                  titulo={item.titulo}
+                  className={styles.capaGaleria}
+                />
+              </Link>
+              <div className={styles.dadosGaleria}>
+                <h3><Link href={endereco}>{item.titulo}</Link></h3>
+                <p>{item.artista ?? "Artista não informado"}</p>
+                <span>{[item.tipo, item.data?.slice(0, 4)].filter(Boolean).join(" · ")}</span>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
 
   return (
     <ul className={styles.resultados}>
