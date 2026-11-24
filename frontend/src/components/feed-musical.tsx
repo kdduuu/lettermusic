@@ -59,13 +59,13 @@ export async function CardsReviews({
             <h3><Link href={`/albuns/${encodeURIComponent(review.id_musicbrainz)}`}>{review.titulo}</Link></h3>
             <p className={styles.artista}>{review.artista ?? "Artista não informado"}</p>
             <p className={styles.meta}>
-              <Link href={`/usuarios/${encodeURIComponent(review.username)}`}>{review.nome_exibicao} (@{review.username})</Link>
+              <Link href={`/usuarios/${encodeURIComponent(review.username)}`}>{review.nome_exibicao}</Link>
               {" · "}<time dateTime={review.criada_em}>{formatarData(review.criada_em)}</time>
               {review.nota !== null ? <span> · ★ {formatarNota(review.nota)}/5</span> : null}
-              {review.atualizada_em ? <span> · Editada</span> : null}
+              
             </p>
             <p className={resumo ? styles.resumo : styles.texto}>{review.texto}</p>
-            {!resumo ? <Link className={styles.verAlbum} href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)}>Abrir álbum ↗</Link> : null}
+            
           </article>
         </li>
       ))}
@@ -83,17 +83,17 @@ export async function ResumoBemAvaliados() {
   if (!resultado.ok) return <p role="alert" className={styles.mensagem}>{resultado.mensagem}</p>;
   if (!resultado.dados.length) return <p className={styles.mensagem}>As médias aparecerão quando houver avaliações públicas.</p>;
   return (
-    <ol className={styles.rankingAvaliacoes}>
-      {resultado.dados.map((obra, indice) => (
+    <ul className={styles.rankingAvaliacoes}>
+      {resultado.dados.map((obra) => (
         <li key={obra.obra_id}>
-          <span className={styles.posicaoRanking}>{String(indice + 1).padStart(2, "0")}</span>
+          
           <div className={styles.albumRanking}>
             <Link href={"/albuns/" + encodeURIComponent(obra.id_musicbrainz)}>{obra.titulo}</Link>
-            <p>{obra.artista ?? "Artista não informado"} · {obra.quantidade_avaliacoes} {obra.quantidade_avaliacoes === 1 ? "avaliação" : "avaliações"}</p>
+            <p>{obra.artista ?? "Artista não informado"}</p>
           </div>
           <strong className={styles.notaRanking}>★ {formatarNota(obra.media ?? 0)}</strong>
         </li>
       ))}
-    </ol>
+    </ul>
   );
 }

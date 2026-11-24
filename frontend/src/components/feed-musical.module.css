@@ -84,3 +84,9 @@
 .albumRanking a:hover { text-decoration: underline; }
 .albumRanking p { color: #aba2a9; font-size: 12px; margin: 5px 0 0; }
 .notaRanking { font: 700 16px Georgia,serif; color: #f0d1a1; white-space: nowrap; }
+
+/* F09.4 — sem numeração competitiva e com metadados discretos. */
+.rankingAvaliacoes li { padding: 15px 0; }
+.albumRanking a { font-size: 20px; }
+.notaRanking { color: #d6bea1; }
+.review .meta { color: #aaa0a8; font-size: 12px; }

@@ -21,7 +21,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
   return (
     <>
       <form action="/albuns" className={styles.buscaLista}>
-        <label htmlFor="termo-catalogo">Buscar no catálogo da comunidade</label>
+        <label htmlFor="termo-catalogo">Pesquisar álbuns</label>
         <div>
           <input id="termo-catalogo" name="termo" type="search" maxLength={100} defaultValue={termo} placeholder="Título ou artista" />
           <button type="submit">Filtrar</button>
@@ -42,8 +42,8 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
           <>
             <div className={styles.catalogoResultados}>
               <div className={styles.catalogoTitulo}>
-                <h2>Álbuns da comunidade</h2>
-                <p>Página {pagina} · {resultado.dados.resultados.length} lançamentos exibidos</p>
+                <h2>Acervo</h2>
+                
               </div>
               <ResultadosMusicais itens={resultado.dados.resultados} categoria="albuns" apresentacao="galeria" />
             </div>
@@ -61,8 +61,8 @@ export default function AlbunsPage({ searchParams }: { searchParams: Parametros 
       <section className={styles.hero + " " + styles.catalogoHero}>
         <p className={styles.heroEyebrow}>Discoteca / Acervo público</p>
         <h1>Álbuns</h1>
-        <p>Explore os lançamentos registrados pela comunidade.</p>
-        <p><Link href="/buscar">Pesquisar no catálogo completo do MusicBrainz</Link></p>
+        
+        <p><Link href="/buscar">Buscar no MusicBrainz ↗</Link></p>
       </section>
       <Suspense fallback={<p className={styles.message}>Carregando catálogo...</p>}>
         <Conteudo searchParams={searchParams} />

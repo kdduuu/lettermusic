@@ -21,7 +21,7 @@ async function DestaqueReal() {
         <span>Entre os mais ouvidos</span>
         <h2>{obra.titulo}</h2>
         <p>{obra.artista ?? "Artista não informado"}</p>
-        <p>{obra.total_escutas} {obra.total_escutas === 1 ? "escuta registrada" : "escutas registradas"}</p>
+        
       </div>
     </Link>
   );
@@ -32,9 +32,9 @@ export default function Home() {
     <main className={styles.container}>
       <section className={styles.hero + " " + styles.heroEditorial} aria-labelledby="titulo-descobrir">
         <div className={styles.heroMain}>
-          <p className={styles.heroEyebrow}>Lettermusic / Descoberta musical</p>
+          <p className={styles.heroEyebrow}>LETTERMUSIC / MÚSICA</p>
           <h1 id="titulo-descobrir">Descobrir</h1>
-          <p>Discos para conhecer, ouvir, avaliar e guardar na sua história musical.</p>
+          <p>Encontre seu próximo disco.</p>
           <SearchForm variant="hero" />
           <div className={styles.heroLinks}>
             <Link href="/albuns">Explorar álbuns ↗</Link>
@@ -50,7 +50,7 @@ export default function Home() {
       <section className={styles.descobertaSecao} aria-labelledby="mais-ouvidas">
         <div className={styles.shelfInfo}>
           <h2 id="mais-ouvidas">Mais ouvidos</h2>
-          <p>Álbuns com mais escutas registradas aqui no Lettermusic.</p>
+          
         </div>
         <Suspense fallback={<p className={styles.message}>Carregando álbuns...</p>}>
           <DestaquesMusicais tipo="mais-ouvidas" />
@@ -58,9 +58,9 @@ export default function Home() {
       </section>
       <section className={styles.secaoRankings} aria-labelledby="melhor-avaliadas">
         <div className={styles.shelfInfo}>
-          <p className={styles.heroEyebrow}>Pela comunidade</p>
+          
           <h2 id="melhor-avaliadas">Mais bem avaliados</h2>
-          <p>As maiores médias em uma seleção que valoriza as opiniões, não apenas a popularidade.</p>
+          
         </div>
         <Suspense fallback={<p className={styles.message}>Carregando avaliações...</p>}>
           <ResumoBemAvaliados />
@@ -70,7 +70,7 @@ export default function Home() {
         <div className={styles.tituloDescoberta}>
           <div className={styles.shelfInfo}>
             <h2 id="reviews-recentes">O que andam dizendo</h2>
-            <p>Reviews recentes, escritas por quem vive a música.</p>
+            
           </div>
           <Link href="/reviews">Todas as reviews ↗</Link>
         </div>

@@ -34,10 +34,10 @@ export default function ReviewsPage({ searchParams }: { searchParams: Parametros
     <main className={styles.container}>
       <header className={styles.cabecalhoEditorial}>
         <div>
-          <p className={styles.etiqueta}>Diário coletivo / Lettermusic</p>
+          <p className={styles.etiqueta}>DIÁRIO COLETIVO</p>
           <h1>Reviews</h1>
         </div>
-        <p>Discos que marcaram alguém. Histórias, impressões e conversas sobre música.</p>
+        
       </header>
       <Suspense fallback={<p className={styles.mensagem}>Carregando reviews...</p>}>
         <ConteudoReviews searchParams={searchParams} />

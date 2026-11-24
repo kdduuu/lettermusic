@@ -36,3 +36,9 @@
   .container header.cabecalhoEditorial { padding-top: 15px; }
   .cabecalhoEditorial h1 { font-size: 55px; }
 }
+
+/* F09.4 — leitura vertical; a regra anterior em .container > ul forçava 2 colunas. */
+.container > ul { grid-template-columns: minmax(0, 1fr); gap: 0; max-width: 950px; }
+.container header.cabecalhoEditorial { padding-bottom: 20px; margin-bottom: 0; }
+.cabecalhoEditorial .etiqueta { margin-bottom: 9px; }
+.container > ul > li { padding: 25px 0; }

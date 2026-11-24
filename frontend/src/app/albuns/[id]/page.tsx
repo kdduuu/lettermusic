@@ -32,14 +32,14 @@ async function BlocoSocial({ id }: { id: string }) {
   return (
     <section className={styles.social} aria-label="Atividade social do álbum">
       <div className={styles.resumo}>
-        <h2>Na comunidade</h2>
+        <h2>Avaliações</h2>
         {resumo.ok ? (
           resumo.dados.quantidade_avaliacoes > 0 ? (
             <p>
               <strong>{resumo.dados.media_avaliacoes?.toLocaleString("pt-BR")} ★</strong>
               <span> · {resumo.dados.quantidade_avaliacoes} avaliações</span>
             </p>
-          ) : <p className={styles.muted}>Este álbum ainda não tem avaliações na comunidade.</p>
+          ) : <p className={styles.muted}>Sem avaliações.</p>
         ) : <p className={styles.muted} role="status">{resumo.mensagem}</p>}
       </div>
 
@@ -54,13 +54,13 @@ async function BlocoSocial({ id }: { id: string }) {
         </p>
       ) : (
         <p className={styles.muted}>
-          <Link href="/entrar">Entre na sua conta</Link> para avaliar, registrar escutas ou escrever uma review.
+          <Link href="/entrar">Entre</Link> para registrar sua música.
         </p>
       )}
 
       {usuario && listas ? (
         <section className={styles.listasDoAlbum} aria-label="Adicionar a uma lista musical">
-          <h2>Suas listas</h2>
+          <h2>Listas</h2>
           {listas.ok && listas.dados.length ? (
             <FormularioAdicionarAlbum idMusicBrainz={id} listas={listas.dados} />
           ) : (
@@ -69,14 +69,12 @@ async function BlocoSocial({ id }: { id: string }) {
               <Link href="/listas">Gerenciar listas</Link>
             </p>
           )}
-          {listas.ok && listas.dados.length > 0 ? (
-            <p className={styles.muted}><Link href="/listas">Ver todas as listas</Link></p>
-          ) : null}
+          
         </section>
       ) : null}
 
       <div className={styles.reviews}>
-        <h2>Reviews recentes</h2>
+        <h2>Reviews</h2>
         {resumo.ok && resumo.dados.reviews.length ? (
           <ul className={styles.reviewLista}>
             {resumo.dados.reviews.map((review, indice) => (
@@ -92,7 +90,7 @@ async function BlocoSocial({ id }: { id: string }) {
             ))}
           </ul>
         ) : <p className={styles.muted}>
-          {resumo.ok ? "Ainda não há reviews publicadas deste álbum." : "Reviews temporariamente indisponíveis."}
+          {resumo.ok ? "Sem reviews." : "Reviews temporariamente indisponíveis."}
         </p>}
       </div>
     </section>
