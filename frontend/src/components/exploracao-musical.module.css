@@ -84,3 +84,8 @@
   .galeria { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 23px 12px; }
   .dadosGaleria h3 { font-size: 16px; }
 }
+
+/* F09.6 — nota real do público junto ao lançamento, sem quadro de crítico. */
+.dadosLinha { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; justify-content: space-between; }
+.dadosLinha span { font-size: 11px; color: #a79ea6; }
+.notaGaleria { font: 700 12px/1.2 Arial,sans-serif; color: #e1cb9d; white-space: nowrap; }

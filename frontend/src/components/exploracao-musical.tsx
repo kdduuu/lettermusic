@@ -7,12 +7,13 @@ import { faixasAlbum, type Categoria, type Item } from "@/lib/exploracao";
 import styles from "./exploracao-musical.module.css";
 
 export function ResultadosMusicais({
-  itens, categoria, listaId, apresentacao = "lista",
+  itens, categoria, listaId, apresentacao = "lista", avaliacoes,
 }: {
   itens: Item[];
   categoria: Categoria;
   listaId?: number;
   apresentacao?: "lista" | "galeria";
+  avaliacoes?: Record<string, { media: number; quantidade: number }>;
 }) {
   if (!itens.length) return <p className={styles.mensagem}>Nenhum resultado encontrado.</p>;
 
@@ -33,7 +34,20 @@ export function ResultadosMusicais({
               <div className={styles.dadosGaleria}>
                 <h3><Link href={endereco}>{item.titulo}</Link></h3>
                 <p>{item.artista ?? "Artista não informado"}</p>
-                <span>{[item.tipo, item.data?.slice(0, 4)].filter(Boolean).join(" · ")}</span>
+                <div className={styles.dadosLinha}>
+                  <span>{[item.tipo, item.data?.slice(0, 4)].filter(Boolean).join(" · ")}</span>
+                  {avaliacoes?.[item.id_musicbrainz] ? (
+                    <strong className={styles.notaGaleria} title={
+                      String(avaliacoes[item.id_musicbrainz].quantidade) +
+                      " avaliações da comunidade"
+                    }>
+                      ★ {avaliacoes[item.id_musicbrainz].media.toLocaleString("pt-BR", {
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 1,
+                      })}
+                    </strong>
+                  ) : null}
+                </div>
               </div>
             </li>
           );

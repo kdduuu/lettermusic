@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Paginacao, ResultadosMusicais } from "@/components/exploracao-musical";
 import { catalogoLocal, obterPagina } from "@/lib/exploracao";
+import { consultarDestaques } from "@/lib/feed";
 import styles from "../page.module.css";
 
 type Parametros = Promise<{
@@ -15,7 +16,18 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
   const termo = typeof params.termo === "string" ? params.termo.trim().slice(0, 100) : "";
   const tipo = ["Album", "Single", "EP"].includes(String(params.tipo)) ? String(params.tipo) : "todos";
   const pagina = obterPagina(params.pagina);
-  const resultado = await catalogoLocal(termo, tipo, pagina);
+  const [resultado, notas] = await Promise.all([
+    catalogoLocal(termo, tipo, pagina),
+    consultarDestaques("melhor-avaliadas"),
+  ]);
+  const avaliacoes = Object.fromEntries(
+    notas.ok ? notas.dados
+      .filter((obra) => obra.media !== undefined && obra.quantidade_avaliacoes !== undefined)
+      .map((obra) => [
+        obra.id_musicbrainz,
+        { media: obra.media as number, quantidade: obra.quantidade_avaliacoes as number },
+      ]) : []
+  );
   const p = new URLSearchParams({ termo, tipo });
 
   return (
@@ -41,7 +53,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
         {resultado.ok ? (
           <>
             <div className={styles.catalogoResultados}>
-              <ResultadosMusicais itens={resultado.dados.resultados} categoria="albuns" apresentacao="galeria" />
+              <ResultadosMusicais itens={resultado.dados.resultados} categoria="albuns" apresentacao="galeria" avaliacoes={avaliacoes} />
             </div>
             <Paginacao pagina={pagina} temProxima={resultado.dados.tem_proxima} endereco={`/albuns?${p}`} />
           </>
