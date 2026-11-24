@@ -24,7 +24,7 @@ export async function DestaquesMusicais({ tipo }: { tipo: TipoDestaque }) {
   if (!resultado.dados.length) return <p className={styles.mensagem}>Os destaques aparecerão conforme a comunidade registrar suas atividades.</p>;
   const capas = await consultarCapas(resultado.dados);
   return (
-    <ul className={styles.grade}>
+    <ul className={styles.grade} data-count={Math.min(resultado.dados.length, 4)}>
       {resultado.dados.map((obra) => (
         <li key={obra.obra_id}>
           <Link href={`/albuns/${encodeURIComponent(obra.id_musicbrainz)}`} className={styles.album}>

@@ -145,3 +145,8 @@
 .conta a { color: #d9d1d6; }
 .conta a:hover { color: #fff; }
 @media (max-width: 650px) { .inner { padding: 15px 18px; } .nav { row-gap: 10px; } .nav a { font-size: 12px; } }
+
+/* F09.5 — navegação mais legível em escalas menores. */
+.nav a { font-size: 14px; }
+.conta { font-size: 14px; }
+@media(max-width: 650px) { .nav a { font-size: 13px; } }

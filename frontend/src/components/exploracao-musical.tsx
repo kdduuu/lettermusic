@@ -102,6 +102,7 @@ export function Paginacao({
   temProxima: boolean;
   endereco: string;
 }) {
+  if (pagina === 1 && !temProxima) return null;
   const separador = endereco.includes("?") ? "&" : "?";
 
   return (

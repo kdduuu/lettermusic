@@ -21,7 +21,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
   return (
     <>
       <form action="/albuns" className={styles.buscaLista}>
-        <label htmlFor="termo-catalogo">Pesquisar álbuns</label>
+        <label htmlFor="termo-catalogo" className={styles.visuallyHidden}>Pesquisar álbuns</label>
         <div>
           <input id="termo-catalogo" name="termo" type="search" maxLength={100} defaultValue={termo} placeholder="Título ou artista" />
           <button type="submit">Filtrar</button>
@@ -41,10 +41,6 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
         {resultado.ok ? (
           <>
             <div className={styles.catalogoResultados}>
-              <div className={styles.catalogoTitulo}>
-                <h2>Acervo</h2>
-                
-              </div>
               <ResultadosMusicais itens={resultado.dados.resultados} categoria="albuns" apresentacao="galeria" />
             </div>
             <Paginacao pagina={pagina} temProxima={resultado.dados.tem_proxima} endereco={`/albuns?${p}`} />
@@ -59,7 +55,7 @@ export default function AlbunsPage({ searchParams }: { searchParams: Parametros 
   return (
     <main className={styles.container}>
       <section className={styles.hero + " " + styles.catalogoHero}>
-        <p className={styles.heroEyebrow}>Discoteca / Acervo público</p>
+        
         <h1>Álbuns</h1>
         
         <p><Link href="/buscar">Buscar no MusicBrainz ↗</Link></p>

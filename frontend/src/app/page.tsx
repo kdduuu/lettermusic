@@ -32,9 +32,9 @@ export default function Home() {
     <main className={styles.container}>
       <section className={styles.hero + " " + styles.heroEditorial} aria-labelledby="titulo-descobrir">
         <div className={styles.heroMain}>
-          <p className={styles.heroEyebrow}>LETTERMUSIC / MÚSICA</p>
+          
           <h1 id="titulo-descobrir">Descobrir</h1>
-          <p>Encontre seu próximo disco.</p>
+          
           <SearchForm variant="hero" />
           <div className={styles.heroLinks}>
             <Link href="/albuns">Explorar álbuns ↗</Link>

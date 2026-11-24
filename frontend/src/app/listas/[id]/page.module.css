@@ -181,3 +181,10 @@
 .conteudo { padding-top: 43px; }
 .cabecalhoGrade { padding-bottom: 20px; }
 @media(max-width:600px) { .hero { padding: 23px; } .conteudo { padding-top: 30px; } }
+
+/* F09.5 — capa e nome da lista formam uma peça mais compacta. */
+.hero { grid-template-columns: minmax(230px,340px) minmax(0,1fr); gap: clamp(30px,5vw,70px); }
+.info h1 { font-size: clamp(49px,6vw,78px); }
+.conteudo { padding-top: 35px; }
+.cabecalhoGrade { padding-bottom: 19px; }
+@media(max-width: 750px) { .hero { grid-template-columns: minmax(0,1fr); } }

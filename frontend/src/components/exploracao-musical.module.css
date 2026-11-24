@@ -13,7 +13,7 @@
 .faixas h2 { font: 600 25px Georgia, serif; }
 .faixas ul { padding: 0; list-style: none; }
 .faixas > ul > li { display: grid; grid-template-columns: 42px minmax(0, 1fr) 56px; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid #393939; }
-.faixas li span { color: #c6c6c6; font-size: 13px; }
+.faixas > ul > li span { color: #c6c6c6; font-size: 13px; }
 .mensagem { color: #c6c6c6; line-height: 1.65; }
 @media (max-width: 600px) {
   .capa, .icone { width: 62px; height: 62px; flex-basis: 62px; }

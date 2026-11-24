@@ -132,7 +132,7 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
         <div className={styles.cabecalhoGrade}>
           <div>
             
-            <h2 id="albuns-lista">Álbuns da lista</h2>
+            <h2 id="albuns-lista">Álbuns</h2>
           </div>
           
         </div>

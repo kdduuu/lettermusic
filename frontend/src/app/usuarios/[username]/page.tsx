@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CapaAlbum } from "@/components/capa-album";
+import { VitrineLista } from "@/components/vitrine-lista";
 import { obterCapaAlbum } from "@/lib/catalogo";
 import { consultarPerfilPublico, type AlbumRecente, type ReviewRecente } from "@/lib/perfis";
 import styles from "./page.module.css";
@@ -131,9 +132,11 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
           </div>
           {perfil.listas_publicas.length ? (
             <ol className={styles.listaColecoes}>
-              {perfil.listas_publicas.map((lista, indice) => (
+              {perfil.listas_publicas.map((lista) => (
                 <li key={lista.id}>
-                  <span className={styles.indice}>{String(indice + 1).padStart(2, "0")}</span>
+                  <Link href={"/listas/" + lista.id} className={styles.capaColecao} aria-label={"Abrir lista " + lista.titulo}>
+                    <VitrineLista listaId={lista.id} titulo={lista.titulo} compacta />
+                  </Link>
                   <div className={styles.listaTexto}>
                     <h3><Link href={"/listas/" + lista.id}>{lista.titulo}</Link></h3>
                     

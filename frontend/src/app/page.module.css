@@ -148,3 +148,21 @@
 .catalogoResultados { padding-top: 28px; }
 .results { margin-top: 32px; }
 @media (max-width: 600px) { .heroEditorial { margin-bottom: 34px; } .secaoRankings { margin-top: 32px; padding: 28px 0; } }
+
+/* F09.5 — filtro compacto, acessível e sem títulos redundantes. */
+.visuallyHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.catalogoHero { padding: 23px 0 4px; }
+.catalogoHero h1 { margin-bottom: 9px; }
+.buscaLista { margin-top: 18px; }
+.results { margin-top: 19px; }
+.catalogoResultados { padding-top: 26px; }
+@media(max-width: 650px) { .catalogoHero { padding-top: 16px; } }
+
+/* F09.5 — hero direto e capas com mais presença. */
+.heroEditorial { padding: clamp(30px,3.7vw,48px); margin-bottom: 35px; }
+.heroEditorial .heroMain h1 { margin-bottom: 24px; }
+.heroMain .heroLinks { margin-top: 18px; }
+.heroEditorial .heroAside { background: #222126; }
+.descobertaSecao { margin-top: 38px; padding-top: 31px; }
+.secaoRankings { margin-top: 37px; padding: 37px 0; }
+@media(max-width: 650px) { .heroEditorial { padding: 26px 20px; } }

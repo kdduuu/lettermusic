@@ -193,3 +193,23 @@
 .corpoEditorial .tituloSecao { margin-bottom: 20px; }
 .perfilHero { padding-bottom: 33px; }
 .estatisticas { margin-top: 25px; }
+
+/* F09.5 — capas reais e coleções ocupam o espaço, não legendas. */
+.gradeCapas[data-count="3"] { max-width: 1110px; }
+.corpoEditorial { grid-template-columns: minmax(0,1.15fr) minmax(300px,.85fr); gap: clamp(35px,5vw,76px); }
+.listaColecoes li { align-items: center; gap: 17px; padding: 18px 0; }
+.capaColecao { display: block; width: 78px; flex: 0 0 78px; text-decoration: none; }
+.listaTexto h3 { font-size: 23px; }
+.listaColecoes .seta { margin-left: auto; }
+.feed .itemReview { padding: 22px 0; gap: 18px; }
+.capaReview { width: 106px; }
+.feed .itemReview { grid-template-columns: 106px minmax(0,1fr); }
+.reviewTexto { font-size: 15px; line-height: 1.6; }
+@media(max-width: 900px) { .corpoEditorial { grid-template-columns: 1fr; } }
+@media(max-width: 600px) {
+  .gradeCapas[data-count="3"] { max-width: none; }
+  .feed .itemReview { grid-template-columns: 78px minmax(0,1fr); }
+  .capaReview { width: 78px; }
+  .capaColecao { width: 65px; flex-basis: 65px; }
+  .listaTexto h3 { font-size: 20px; }
+}
