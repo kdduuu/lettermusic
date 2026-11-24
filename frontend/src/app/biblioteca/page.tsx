@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { requisitarBackend } from "@/lib/backend";
+import { CapaAlbum } from "@/components/capa-album";
+import { obterCapaAlbum } from "@/lib/catalogo";
 import { obterTokenSessao, obterUsuarioAutenticado } from "@/lib/sessao";
 import styles from "./page.module.css";
 
@@ -75,6 +77,27 @@ function Complemento({ registro, tipo }: { registro: Registro; tipo: Categoria["
   return null;
 }
 
+async function CapasDaColecao({ registros }: { registros: Registro[] }) {
+  const albuns = registros.filter(
+    (r): r is Registro & { id_musicbrainz: string } =>
+      typeof r.id_musicbrainz === "string" &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(r.id_musicbrainz)
+  ).slice(0, 5);
+  if (!albuns.length) return <p className={styles.mensagem}>Seus álbuns aparecerão aqui conforme você registrar músicas.</p>;
+  const urls = await Promise.all(albuns.map(a => obterCapaAlbum(a.id_musicbrainz)));
+  return (
+    <div className={styles.vitrineCapas}>
+      {albuns.map((album, index) => (
+        <Link href={"/albuns/" + encodeURIComponent(album.id_musicbrainz)} key={album.id} className={styles.albumVitrine}>
+          <CapaAlbum url={urls[index]} titulo={album.titulo ?? "Álbum"} className={styles.capaVitrine} />
+          <strong>{album.titulo ?? "Álbum sem título"}</strong>
+          <span>{album.artista ?? "Artista não informado"}</span>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 async function ConteudoBiblioteca({
   searchParams,
 }: {
@@ -107,8 +130,26 @@ async function ConteudoBiblioteca({
 
   return (
     <>
-      <h1>Minha biblioteca</h1>
-      <p className={styles.subtitulo}>Seus registros musicais, {usuario.nome_exibicao}.</p>
+      <header className={styles.topoBiblioteca}>
+        <p className={styles.etiqueta}>Seu arquivo musical</p>
+        <h1>Minha biblioteca</h1>
+        <p className={styles.subtitulo}>Álbuns que fazem parte da sua história, {usuario.nome_exibicao}.</p>
+        <nav className={styles.navegacaoCategorias} aria-label="Categorias da biblioteca">
+          {CATEGORIAS.map(categoria => (
+            <a key={categoria.tipo} href={"#secao-" + categoria.tipo}>{categoria.titulo}</a>
+          ))}
+        </nav>
+      </header>
+      <section className={styles.vitrine} aria-label="Capas da minha coleção">
+        <div className={styles.vitrineCabecalho}>
+          <p className={styles.etiqueta}>Da sua coleção</p>
+          <h2>Os discos que ficam.</h2>
+        </div>
+        <Suspense fallback={<p className={styles.mensagem}>Carregando capas...</p>}>
+          <CapasDaColecao registros={resultados[0] ?? []} />
+        </Suspense>
+      </section>
+      <div className={styles.secoesGrid}>
       {CATEGORIAS.map((categoria, indice) => {
         const itens = resultados[indice];
         const paginaAtual = categoriaAtiva === categoria.tipo ? pagina : 1;
@@ -164,6 +205,7 @@ async function ConteudoBiblioteca({
           </section>
         );
       })}
+      </div>
       <p className={styles.limite}>20 registros por página em cada categoria.</p>
     </>
   );

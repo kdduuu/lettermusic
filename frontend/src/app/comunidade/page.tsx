@@ -19,23 +19,38 @@ function album(id: string) {
   return `/albuns/${encodeURIComponent(id)}`;
 }
 
-function ItemAtividade({ item }: { item: Atividade }) {
+async function ItemAtividade({ item }: { item: Atividade }) {
+  const capa = item.tipo === "lista" ? null : await obterCapaAlbum(item.id_musicbrainz);
   return (
     <li className={styles.atividade}>
       <div className={styles.avatar} aria-hidden="true">{Array.from(item.nome_exibicao.trim())[0]?.toLocaleUpperCase("pt-BR") || "♪"}</div>
       <article>
         <p className={styles.meta}>
-          <Link href={perfil(item.username)}>{item.nome_exibicao}</Link> · <time dateTime={item.criada_em}>{formatarData(item.criada_em)}</time>
+          <Link href={perfil(item.username)}>{item.nome_exibicao}</Link>
+          {" · "}<time dateTime={item.criada_em}>{formatarData(item.criada_em)}</time>
         </p>
         {item.tipo === "lista" ? (
-          <p>Lista pública: <Link href={`/listas/${item.id}`}>{item.titulo}</Link></p>
+          <div className={styles.listaAtividade}>
+            <span aria-hidden="true">♫</span>
+            <div>
+              <p>Publicou uma lista</p>
+              <h3><Link href={"/listas/" + item.id}>{item.titulo}</Link></h3>
+            </div>
+          </div>
         ) : (
-          <>
-            <p>{item.tipo === "review" ? "Publicou uma review de " : "Avaliou "}<Link href={album(item.id_musicbrainz)}>{item.titulo}</Link>{item.artista ? ` — ${item.artista}` : ""}</p>
-            {item.tipo === "review" ? (
-              <><p className={styles.resumo}>{item.texto}</p><Link className={styles.linkSecundario} href={album(item.id_musicbrainz)}>Ver álbum e reviews</Link></>
-            ) : <p className={styles.nota}>★ {item.nota.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}/5</p>}
-          </>
+          <div className={styles.atividadeMusical}>
+            <Link href={album(item.id_musicbrainz)} aria-label={"Abrir álbum " + item.titulo}>
+              <CapaAlbum url={capa} titulo={item.titulo} className={styles.capaFeed} />
+            </Link>
+            <div>
+              <p className={styles.acaoTexto}>{item.tipo === "review" ? "Escreveu sobre" : "Avaliou"}</p>
+              <h3><Link href={album(item.id_musicbrainz)}>{item.titulo}</Link></h3>
+              {item.artista ? <p className={styles.meta}>{item.artista}</p> : null}
+              {item.tipo === "review" ? (
+                <><p className={styles.resumo}>{item.texto}</p><Link className={styles.linkSecundario} href={album(item.id_musicbrainz)}>Ver álbum e reviews ↗</Link></>
+              ) : <p className={styles.nota}>★ {item.nota.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}/5</p>}
+            </div>
+          </div>
         )}
       </article>
     </li>

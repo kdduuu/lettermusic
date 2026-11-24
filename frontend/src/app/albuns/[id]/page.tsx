@@ -136,12 +136,18 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
           </p>
         </div>
       </article>
-      <Suspense fallback={<p className={styles.message}>Carregando faixas...</p>}>
-        <FaixasDoAlbum id={id} />
-      </Suspense>
-      <Suspense fallback={<p className={styles.message}>Carregando atividade musical...</p>}>
-        <BlocoSocial id={id} />
-      </Suspense>
+      <div className={styles.corpoAlbum}>
+        <div className={styles.colunaFaixas}>
+          <Suspense fallback={<p className={styles.message}>Carregando faixas...</p>}>
+            <FaixasDoAlbum id={id} />
+          </Suspense>
+        </div>
+        <aside className={styles.colunaSocial}>
+          <Suspense fallback={<p className={styles.message}>Carregando atividade musical...</p>}>
+            <BlocoSocial id={id} />
+          </Suspense>
+        </aside>
+      </div>
     </>
   );
 }
