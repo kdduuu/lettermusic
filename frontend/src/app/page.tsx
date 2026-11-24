@@ -26,7 +26,7 @@ async function DestaqueReal() {
     <Link className={styles.destaqueObra} href={"/albuns/" + encodeURIComponent(obra.id_musicbrainz)}>
       <CapaAlbum url={capa} titulo={obra.titulo} className={styles.destaqueCapa} />
       <div className={styles.destaqueInfo}>
-        <span>Da comunidade</span>
+        
         <h2>{obra.titulo}</h2>
         <p>{obra.artista ?? "Artista não informado"}</p>
         

@@ -143,7 +143,7 @@ async function ConteudoBiblioteca({
       <section className={styles.vitrine} aria-label="Capas da minha coleção">
         <div className={styles.vitrineCabecalho}>
           
-          <h2>Álbuns recentes</h2>
+          <h2>Álbuns ouvidos</h2>
         </div>
         <Suspense fallback={<p className={styles.mensagem}>Carregando capas...</p>}>
           <CapasDaColecao registros={resultados[0] ?? []} />

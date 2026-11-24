@@ -35,8 +35,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
         <div className={styles.formulario}><FormularioCriarLista /></div>
       </details>
 
-      <section className={styles.listagem} aria-labelledby="minhas-listas">
-        <h2 id="minhas-listas">Listas</h2>
+      <section className={styles.listagem} aria-label="Minhas listas">
         {!resultado.ok ? (
           <p role="alert" className={styles.erro}>{resultado.mensagem}</p>
         ) : resultado.dados.listas.length === 0 ? (

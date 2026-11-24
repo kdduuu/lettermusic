@@ -43,7 +43,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
   return (
     <>
       <form action="/buscar" className={styles.buscaLista} role="search">
-        <label htmlFor="busca-exploracao">Pesquisar música</label>
+        <label htmlFor="busca-exploracao" className={styles.visuallyHidden}>Pesquisar música</label>
         {listaId ? <input type="hidden" name="lista" value={listaId} /> : null}
         {categoria !== "todos" ? <input type="hidden" name="categoria" value={categoria} /> : null}
         <div>
