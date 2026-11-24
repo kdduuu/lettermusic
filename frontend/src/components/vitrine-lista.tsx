@@ -19,8 +19,8 @@ function CapaEditorial({
   return (
     <div
       className={[styles.composicao, classeQuantidade, aparencia === "destaque" ? styles.destaque : styles.cartao].join(" ")}
-      aria-label={quantidade ? "Capa composta por álbuns da lista " + nomeLista : "Lista sem álbuns: " + nomeLista}
-      role="img"
+      aria-label={aparencia === "cartao" ? (quantidade ? "Capa composta por álbuns da lista " + nomeLista : "Lista sem álbuns: " + nomeLista) : undefined}
+      role={aparencia === "cartao" ? "img" : undefined}
     >
       {quantidade === 0 ? (
         <div className={styles.semItens}>

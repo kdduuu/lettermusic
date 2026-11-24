@@ -4,7 +4,7 @@ import { SearchForm } from "@/components/site-header";
 import { CapaAlbum } from "@/components/capa-album";
 import { obterCapaAlbum } from "@/lib/catalogo";
 import { consultarDestaques } from "@/lib/feed";
-import { DestaquesMusicais, ReviewsRecentes } from "@/components/feed-musical";
+import { DestaquesMusicais, ResumoBemAvaliados, ReviewsRecentes } from "@/components/feed-musical";
 import styles from "./page.module.css";
 
 async function DestaqueReal() {
@@ -56,13 +56,14 @@ export default function Home() {
           <DestaquesMusicais tipo="mais-ouvidas" />
         </Suspense>
       </section>
-      <section className={styles.descobertaSecao} aria-labelledby="melhor-avaliadas">
+      <section className={styles.secaoRankings} aria-labelledby="melhor-avaliadas">
         <div className={styles.shelfInfo}>
+          <p className={styles.heroEyebrow}>Pela comunidade</p>
           <h2 id="melhor-avaliadas">Mais bem avaliados</h2>
-          <p>Obras em destaque pelas avaliações da comunidade.</p>
+          <p>As maiores médias em uma seleção que valoriza as opiniões, não apenas a popularidade.</p>
         </div>
-        <Suspense fallback={<p className={styles.message}>Carregando álbuns...</p>}>
-          <DestaquesMusicais tipo="melhor-avaliadas" />
+        <Suspense fallback={<p className={styles.message}>Carregando avaliações...</p>}>
+          <ResumoBemAvaliados />
         </Suspense>
       </section>
       <section className={styles.descobertaSecao} aria-labelledby="reviews-recentes">

@@ -73,3 +73,14 @@
   .reviewsPagina .capaReview, .reviewsPagina .review:first-child .capaReview { width: 84px; }
   .reviewsPagina .review h3, .reviewsPagina .review:first-child h3 { font-size: 20px; }
 }
+
+/* F09.3 — ranking textual para evitar a segunda grade de capas repetidas. */
+.rankingAvaliacoes { list-style: none; padding: 0; margin: 0; }
+.rankingAvaliacoes li { display: flex; align-items: center; gap: 19px; padding: 18px 0; border-bottom: 1px solid #403d44; }
+.rankingAvaliacoes li:first-child { border-top: 1px solid #403d44; }
+.posicaoRanking { font: 700 25px Georgia,serif; color: #807984; min-width: 33px; }
+.albumRanking { min-width: 0; flex: 1; }
+.albumRanking a { color: #f2ecec; text-decoration: none; font: 700 21px/1.2 Georgia,serif; overflow-wrap: anywhere; }
+.albumRanking a:hover { text-decoration: underline; }
+.albumRanking p { color: #aba2a9; font-size: 12px; margin: 5px 0 0; }
+.notaRanking { font: 700 16px Georgia,serif; color: #f0d1a1; white-space: nowrap; }

@@ -78,3 +78,22 @@ export async function ReviewsRecentes() {
   if (!resultado.ok) return <p role="alert" className={styles.mensagem}>{resultado.mensagem}</p>;
   return <CardsReviews reviews={resultado.dados.resultados} resumo />;
 }
+export async function ResumoBemAvaliados() {
+  const resultado = await consultarDestaques("melhor-avaliadas");
+  if (!resultado.ok) return <p role="alert" className={styles.mensagem}>{resultado.mensagem}</p>;
+  if (!resultado.dados.length) return <p className={styles.mensagem}>As médias aparecerão quando houver avaliações públicas.</p>;
+  return (
+    <ol className={styles.rankingAvaliacoes}>
+      {resultado.dados.map((obra, indice) => (
+        <li key={obra.obra_id}>
+          <span className={styles.posicaoRanking}>{String(indice + 1).padStart(2, "0")}</span>
+          <div className={styles.albumRanking}>
+            <Link href={"/albuns/" + encodeURIComponent(obra.id_musicbrainz)}>{obra.titulo}</Link>
+            <p>{obra.artista ?? "Artista não informado"} · {obra.quantidade_avaliacoes} {obra.quantidade_avaliacoes === 1 ? "avaliação" : "avaliações"}</p>
+          </div>
+          <strong className={styles.notaRanking}>★ {formatarNota(obra.media ?? 0)}</strong>
+        </li>
+      ))}
+    </ol>
+  );
+}
