@@ -44,3 +44,16 @@
 .ampla .edicao { font-size: 12px; }
 .ampla .edicao span:last-child { font-size: 19px; }
 @media (max-width: 600px) { .miniatura { height: 160px; } .ampla .edicao { font-size: 10px; } }
+
+/* F09.5 — mesma paleta grafite para todas as coleções. */
+.arte { --fundo: #373a40; --forma: #737b82; --linha: #aeb9ba; }
+.compacta {
+  flex: 0 0 78px; width: 78px; height: 78px; min-width: 78px;
+  margin: 0; border-radius: 7px;
+}
+.compacta .marca { font-size: 16px; top: 10%; left: 10%; }
+.compacta .edicao { display: none; }
+.compacta .forma { width: 76%; top: 18%; }
+@media (max-width: 600px) {
+  .compacta { width: 65px; height: 65px; min-width: 65px; flex-basis: 65px; }
+}

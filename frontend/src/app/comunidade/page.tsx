@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { CapaAlbum } from "@/components/capa-album";
+import { VitrineLista } from "@/components/vitrine-lista";
 import { obterCapaAlbum } from "@/lib/catalogo";
 import { consultarComunidade, type Atividade, type ObraEmAlta } from "@/lib/comunidade";
 import styles from "./page.module.css";
@@ -29,7 +30,7 @@ async function ItemAtividade({ item }: { item: Atividade }) {
         </p>
         {item.tipo === "lista" ? (
           <div className={styles.listaAtividade}>
-            <span aria-hidden="true">♫</span>
+            <VitrineLista listaId={item.id} titulo={item.titulo} compacta />
             <div>
               <p>Publicou uma lista</p>
               <h3><Link href={"/listas/" + item.id}>{item.titulo}</Link></h3>
@@ -89,9 +90,12 @@ async function ConteudoComunidade() {
           
           {dados.membros_ativos.length ? <ul className={styles.membros}>
             {dados.membros_ativos.map((membro) => (
-              <li key={membro.username}>
-                <Link href={perfil(membro.username)}>{membro.nome_exibicao}</Link>
-                <p className={styles.meta}>@{membro.username} · {plural(membro.contribuicoes, "contribuição", "contribuições")}</p>
+              <li key={membro.username} className={styles.membro}>
+                <span className={styles.avatarMembro} aria-hidden="true">{Array.from(membro.nome_exibicao.trim())[0]?.toLocaleUpperCase("pt-BR") || "♪"}</span>
+                <div>
+                  <Link href={perfil(membro.username)}>{membro.nome_exibicao}</Link>
+                  <p className={styles.meta}>@{membro.username} · {plural(membro.contribuicoes, "contribuição", "contribuições")}</p>
+                </div>
               </li>
             ))}
           </ul> : <p className={styles.mensagem}>Nenhuma contribuição no período.</p>}
@@ -111,7 +115,7 @@ export default function ComunidadePage() {
     <main className={styles.container}>
       <header className={styles.cabecalho}>
         <div>
-          <p className={styles.etiqueta}>Pessoas, discos e conversas</p>
+          
           <h1>Comunidade</h1>
         </div>
         

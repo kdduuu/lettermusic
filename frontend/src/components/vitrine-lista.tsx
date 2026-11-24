@@ -4,15 +4,16 @@ type Props = {
   listaId: number;
   titulo?: string;
   token?: string | null;
+  compacta?: boolean;
 };
 
-function ArteDaLista({ listaId, titulo = "Coleção musical", ampla = false }: Props & { ampla?: boolean }) {
-  const tom = ["grafite", "azul", "oliva", "ameixa", "areia"][listaId % 5];
+function ArteDaLista({ listaId, titulo = "Coleção musical", ampla = false, compacta = false }: Props & { ampla?: boolean }) {
+  const tom = "grafite";
   return (
     <div
       role="img"
       aria-label={"Capa ilustrada da lista " + titulo}
-      className={[styles.arte, styles[tom], ampla ? styles.ampla : styles.miniatura].join(" ")}
+      className={[styles.arte, styles[tom], ampla ? styles.ampla : compacta ? styles.compacta : styles.miniatura].join(" ")}
     >
       <span className={styles.marca} aria-hidden="true">LM.</span>
       <span className={styles.forma} aria-hidden="true" />
@@ -27,8 +28,8 @@ function ArteDaLista({ listaId, titulo = "Coleção musical", ampla = false }: P
 }
 
 // As listas têm identidade própria; as capas dos álbuns permanecem dentro da coleção.
-export function VitrineLista({ listaId, titulo }: Props) {
-  return <ArteDaLista listaId={listaId} titulo={titulo} />;
+export function VitrineLista({ listaId, titulo, compacta = false }: Props) {
+  return <ArteDaLista listaId={listaId} titulo={titulo} compacta={compacta} />;
 }
 
 export function ColagemEditorialLista({ listaId, titulo }: Props) {

@@ -75,3 +75,26 @@
 .atividade .meta:first-child { margin-bottom: 8px; }
 .lateral h2 { font-size: 23px; }
 @media (max-width: 760px) { .atividadeMusical { grid-template-columns: 72px minmax(0, 1fr); } .capaFeed { width: 72px; } }
+
+/* F09.5 — feed mais social; informação lateral disponível durante a leitura. */
+.layout { grid-template-columns: minmax(0,1.4fr) minmax(300px,.85fr); gap: clamp(28px,5vw,62px); }
+.lateral { align-self: start; position: sticky; top: 22px; }
+.listaAtividade { gap: 17px; padding: 8px 0; }
+.listaAtividade > :first-child { flex-shrink: 0; }
+.atividade { padding: 22px 0 24px; }
+.atividadeMusical h3, .listaAtividade h3 { font-size: 22px; }
+.atividade .meta { font-size: 13px; }
+.membro { display: flex; align-items: center; gap: 13px; }
+.avatarMembro {
+  display: grid; place-items: center; width: 42px; height: 42px; flex: 0 0 42px;
+  background: #353239; border: 1px solid #59535c; border-radius: 50%;
+  font: 700 20px Georgia,serif; color: #f0e9eb;
+}
+.membro > div { min-width: 0; }
+.membro .meta { margin-top: 4px; }
+.obra { grid-template-columns: 72px minmax(0,1fr); gap: 14px; }
+.capa { width: 72px; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .lateral { position: static; top: auto; }
+}
