@@ -139,7 +139,7 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
       <div className={styles.corpoAlbum}>
         <div className={styles.colunaFaixas}>
           <Suspense fallback={<p className={styles.message}>Carregando faixas...</p>}>
-            <FaixasDoAlbum id={id} />
+            <FaixasDoAlbum id={id} artista={obra.artista ?? "Artista não informado"} />
           </Suspense>
         </div>
         <aside className={styles.colunaSocial}>

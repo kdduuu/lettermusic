@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { CapaAlbum } from "@/components/capa-album";
+import { obterCapaAlbum } from "@/lib/catalogo";
+import { FaixasInterativas } from "@/components/faixas-interativas";
 import { BotaoAdicionarBusca } from "@/components/formularios-listas";
 import { faixasAlbum, type Categoria, type Item } from "@/lib/exploracao";
 import styles from "./exploracao-musical.module.css";
@@ -111,39 +113,22 @@ export function Paginacao({
   );
 }
 
-function duracao(ms: number | null) {
-  if (ms === null) return "—";
-  const segundos = Math.floor(ms / 1000);
-  return `${Math.floor(segundos / 60)}:${String(segundos % 60).padStart(2, "0")}`;
-}
-
-export async function FaixasDoAlbum({ id }: { id: string }) {
-  const resultado = await faixasAlbum(id);
-
+export async function FaixasDoAlbum({
+  id, artista,
+}: {
+  id: string;
+  artista: string;
+}) {
+  const [resultado, capa] = await Promise.all([faixasAlbum(id), obterCapaAlbum(id)]);
   return (
     <section className={styles.faixas}>
       <h2>Faixas</h2>
       {!resultado.ok ? (
         <p role="alert" className={styles.mensagem}>{resultado.mensagem}</p>
       ) : !resultado.dados.faixas.length ? (
-        <p className={styles.mensagem}>Nenhuma faixa disponível para a edição consultada.</p>
+        <p className={styles.mensagem}>Faixas indisponíveis nesta edição.</p>
       ) : (
-        <>
-          <p className={styles.mensagem}>
-            Edição consultada: {resultado.dados.edicao}
-            {resultado.dados.data ? ` · ${resultado.dados.data}` : ""}
-            {resultado.dados.pais ? ` · ${resultado.dados.pais}` : ""}
-          </p>
-          <ul>
-            {resultado.dados.faixas.map((faixa, indice) => (
-              <li key={indice}>
-                <span>{faixa.disco > 1 ? `${faixa.disco}.` : ""}{faixa.numero}</span>
-                <strong>{faixa.titulo}</strong>
-                <span>{duracao(faixa.duracao_ms)}</span>
-              </li>
-            ))}
-          </ul>
-        </>
+        <FaixasInterativas faixas={resultado.dados.faixas} capa={capa} artista={artista} />
       )}
     </section>
   );
