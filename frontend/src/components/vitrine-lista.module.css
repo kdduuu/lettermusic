@@ -1,54 +1,46 @@
-.composicao {
-  width: 100%;
-  height: 172px;
-  display: grid;
-  overflow: hidden;
-  border-radius: 9px;
-  background: #353239;
-  position: relative;
-  isolation: isolate;
+.arte {
+  position: relative; isolation: isolate; display: block;
+  overflow: hidden; width: 100%; color: #f0ede7;
+  border-radius: 8px; border: 1px solid #ffffff1a;
+  background: var(--fundo); --fundo: #393b40; --forma: #7b8180; --linha: #d5d5c8;
 }
-.cartao { margin-bottom: 20px; }
-.destaque { height: auto; aspect-ratio: 1; border-radius: 10px; box-shadow: 0 18px 38px #00000044; }
-.celula { position: relative; min-width: 0; min-height: 0; overflow: hidden; display: block; }
-.capa, .capaAusente { position: relative; width: 100%; height: 100%; display: grid; place-items: center; overflow: hidden; background: #47424a; }
-.capa img { object-fit: cover; transition: transform .28s ease; }
-.destaque .celula:hover img, .destaque .celula:focus-visible img { transform: scale(1.045); }
-.capaAusente { padding: 13px; background: #3a3640; color: #f0e8e9; align-content: center; gap: 8px; }
-.capaAusente span { color: #b6a6af; font-size: 9px; letter-spacing: .14em; }
-.capaAusente strong { font: 700 clamp(11px, 1.3vw, 19px)/1.15 Georgia,serif; text-align: center; overflow-wrap: anywhere; }
-.uma { grid-template-columns: 52% 48%; }
-.uma .celula { grid-column: 1; }
-.legendaUnica {
-  grid-column: 2; padding: clamp(12px, 2vw, 25px);
-  display: flex; justify-content: center; flex-direction: column; min-width: 0;
-  border-left: 1px solid #ffffff0e; background: #302d35;
+.miniatura { height: 172px; margin-bottom: 20px; }
+.ampla { width: 100%; aspect-ratio: 1; border-radius: 10px; box-shadow: 0 18px 38px #0005; }
+.grafite { --fundo: #373a40; --forma: #737b82; --linha: #aeb9ba; }
+.azul { --fundo: #293d4a; --forma: #6e8c96; --linha: #b6d0ca; }
+.oliva { --fundo: #3b423b; --forma: #8a9577; --linha: #d6d2ac; }
+.ameixa { --fundo: #42343d; --forma: #926d83; --linha: #d7b1b9; }
+.areia { --fundo: #484039; --forma: #968879; --linha: #e2d2bd; }
+.marca {
+  position: absolute; top: 10%; left: 9%; font: 700 clamp(15px, 2.5vw, 27px)/1 Georgia, serif;
+  letter-spacing: -.07em; z-index: 2;
 }
-.legendaUnica span { font-size: 10px; letter-spacing: .16em; color: #e09baa; }
-.legendaUnica strong { margin: 11px 0 7px; font: 700 clamp(14px, 2vw, 27px)/1.07 Georgia,serif; color: #f1eaeb; overflow-wrap: anywhere; }
-.legendaUnica small { color: #b9adb5; line-height: 1.5; overflow-wrap: anywhere; }
-.duas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; }
-.tres { grid-template-columns: 1.16fr 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 3px; }
-.tres .celula:first-child { grid-row: 1 / 3; }
-.quatro { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); gap: 3px; }
-.semItens {
-  display: flex; flex-direction: column; justify-content: center;
-  width: 100%; height: 100%; padding: 25px;
-  background: #302d34; color: #f1e8e9; overflow: hidden;
+.forma {
+  position: absolute; display: block; width: 64%; aspect-ratio: 1;
+  background: var(--forma); border-radius: 50%; top: 12%; left: 42%;
+  transform: rotate(-16deg) scaleX(.86);
 }
-.marcaVazia { color: #df919e; font-size: 9px; letter-spacing: .15em; font-weight: 700; }
-.semItens strong { font: 700 clamp(23px, 3vw, 42px)/1.05 Georgia,serif; margin: 12px 0 20px; overflow-wrap: anywhere; }
-.linhaVazia { width: 52px; height: 2px; background: #a66c79; }
-.destaque.uma { grid-template-columns: 1fr; grid-template-rows: 72% 28%; }
-.destaque.uma .celula { grid-column: 1; grid-row: 1; }
-.destaque.uma .legendaUnica { grid-column: 1; grid-row: 2; border-left: 0; border-top: 1px solid #ffffff18; padding: 15px 22px; }
-.destaque .legendaUnica strong { margin: 4px 0; font-size: clamp(17px, 2vw, 27px); }
-.destaque .legendaUnica span { font-size: 9px; }
-.destaque .legendaUnica small { font-size: 11px; }
-@media (max-width: 600px) {
-  .composicao.cartao { height: 160px; }
-  .legendaUnica { padding: 14px; }
-  .legendaUnica strong { font-size: 17px; }
-  .destaque.uma .legendaUnica { padding: 10px 16px; }
+.forma::after {
+  content: ""; position: absolute; inset: 20%; border: 1px solid #ffffff33; border-radius: 50%;
 }
-@media (prefers-reduced-motion: reduce) { .capa img { transition: none; } .destaque .celula:hover img { transform: none; } }
+.anel {
+  position: absolute; width: 56%; aspect-ratio: 1; top: 36%; left: -9%;
+  border: 2px solid var(--linha); border-radius: 50%;
+  opacity: .78; transform: rotate(20deg) scaleY(.78);
+}
+.risco {
+  position: absolute; width: 2px; height: 66%; top: 12%; left: 65%;
+  background: var(--linha); opacity: .65; transform: rotate(27deg);
+  transform-origin: center;
+}
+.edicao {
+  position: absolute; bottom: 9%; left: 9%; right: 9%; display: flex;
+  align-items: baseline; justify-content: space-between;
+  font: 600 9px/1 Arial, sans-serif; letter-spacing: .16em;
+  color: #f3eee8; z-index: 2;
+}
+.edicao span:last-child { font-family: Georgia, serif; font-size: 12px; letter-spacing: .08em; }
+.ampla .marca { font-size: clamp(26px, 3vw, 42px); }
+.ampla .edicao { font-size: 12px; }
+.ampla .edicao span:last-child { font-size: 19px; }
+@media (max-width: 600px) { .miniatura { height: 160px; } .ampla .edicao { font-size: 10px; } }
