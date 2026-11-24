@@ -19,7 +19,7 @@ async function ConteudoReviews({ searchParams }: { searchParams: Parametros }) {
   const { dados } = resultado;
   return (
     <>
-      <CardsReviews reviews={dados.resultados} />
+      <CardsReviews reviews={dados.resultados} apresentacao="editorial" />
       <nav className={styles.paginacao} aria-label="Páginas de reviews">
         {pagina > 1 ? <Link href={`/reviews?pagina=${pagina - 1}`}>Anterior</Link> : null}
         <span>Página {pagina}</span>
@@ -32,9 +32,12 @@ async function ConteudoReviews({ searchParams }: { searchParams: Parametros }) {
 export default function ReviewsPage({ searchParams }: { searchParams: Parametros }) {
   return (
     <main className={styles.container}>
-      <header>
-        <h1>Reviews</h1>
-        <p>Descubra o que a comunidade está ouvindo e compartilhando.</p>
+      <header className={styles.cabecalhoEditorial}>
+        <div>
+          <p className={styles.etiqueta}>Diário coletivo / Lettermusic</p>
+          <h1>Reviews</h1>
+        </div>
+        <p>Discos que marcaram alguém. Histórias, impressões e conversas sobre música.</p>
       </header>
       <Suspense fallback={<p className={styles.mensagem}>Carregando reviews...</p>}>
         <ConteudoReviews searchParams={searchParams} />

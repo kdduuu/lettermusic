@@ -18,3 +18,21 @@
 .paginacao a { border-color: #57515b; }
 @media (max-width: 800px) { .container > ul { grid-template-columns: 1fr; } }
 @media (max-width: 650px) { .container { padding: 25px 17px 70px; } .container header { padding: 28px 22px; } .container h1 { font-size: 55px; } }
+
+/* F09.3 — reduz a repetição de retângulos enormes e valoriza o conteúdo. */
+.container header.cabecalhoEditorial {
+  display: flex; justify-content: space-between; align-items: end;
+  flex-wrap: wrap; gap: 25px; padding: 28px 0 31px;
+  border: 0; border-bottom: 1px solid #49434c; border-radius: 0;
+  background: transparent; margin-bottom: 4px;
+}
+.cabecalhoEditorial h1 { font-size: clamp(58px, 7vw, 80px); margin: 0; }
+.cabecalhoEditorial .etiqueta {
+  margin: 0 0 16px; color: #e994a2; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .15em; font-size: 11px;
+}
+.cabecalhoEditorial > p { max-width: 335px; color: #bbb0b8; font-size: 15px; line-height: 1.6; margin: 0 0 5px; }
+@media (max-width: 650px) {
+  .container header.cabecalhoEditorial { padding-top: 15px; }
+  .cabecalhoEditorial h1 { font-size: 55px; }
+}

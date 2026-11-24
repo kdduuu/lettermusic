@@ -39,11 +39,17 @@ export async function DestaquesMusicais({ tipo }: { tipo: TipoDestaque }) {
   );
 }
 
-export async function CardsReviews({ reviews, resumo = false }: { reviews: ReviewFeed[]; resumo?: boolean }) {
+export async function CardsReviews({
+  reviews, resumo = false, apresentacao = "resumo",
+}: {
+  reviews: ReviewFeed[];
+  resumo?: boolean;
+  apresentacao?: "resumo" | "editorial";
+}) {
   if (!reviews.length) return <p className={styles.mensagem}>Nenhuma review publicada nesta página.</p>;
   const capas = await consultarCapas(reviews);
   return (
-    <ul className={styles.reviews}>
+    <ul className={apresentacao === "editorial" ? styles.reviews + " " + styles.reviewsPagina : styles.reviews}>
       {reviews.map((review) => (
         <li key={review.id} className={styles.review}>
           <Link href={`/albuns/${encodeURIComponent(review.id_musicbrainz)}`} aria-label={`Abrir álbum ${review.titulo}`}>
@@ -59,6 +65,7 @@ export async function CardsReviews({ reviews, resumo = false }: { reviews: Revie
               {review.atualizada_em ? <span> · Editada</span> : null}
             </p>
             <p className={resumo ? styles.resumo : styles.texto}>{review.texto}</p>
+            {!resumo ? <Link className={styles.verAlbum} href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)}>Abrir álbum ↗</Link> : null}
           </article>
         </li>
       ))}

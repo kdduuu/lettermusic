@@ -45,3 +45,31 @@
   .review { grid-template-columns: 70px minmax(0,1fr); }
 }
 @media (prefers-reduced-motion: reduce) { .capaDestaque { transition: none; } .album:hover .capaDestaque { transform: none; } }
+
+/* F09.3 — reviews como textos editoriais, com capa e leitura em destaque. */
+.reviewsPagina { grid-template-columns: minmax(0,1fr); max-width: 1060px; gap: 0; }
+.reviewsPagina .review {
+  grid-template-columns: 145px minmax(0,1fr);
+  align-items: start; gap: 31px; padding: 32px 0; border-color: #423e46;
+}
+.reviewsPagina .capaReview { width: 145px; border-radius: 8px; }
+.reviewsPagina .review h3 { font: 700 32px/1.13 Georgia,serif; margin: 1px 0 6px; letter-spacing: -.035em; }
+.reviewsPagina .artista { font-size: 15px; color: #c7bac1; }
+.reviewsPagina .meta { margin-top: 15px; font-size: 12px; line-height: 1.6; }
+.reviewsPagina .texto { color: #e6dde0; font-size: 16px; line-height: 1.75; margin-top: 20px; max-width: 700px; }
+.reviewsPagina .review:first-child { grid-template-columns: 205px minmax(0,1fr); padding: 40px 0; }
+.reviewsPagina .review:first-child .capaReview { width: 205px; }
+.reviewsPagina .review:first-child h3 { font-size: clamp(32px, 4vw, 47px); }
+.verAlbum { display: inline-block; font-size: 12px; color: #ef8996 !important; text-decoration: none !important; margin-top: 18px; border-bottom: 1px solid #ac727e; padding-bottom: 6px; }
+.verAlbum:hover { border-bottom-color: #f4bac3; }
+@media (max-width: 720px) {
+  .reviewsPagina .review, .reviewsPagina .review:first-child { grid-template-columns: 112px minmax(0,1fr); gap: 18px; padding: 27px 0; }
+  .reviewsPagina .capaReview, .reviewsPagina .review:first-child .capaReview { width: 112px; }
+  .reviewsPagina .review h3, .reviewsPagina .review:first-child h3 { font-size: 25px; }
+  .reviewsPagina .texto { font-size: 14px; }
+}
+@media (max-width: 440px) {
+  .reviewsPagina .review, .reviewsPagina .review:first-child { grid-template-columns: 84px minmax(0,1fr); gap: 12px; }
+  .reviewsPagina .capaReview, .reviewsPagina .review:first-child .capaReview { width: 84px; }
+  .reviewsPagina .review h3, .reviewsPagina .review:first-child h3 { font-size: 20px; }
+}
