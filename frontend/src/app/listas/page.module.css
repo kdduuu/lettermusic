@@ -72,3 +72,19 @@
 .visibilidade { font-size: 10px; }
 .autorPublico { padding: 9px 4px; }
 @media(max-width:650px) { .cabecalho { padding: 14px 0 24px; } .cabecalho h1 { font-size: 49px; } }
+
+
+/* F09.6 — coleções editoriais, sem cartões inflados. */
+.container { max-width: var(--lm-content); padding: 26px 22px 68px; }
+.cabecalho { padding: 12px 0 20px; }
+.cabecalho h1 { font-size: clamp(42px,5vw,57px); }
+.listagem { margin-top: 26px; }
+.listagem h2 { font-size: 25px; margin-bottom: 14px; }
+.grade { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.cartao { padding: 14px; border-radius: 8px; }
+.cartao h3 { font-size: 20px; margin: 7px 0 0; }
+.visibilidade { font-size: 9px; }
+.autorPublico { font-size: 11px; padding: 5px 3px; }
+.nova { padding: 16px 0; margin-top: 19px; }
+@media(max-width:800px) { .grade { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) { .container { padding: 22px 16px 55px; } .grade { grid-template-columns: 1fr; } .cabecalho h1 { font-size: 43px; } }

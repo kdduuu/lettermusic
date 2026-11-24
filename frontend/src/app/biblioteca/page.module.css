@@ -65,3 +65,20 @@
 .secao { padding: 23px; }
 .navegacaoCategorias { gap: 8px; }
 .navegacaoCategorias a { padding: 8px 13px; font-size: 11px; }
+
+
+/* F09.6 — biblioteca mais compacta, com grades ao invés de painéis grandes. */
+.container { max-width: var(--lm-content); padding: 25px 22px 65px; }
+.topoBiblioteca { padding: 24px 28px; border-radius: 9px; }
+.container h1 { font-size: clamp(42px,5vw,58px); margin-bottom: 15px; }
+.vitrine { padding: 30px 0; }
+.vitrineCabecalho h2 { font-size: 26px; margin-bottom: 13px; }
+.vitrineCapas { gap: 14px; }
+.albumVitrine strong { font-size: 15px; margin-top: 7px; }
+.albumVitrine span { font-size: 11px; margin-top: 2px; }
+.secoesGrid { gap: 14px; padding-top: 20px; }
+.secao { padding: 18px; border-radius: 8px; }
+.secao h2 { font-size: 22px; }
+.lista li { padding: 12px 0; }
+.linha a,.linha > span:first-child { font-size: 16px; }
+@media(max-width:650px) { .container { padding: 20px 16px 58px; } .topoBiblioteca { padding: 20px; } }

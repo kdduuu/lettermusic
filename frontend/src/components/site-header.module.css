@@ -150,3 +150,22 @@
 .nav a { font-size: 14px; }
 .conta { font-size: 14px; }
 @media(max-width: 650px) { .nav a { font-size: 13px; } }
+
+
+/* F09.6 — cabeçalho mais fino, a música ocupa mais da primeira dobra. */
+.inner { max-width: 1180px; padding: 12px 22px; gap: 19px; }
+.brand { font-size: 24px; }
+.nav { gap: clamp(12px,1.35vw,21px); }
+.nav a { font-size: 12px; padding: 5px 0; }
+.conta { font-size: 12px; gap: 11px; }
+.search { width: min(100%,253px); gap: 7px; }
+.search input { padding: 8px 10px; font-size: 12px; }
+.search button { padding: 8px 11px; font-size: 12px; }
+@media(max-width:1120px) { .nav { gap: 16px; } .inner { gap: 14px; } }
+@media(max-width:650px) {
+  .inner { padding: 12px 16px; }
+  .brand { font-size: 23px; }
+  .nav a { font-size: 13px; }
+  .search { width: 100%; }
+  .search input, .search button { padding: 10px 12px; }
+}

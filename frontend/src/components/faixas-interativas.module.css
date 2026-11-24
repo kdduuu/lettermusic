@@ -62,3 +62,11 @@
 @media (prefers-reduced-motion: reduce) {
   .linha, .seta { transition: none; }
 }
+
+
+/* F09.6 — tracklist mais próxima da densidade de fichas musicais. */
+.linha { padding: 11px 8px; grid-template-columns: 28px minmax(0,1fr) 48px 13px; gap: 10px; }
+.titulo { font-size: 13px; }
+.numero { font-size: 13px; }
+.duracao { font-size: 11px; }
+@media(max-width:520px) { .linha { padding: 13px 5px; } .titulo { font-size: 14px; } }

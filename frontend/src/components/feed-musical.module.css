@@ -134,3 +134,44 @@
   .reviewsPagina .review:first-child h3 { font-size: 21px; }
   .reviewsPagina .texto { font-size: 14px; }
 }
+
+
+/* F09.6 — capas menores, notas compactas e reviews em ritmo editorial. */
+.grade { gap: 17px; }
+.grade[data-count="1"] { grid-template-columns: minmax(0,230px); }
+.grade[data-count="2"] { grid-template-columns: repeat(2,minmax(0,235px)); max-width: 490px; }
+.grade[data-count="3"] { grid-template-columns: repeat(3,minmax(0,235px)); max-width: 740px; }
+.grade[data-count="4"] { grid-template-columns: repeat(4,minmax(0,1fr)); max-width: 1000px; }
+.album { gap: 5px; }
+.album strong { font: 700 16px/1.24 var(--lm-serif); }
+.grade p { font-size: 12px; margin: 3px 0 0; }
+.capaDestaque { border-radius: 5px; }
+.reviews { gap: 0 26px; }
+.review { grid-template-columns: 82px minmax(0,1fr); padding: 17px 0 19px; gap: 13px; }
+.capaReview { width: 82px; border-radius: 5px; }
+.review h3 { font-size: 18px; line-height: 1.2; }
+.artista,.meta { font-size: 11px; margin: 4px 0; }
+.texto,.resumo { font-size: 13px; line-height: 1.5; margin-top: 8px; }
+.reviewsPagina { gap: 0 28px; }
+.reviewsPagina .review, .reviewsPagina .review:first-child {
+  grid-template-columns: 104px minmax(0,1fr); gap: 16px; padding: 23px 0;
+}
+.reviewsPagina .capaReview, .reviewsPagina .review:first-child .capaReview { width: 104px; }
+.reviewsPagina .review h3, .reviewsPagina .review:first-child h3 { font-size: 22px; line-height: 1.14; }
+.reviewsPagina .artista { font-size: 12px; }
+.reviewsPagina .meta { font-size: 11px; margin-top: 7px; }
+.reviewsPagina .texto { font-size: 13px; line-height: 1.6; margin-top: 9px; }
+.rankingAvaliacoes li { padding: 11px 0; gap: 10px; }
+.albumRanking a { font-size: 16px; }
+.albumRanking p { font-size: 11px; margin: 2px 0 0; }
+.notaRanking { font-size: 14px; }
+@media(max-width:900px) { .reviewsPagina { grid-template-columns: 1fr; } }
+@media(max-width:650px) {
+  .grade[data-count="2"],.grade[data-count="3"],.grade[data-count="4"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; }
+  .grade { gap: 15px; }
+  .review { grid-template-columns: 72px minmax(0,1fr); }
+  .capaReview { width: 72px; }
+  .reviewsPagina .review, .reviewsPagina .review:first-child { grid-template-columns: 86px minmax(0,1fr); gap: 12px; }
+  .reviewsPagina .capaReview,.reviewsPagina .review:first-child .capaReview { width: 86px; }
+  .reviewsPagina .review h3,.reviewsPagina .review:first-child h3 { font-size: 20px; }
+}

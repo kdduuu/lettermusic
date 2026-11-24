@@ -23,3 +23,8 @@ button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
 ::selection { background: #83505b; color: #fff; }
 :focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+
+/* F09.6 — escala AOTY: densidade nativa em 100%, nunca zoom global. */
+:root { --lm-content: 1120px; --lm-content-compact: 1030px; }
+body { font-size: 14px; line-height: 1.45; }

@@ -166,3 +166,49 @@
 .descobertaSecao { margin-top: 38px; padding-top: 31px; }
 .secaoRankings { margin-top: 37px; padding: 37px 0; }
 @media(max-width: 650px) { .heroEditorial { padding: 26px 20px; } }
+
+
+/* F09.6 — tipografia e espaços compactos inspirados na hierarquia do AOTY. */
+.container { max-width: var(--lm-content); padding: 27px 22px 66px; }
+.heroEditorial { gap: 28px; grid-template-columns: minmax(0,1fr) minmax(300px,.88fr); padding: 27px 30px; margin-bottom: 20px; border-radius: 9px; }
+.heroEditorial .heroMain h1 { font-size: clamp(46px,5vw,62px); margin: 0 0 15px; }
+.heroAside { padding: 6px; border-radius: 8px; }
+.destaqueObra { grid-template-columns: minmax(115px,42%) minmax(0,1fr); gap: 14px; padding: 9px; }
+.destaqueCapa { border-radius: 5px; }
+.destaqueInfo h2 { font-size: clamp(20px,2vw,26px); margin: 7px 0; }
+.destaqueInfo span { letter-spacing: .1em; font-size: 9px; }
+.destaqueInfo p { font-size: 12px; margin: 0; }
+.heroMain .heroLinks { gap: 19px; margin-top: 16px; font-size: 12px; }
+.heroLinks a { padding-bottom: 3px; }
+.descobertaSecao { margin-top: 26px; padding-top: 22px; }
+.descobertaSecao h2 { font-size: clamp(24px,2.65vw,30px); }
+.shelfInfo { margin-bottom: 16px; }
+.secaoRankings { margin-top: 29px; padding: 26px 0; gap: 35px; grid-template-columns: minmax(0,.56fr) minmax(0,1.44fr); }
+.secaoRankings h2 { font-size: 30px; }
+.tituloDescoberta { margin-bottom: 14px; }
+.tituloDescoberta a { font-size: 12px; }
+.catalogoHero { padding: 15px 0 0; }
+.catalogoHero h1 { font-size: clamp(43px,5vw,58px); margin: 0 0 8px; }
+.catalogoHero a { font-size: 12px; }
+.buscaLista { max-width: 590px; margin-top: 13px; gap: 6px; }
+.buscaLista input { padding: 9px 11px; font-size: 13px; }
+.buscaLista button { padding: 9px 13px; font-size: 12px; }
+.filtroCatalogo { margin-top: 7px; gap: 10px; }
+.filtroCatalogo label { font-size: 12px; color: var(--lm-muted); }
+.filtroCatalogo select { padding: 7px 9px; font-size: 12px; }
+.results { margin-top: 10px; }
+.catalogoResultados { padding-top: 20px; }
+.searchPage { padding: 27px 30px; }
+.searchPage h1 { font-size: 46px; }
+@media(max-width:900px) {
+  .heroEditorial { grid-template-columns: 1fr; }
+  .heroAside { max-width: 540px; }
+}
+@media(max-width:680px) {
+  .container { padding: 21px 16px 56px; }
+  .heroEditorial { padding: 23px 19px; }
+  .heroEditorial .heroMain h1 { font-size: 46px; }
+  .descobertaSecao { margin-top: 24px; }
+  .catalogoHero h1 { font-size: 46px; }
+  .secaoRankings { grid-template-columns: 1fr; gap: 12px; }
+}

@@ -98,3 +98,28 @@
   .layout { grid-template-columns: 1fr; }
   .lateral { position: static; top: auto; }
 }
+
+
+/* F09.6 — página social densa, pessoas e capas acima de textos de apoio. */
+.container { max-width: var(--lm-content); padding: 25px 22px 70px; }
+.cabecalho { padding: 7px 0 19px; margin-bottom: 21px; }
+.cabecalho h1 { font-size: clamp(42px,5vw,58px); }
+.layout { grid-template-columns: minmax(0,1.46fr) minmax(265px,.84fr); gap: 32px; }
+.layout h2 { font-size: 23px; margin-bottom: 13px; }
+.atividade { grid-template-columns: 36px minmax(0,1fr); gap: 12px; padding: 16px 0; }
+.avatar { width: 36px; font-size: 17px; }
+.atividadeMusical { grid-template-columns: 70px minmax(0,1fr); gap: 13px; }
+.capaFeed { width: 70px; border-radius: 5px; }
+.atividadeMusical h3,.listaAtividade h3 { font-size: 19px; margin-bottom: 4px; }
+.atividade .meta { font-size: 11px; margin-bottom: 4px; }
+.acaoTexto { font-size: 10px; }
+.atividadeMusical .resumo { font-size: 12px; margin-top: 7px; }
+.listaAtividade { gap: 11px; padding: 6px 0; }
+.lateral { padding-left: 25px; }
+.lateral h2 { font-size: 21px; }
+.membros li,.obras li { padding: 11px 0; }
+.avatarMembro { width: 36px; height: 36px; flex-basis: 36px; font-size: 17px; }
+.obra { grid-template-columns: 52px minmax(0,1fr); gap: 9px; }
+.capa { width: 52px; }
+@media(max-width:900px) { .layout { grid-template-columns: 1fr; } .lateral { position: static; padding: 23px 0 0; border-left:0; border-top: 1px solid var(--lm-line); } }
+@media(max-width:650px) { .container { padding: 20px 16px 58px; } .cabecalho h1 { font-size: 45px; } }
