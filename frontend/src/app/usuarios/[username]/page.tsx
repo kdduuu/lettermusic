@@ -57,9 +57,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
             <p className={styles.sobretitulo}>Arquivo musical pessoal {ano ? " · Desde " + ano : ""}</p>
             <h1>{perfil.nome_exibicao}</h1>
             <p className={styles.username}>@{perfil.username}</p>
-            {perfil.bio ? <p className={styles.bio}>{perfil.bio}</p> : (
-              <p className={styles.bioAlternativa}>Uma história contada através de álbuns, reviews e listas.</p>
-            )}
+            {perfil.bio ? <p className={styles.bio}>{perfil.bio}</p> : null}
           </div>
         </div>
         <dl className={styles.estatisticas} aria-label="Atividade pública do perfil">
@@ -72,7 +70,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
       <section className={styles.discografia} aria-labelledby="albuns-recentes">
         <div className={styles.tituloSecao}>
           <div>
-            <p className={styles.sobretitulo}>Últimos registros públicos</p>
+            <p className={styles.sobretitulo}>Atividade musical recente</p>
             <h2 id="albuns-recentes">A música fala por si.</h2>
           </div>
           <p className={styles.nota}>Até cinco álbuns das avaliações e reviews recentes.</p>
