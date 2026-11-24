@@ -251,3 +251,8 @@
   .gradeCapas[data-count="3"] { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .tituloSecao h2 { font-size: 25px; }
 }
+
+
+/* F09.6 — largura da miniatura coerente com a arte compacta. */
+.capaColecao { width: 68px; flex-basis: 68px; }
+@media(max-width:600px) { .capaColecao { width: 62px; flex-basis: 62px; } }

@@ -71,3 +71,8 @@
 .miniatura { height: 140px; margin-bottom: 11px; }
 .ampla .marca { font-size: clamp(23px,3vw,36px); }
 @media(max-width:600px) { .miniatura { height: 154px; } }
+
+
+/* F09.6 — miniaturas usadas no feed e perfil, sem extrapolar suas colunas. */
+.compacta { width: 68px; height: 68px; min-width: 68px; flex-basis: 68px; }
+@media(max-width:600px) { .compacta { width: 62px; height: 62px; min-width: 62px; flex-basis: 62px; } }

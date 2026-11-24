@@ -28,3 +28,10 @@
 .avaliacao button, .review button { background: #38353c; border-color: #68616b; }
 .avaliacao button:hover, .review button:hover { background: #45414a; }
 .nota { color: #ada3aa; }
+
+
+/* F09.6 — avaliação e escrita sem controles superdimensionados. */
+.container { margin-top: 18px; gap: 15px; }
+.avaliacao label,.review label { font-size: 13px; }
+.avaliacao select,.review textarea { padding: 9px 11px; font-size: 13px; }
+.avaliacao button,.review button { padding: 8px 12px; font-size: 12px; }

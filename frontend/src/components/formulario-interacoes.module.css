@@ -20,3 +20,11 @@
 .acao button, .escuta button { background: #343139; border-color: #615964; }
 .acao button:hover, .escuta button:hover { background: #413c45; }
 .contador { color: #b3a8b1; }
+
+
+/* F09.6 — controles compactos, com áreas de clique confortáveis. */
+.container { margin-top: 20px; }
+.container h2 { font-size: 15px; margin-bottom: 10px; }
+.grupo { gap: 8px; }
+.acao button,.escuta button { font-size: 12px; padding: 9px 12px; border-radius: 5px; }
+.escuta { margin-top: 12px; }

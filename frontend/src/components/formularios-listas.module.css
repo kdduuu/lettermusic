@@ -40,3 +40,10 @@
 .form .primario { background: #ede5e8; color: #232026; border-color: #ede5e8; }
 .ajuda { color: #b3aab1; }
 .excluir { border-color: #49454e; }
+
+
+/* F09.6 — edição de listas compacta sem ocultar ações. */
+.form { gap: 9px; }
+.form label,.adicionar label { font-size: 12px; }
+.form input:not([type="checkbox"]),.form textarea,.adicionar select,.buscar input { padding: 9px 11px; font-size: 13px; }
+.form button,.adicionar button,.botaoBusca button,.controles button,.excluir button { font-size: 12px; padding: 9px 12px; }

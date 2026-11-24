@@ -123,3 +123,7 @@
 .capa { width: 52px; }
 @media(max-width:900px) { .layout { grid-template-columns: 1fr; } .lateral { position: static; padding: 23px 0 0; border-left:0; border-top: 1px solid var(--lm-line); } }
 @media(max-width:650px) { .container { padding: 20px 16px 58px; } .cabecalho h1 { font-size: 45px; } }
+
+
+/* F09.6 — lateral informativa acompanha o conteúdo, sem prender em telas estreitas. */
+@media(min-width:901px) { .lateral { top: 15px; } }

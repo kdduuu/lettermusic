@@ -65,3 +65,15 @@
 .form button:hover { background: #fff; }
 .alternativa a { color: #f4edf0; }
 @media (max-width: 650px) { .container { margin: 22px 17px 60px; padding: 25px 20px; } }
+
+
+/* F09.6 — formulários na mesma escala do restante do produto. */
+.container { max-width: 485px; margin: 35px auto 65px; padding: 28px 32px; border-radius: 9px; }
+.container h1 { font-size: clamp(36px,4vw,48px); }
+.container h2 { font-size: 22px; }
+.form { gap: 10px; }
+.form label { font-size: 12px; }
+.form input { padding: 10px 11px; font-size: 13px; margin-bottom: 4px; border-radius: 5px; }
+.form button { padding: 10px 13px; font-size: 13px; margin-top: 8px; border-radius: 5px; }
+.alternativa { font-size: 12px; }
+@media(max-width:650px) { .container { margin: 21px 16px 60px; padding: 22px 19px; } }
