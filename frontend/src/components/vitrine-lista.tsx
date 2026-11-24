@@ -13,7 +13,7 @@ function ArteDaLista({ listaId, titulo = "Coleção musical", ampla = false, com
     <div
       role="img"
       aria-label={"Capa ilustrada da lista " + titulo}
-      className={[styles.arte, styles[tom], ampla ? styles.ampla : compacta ? styles.compacta : styles.miniatura].join(" ")}
+      className={[styles.arte, styles[tom], [styles.variacaoUm, styles.variacaoDois, styles.variacaoTres][listaId % 3], ampla ? styles.ampla : compacta ? styles.compacta : styles.miniatura].join(" ")}
     >
       <span className={styles.marca} aria-hidden="true">LM.</span>
       <span className={styles.forma} aria-hidden="true" />

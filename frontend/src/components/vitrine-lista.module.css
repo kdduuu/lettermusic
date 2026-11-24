@@ -57,3 +57,11 @@
 @media (max-width: 600px) {
   .compacta { width: 65px; height: 65px; min-width: 65px; flex-basis: 65px; }
 }
+
+/* F09.5 — cada coleção tem geometria própria dentro da mesma paleta aprovada. */
+.variacaoDois .forma { width: 70%; top: -7%; left: 49%; transform: rotate(22deg) scaleX(.95); }
+.variacaoDois .anel { width: 64%; top: 43%; left: -16%; transform: rotate(-22deg) scaleY(.8); }
+.variacaoDois .risco { left: 46%; top: 17%; transform: rotate(-29deg); }
+.variacaoTres .forma { width: 60%; top: 24%; left: 51%; transform: rotate(31deg) scaleX(.91); }
+.variacaoTres .anel { width: 75%; top: 13%; left: -25%; transform: rotate(20deg) scaleY(.78); }
+.variacaoTres .risco { left: 80%; top: 4%; transform: rotate(16deg); height: 78%; }
