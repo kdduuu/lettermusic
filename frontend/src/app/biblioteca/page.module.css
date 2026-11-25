@@ -89,3 +89,28 @@
 .secoesGrid { gap: 20px 30px; }
 .albumVitrine span, .artista { font-size: 13px; }
 .reviewTexto, .linha a { overflow-wrap: anywhere; }
+
+/* F09.13 — a browsable collection instead of six endless lists. */
+.libraryHeader { display:flex; align-items:baseline; justify-content:space-between; gap:16px; padding: 10px 0 16px; }
+.libraryHeader h1 { margin:0; }
+.libraryHeader a { color:var(--lm-muted); font-size:13px; text-decoration:none; }
+.libraryHeader a:hover { text-decoration:underline; }
+.libraryTabs { display:flex; flex-wrap:wrap; gap:8px 23px; border-bottom:1px solid var(--lm-line); }
+.libraryTabs a { color:var(--lm-muted); font-size:14px; text-decoration:none; padding:10px 0; border-bottom:2px solid transparent; }
+.libraryTabs a[aria-current="page"] { color:var(--lm-text); border-bottom-color:var(--lm-accent); }
+.libraryTabs a:hover { color:var(--lm-text); }
+.libraryContent { padding:24px 0; }
+.collection,.diary { list-style:none; padding:0; margin:0; }
+.collection { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:25px 15px; }
+.collection li,.diary li { min-width:0; }
+.collectionInfo { min-width:0; overflow-wrap:anywhere; }
+.collectionInfo strong { font-size:16px; }
+.collectionInfo span { font-size:13px; }
+.collection .detalhe { display:block; margin:5px 0 0; color:#dec89a; font-size:13px; }
+.diary { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:28px; }
+.diary li { padding:16px 0; border-bottom:1px solid var(--lm-line); }
+.diary .albumVitrine { display:grid; grid-template-columns:72px minmax(0,1fr); align-items:center; gap:13px; }
+.diary .detalhe,.diary .reviewTexto { display:block; margin:8px 0 0 85px; font-size:13px; overflow-wrap:anywhere; }
+@media(max-width:1070px) { .collection { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+@media(max-width:780px) { .collection { grid-template-columns:repeat(3,minmax(0,1fr)); } .diary { grid-template-columns:1fr; } }
+@media(max-width:560px) { .collection { grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px 12px; } .libraryTabs { gap:4px 15px; } .libraryTabs a { font-size:13px; } }

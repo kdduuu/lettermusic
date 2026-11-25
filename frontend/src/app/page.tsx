@@ -21,7 +21,7 @@ async function DestaqueReal() {
     ? catalogo.dados.resultados.find((item) => !idsEmDestaque.has(item.id_musicbrainz))
     : null) ?? (ouvintes.ok ? ouvintes.dados[0] : null);
   if (!obra) {
-    return <p className={styles.destaqueVazio}>Sem destaques.</p>;
+    return <p className={styles.destaqueVazio}>No featured album yet.</p>;
   }
   const capa = await obterCapaAlbum(obra.id_musicbrainz);
   return (
@@ -29,41 +29,12 @@ async function DestaqueReal() {
       <CapaAlbum url={capa} titulo={obra.titulo} className={styles.destaqueCapa} />
       <div className={styles.destaqueInfo}>
         
-        <span>Em destaque</span>
+        <span>Featured</span>
         <h2>{obra.titulo}</h2>
-        <p>{obra.artista ?? "Artista não informado"}</p>
+        <p>{obra.artista ?? "Unknown artist"}</p>
         
       </div>
     </Link>
-  );
-}
-
-async function AvaliacoesSignificativas() {
-  const resultado = await consultarDestaques("melhor-avaliadas");
-  if (!resultado.ok) return null;
-  const obras = resultado.dados;
-  // Se todas as notas forem iguais ou a amostra for muito pequena,
-  // não repetimos a mesma vitrine sob outro título.
-  if (obras.length < 4 || new Set(obras.map((obra) => obra.media)).size < 2) return null;
-  return (
-    <section className={styles.secaoRankings} aria-labelledby="melhor-avaliadas">
-      <div className={styles.shelfInfo}>
-        <h2 id="melhor-avaliadas">Mais bem avaliados</h2>
-      </div>
-      <ul className={styles.avaliacoesLista}>
-        {obras.map((obra) => (
-          <li key={obra.obra_id}>
-            <div>
-              <Link href={"/albuns/" + encodeURIComponent(obra.id_musicbrainz)}>{obra.titulo}</Link>
-              <span>{obra.artista ?? "Artista não informado"}</span>
-            </div>
-            <strong aria-label={"Nota " + (obra.media ?? 0).toLocaleString("pt-BR") + " de 5"}>
-              ★ {(obra.media ?? 0).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}
-            </strong>
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }
 
@@ -73,8 +44,8 @@ async function ListasDaComunidade() {
   return (
     <section className={styles.descobertaSecao} aria-labelledby="listas-comunidade">
       <div className={styles.tituloDescoberta}>
-        <h2 id="listas-comunidade">Listas da comunidade</h2>
-        <Link href="/listas/explorar">Todas as listas ↗</Link>
+        <h2 id="listas-comunidade">Lists</h2>
+        <Link href="/listas/explorar">View all</Link>
       </div>
       <ul className={styles.listasHome}>
         {resultado.dados.resultados.slice(0, 3).map(lista => (
@@ -83,7 +54,7 @@ async function ListasDaComunidade() {
               <VitrineLista listaId={lista.id} titulo={lista.titulo} />
               <strong>{lista.titulo}</strong>
             </Link>
-            <p><Link href={"/usuarios/" + encodeURIComponent(lista.username)}>{lista.nome_exibicao}</Link> · {lista.total_itens} {lista.total_itens === 1 ? "álbum" : "álbuns"}</p>
+            <p><Link href={"/usuarios/" + encodeURIComponent(lista.username)}>{lista.nome_exibicao}</Link> · {lista.total_itens} {lista.total_itens === 1 ? "album" : "albums"}</p>
           </li>
         ))}
       </ul>
@@ -93,44 +64,41 @@ async function ListasDaComunidade() {
 
 export default function Home() {
   return (
-    <main className={styles.container}>
+    <main className={`${styles.container} ${styles.editorialHome}`}>
       <section className={styles.hero + " " + styles.heroEditorial} aria-labelledby="titulo-descobrir">
         <div className={styles.heroMain}>
           
-          <h1 id="titulo-descobrir">Descobrir</h1>
+          <h1 id="titulo-descobrir">Discover</h1>
           
           <div className={styles.heroLinks}>
-            <Link href="/albuns">Explorar álbuns ↗</Link>
-            <Link href="/listas/explorar">Listas da comunidade ↗</Link>
+            <Link href="/albuns">Explorar albums ↗</Link>
+            <Link href="/listas/explorar">Lists ↗</Link>
           </div>
         </div>
         <div className={styles.heroAside}>
-          <Suspense fallback={<p className={styles.destaqueVazio}>Carregando destaque musical...</p>}>
+          <Suspense fallback={<p className={styles.destaqueVazio}>Loading album…</p>}>
             <DestaqueReal />
           </Suspense>
         </div>
       </section>
       <section className={styles.descobertaSecao} aria-labelledby="mais-ouvidas">
         <div className={styles.shelfInfo}>
-          <h2 id="mais-ouvidas">Mais ouvidos</h2>
+          <h2 id="mais-ouvidas">Most played</h2>
           
         </div>
-        <Suspense fallback={<p className={styles.message}>Carregando álbuns...</p>}>
+        <Suspense fallback={<p className={styles.message}>Carregando albums...</p>}>
           <DestaquesMusicais tipo="mais-ouvidas" />
         </Suspense>
       </section>
-      <Suspense fallback={null}>
-        <AvaliacoesSignificativas />
-      </Suspense>
       <section className={styles.descobertaSecao} aria-labelledby="reviews-recentes">
         <div className={styles.tituloDescoberta}>
           <div className={styles.shelfInfo}>
-            <h2 id="reviews-recentes">Reviews recentes</h2>
+            <h2 id="reviews-recentes">Reviews</h2>
             
           </div>
-          <Link href="/reviews">Todas as reviews ↗</Link>
+          <Link href="/reviews">View all</Link>
         </div>
-        <Suspense fallback={<p className={styles.message}>Carregando reviews...</p>}>
+        <Suspense fallback={<p className={styles.message}>Loading reviews…</p>}>
           <ReviewsRecentes />
         </Suspense>
       </section>

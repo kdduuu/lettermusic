@@ -287,3 +287,19 @@
 .searchPage .results { margin-top: 18px; }
 @media(max-width:650px) { .listasHome { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media(max-width:390px) { .listasHome { grid-template-columns: 1fr; } }
+
+/* F09.13 — one editorial canvas, not a stack of cards. */
+.editorialHome { display: flex; flex-direction: column; gap: 34px; }
+.editorialHome .hero.heroEditorial { margin: 0; padding: 20px 0 26px; background: transparent; border: 0; border-bottom: 1px solid var(--lm-line); border-radius: 0; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr); }
+.editorialHome .heroEditorial .heroAside { border: 0; padding: 0; }
+.editorialHome .destaqueObra { grid-template-columns: minmax(110px,40%) minmax(0,1fr); }
+.editorialHome .heroMain h1 { font-size: clamp(48px,5vw,64px); }
+.editorialHome .heroLinks { gap: 18px; }
+.editorialHome .descobertaSecao { margin: 0; padding: 0; border: 0; background: transparent; }
+.editorialHome .shelfInfo, .editorialHome .tituloDescoberta { margin: 0 0 14px; }
+.editorialHome .tituloDescoberta .shelfInfo { margin: 0; }
+.editorialHome .descobertaSecao h2 { font-size: clamp(25px,3vw,31px); line-height: 1.15; letter-spacing: -.025em; }
+.editorialHome .tituloDescoberta > a { font-size: 12px; text-decoration: none; }
+.editorialHome .tituloDescoberta > a:hover { text-decoration: underline; }
+.editorialHome .listasHome { gap: 16px; }
+@media(max-width:760px) { .editorialHome { gap: 28px; } .editorialHome .hero.heroEditorial { grid-template-columns: 1fr; gap: 18px; } .editorialHome .destaqueObra { grid-template-columns: 110px minmax(0,1fr); } }
