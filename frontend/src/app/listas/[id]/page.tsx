@@ -92,7 +92,7 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
   return (
     <>
       <nav className={styles.breadcrumb} aria-label="Navegação">
-        <Link href={dono ? "/listas" : "/"}>{dono ? "Minhas listas" : "Descobrir"}</Link>
+        <Link href={dono ? "/listas" : "/listas/explorar"}>{dono ? "Minhas listas" : "Listas"}</Link>
         <span aria-hidden="true">/</span><span>{lista.titulo}</span>
       </nav>
 
@@ -143,7 +143,7 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
               ultimaPosicao={ultimaPosicao} temProxima={temProxima} pagina={pagina}
             />
           </Suspense>
-        ) : <p className={styles.vazio}>Esta lista ainda não tem álbuns nesta página.</p>}
+        ) : <p className={styles.vazio}>Nenhum álbum nesta página.</p>}
 
         {pagina > 1 || temProxima ? (
           <nav className={styles.paginacao} aria-label="Páginas da lista">

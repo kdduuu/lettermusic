@@ -146,7 +146,7 @@ async function ConteudoBiblioteca({
           <h2>Álbuns ouvidos</h2>
         </div>
         <Suspense fallback={<p className={styles.mensagem}>Carregando capas...</p>}>
-          <CapasDaColecao registros={resultados[0] ?? []} />
+          {resultados[0] === null ? <p role="alert" className={styles.mensagem}>Não foi possível carregar os álbuns.</p> : <CapasDaColecao registros={resultados[0]} />}
         </Suspense>
       </section>
       <div className={styles.secoesGrid}>

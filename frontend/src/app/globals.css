@@ -110,3 +110,10 @@ select:not([multiple]):not([size]):hover:not(:disabled) { border-color: #807681;
     cursor: default;
   }
 }
+
+/* F09.12 — refinamento final. */
+button:disabled { cursor: not-allowed; }
+input, select, textarea { max-width: 100%; }
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+}

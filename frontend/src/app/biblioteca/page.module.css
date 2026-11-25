@@ -82,3 +82,10 @@
 .lista li { padding: 12px 0; }
 .linha a,.linha > span:first-child { font-size: 16px; }
 @media(max-width:650px) { .container { padding: 20px 16px 58px; } .topoBiblioteca { padding: 20px; } }
+
+/* F09.12 — refinamento final. */
+.navegacaoCategorias a { border-radius: 5px; font-size: 13px; min-height: 36px; display: inline-flex; align-items: center; }
+.secao { background: transparent; border: 0; border-top: 1px solid var(--lm-line); border-radius: 0; padding: 18px 0; }
+.secoesGrid { gap: 20px 30px; }
+.albumVitrine span, .artista { font-size: 13px; }
+.reviewTexto, .linha a { overflow-wrap: anywhere; }

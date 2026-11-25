@@ -95,7 +95,7 @@ async function Conteudo({ params, searchParams }: Props) {
 export default function ArtistaPage(props: Props) {
   return (
     <main className={styles.container}>
-      <Link href="/" className={visual.voltar}>Descobrir</Link>
+      <Link href="/buscar" className={visual.voltar}>← Buscar</Link>
       <Suspense fallback={<p className={styles.message}>Carregando artista...</p>}>
         <Conteudo {...props} />
       </Suspense>

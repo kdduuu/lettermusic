@@ -271,14 +271,13 @@ async function AvisoSemResultados({
 
   return resultados.every(r => r.ok && r.dados.resultados.length === 0)
     ? <p className={styles.message}>
-        Nenhum resultado encontrado. Tente outro termo.{" "}
-        Se for um lançamento ausente do catálogo, você pode{" "}
+        Nenhum resultado encontrado.{" "}
         <Link
           href="https://musicbrainz.org/release/add"
           target="_blank"
           rel="noopener noreferrer"
         >
-          adicioná-lo ao MusicBrainz
+          Adicionar lançamento ao MusicBrainz
         </Link>.
       </p>
     : null;

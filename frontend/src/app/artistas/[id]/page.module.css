@@ -12,3 +12,7 @@
   .identidade h1 { font-size: clamp(27px,7vw,39px); }
   .discografia { margin-top: 23px; }
 }
+
+/* F09.12 — refinamento final. */
+.identidade p { font-size: 14px; line-height: 1.5; }
+@media(max-width:360px) { .artistaHero { flex-wrap: wrap; } }

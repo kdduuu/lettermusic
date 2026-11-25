@@ -77,3 +77,9 @@
 .form button { padding: 10px 13px; font-size: 13px; margin-top: 8px; border-radius: 5px; }
 .alternativa { font-size: 12px; }
 @media(max-width:650px) { .container { margin: 21px 16px 60px; padding: 22px 19px; } }
+
+/* F09.12 — refinamento final. */
+.form label,.form input,.form button,.alternativa { font-size: 14px; }
+.form input,.form button { min-height: 40px; }
+.container h1,.container p { overflow-wrap: anywhere; }
+.alternativa { color: var(--lm-muted); }
