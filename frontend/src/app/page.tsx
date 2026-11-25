@@ -4,6 +4,8 @@ import { CapaAlbum } from "@/components/capa-album";
 import { obterCapaAlbum } from "@/lib/catalogo";
 import { consultarDestaques } from "@/lib/feed";
 import { catalogoLocal } from "@/lib/exploracao";
+import { obterListasPublicas } from "@/lib/listas-publicas";
+import { VitrineLista } from "@/components/vitrine-lista";
 import { DestaquesMusicais, ReviewsRecentes } from "@/components/feed-musical";
 import styles from "./page.module.css";
 
@@ -65,6 +67,30 @@ async function AvaliacoesSignificativas() {
   );
 }
 
+async function ListasDaComunidade() {
+  const resultado = await obterListasPublicas(1);
+  if (!resultado.ok || !resultado.dados.resultados.length) return null;
+  return (
+    <section className={styles.descobertaSecao} aria-labelledby="listas-comunidade">
+      <div className={styles.tituloDescoberta}>
+        <h2 id="listas-comunidade">Listas da comunidade</h2>
+        <Link href="/listas/explorar">Todas as listas ↗</Link>
+      </div>
+      <ul className={styles.listasHome}>
+        {resultado.dados.resultados.slice(0, 3).map(lista => (
+          <li key={lista.id}>
+            <Link className={styles.listaHome} href={"/listas/" + lista.id}>
+              <VitrineLista listaId={lista.id} titulo={lista.titulo} />
+              <strong>{lista.titulo}</strong>
+            </Link>
+            <p><Link href={"/usuarios/" + encodeURIComponent(lista.username)}>{lista.nome_exibicao}</Link> · {lista.total_itens} {lista.total_itens === 1 ? "álbum" : "álbuns"}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <main className={styles.container}>
@@ -108,6 +134,7 @@ export default function Home() {
           <ReviewsRecentes />
         </Suspense>
       </section>
+      <Suspense fallback={null}><ListasDaComunidade /></Suspense>
     </main>
   );
 }

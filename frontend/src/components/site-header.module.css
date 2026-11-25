@@ -185,3 +185,14 @@
 @media(forced-colors:active) {
   .nav a:focus-visible, .brand:focus-visible, .conta a:focus-visible, .conta button:focus-visible { outline-color: Highlight; }
 }
+
+/* F09.12 — refinamento final. */
+.nav a[aria-current] { color: var(--lm-text); }
+.nav a[aria-current]::after { right: 0; }
+.nav a:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 3px; text-decoration: none; }
+.nav a:focus-visible::after { right: 100%; }
+.nav a[aria-current]:focus-visible::after { right: 0; }
+.nav a, .conta { font-size: 13px; }
+.conta { flex-wrap: wrap; }
+@media(max-width:650px) { .nav { gap: 10px 15px; } .conta { gap: 10px; } .search { flex-basis: 100%; margin-left: 0; } }
+@media(prefers-reduced-motion:reduce) { .nav a, .nav a::after { transition: none; } }

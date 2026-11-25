@@ -270,3 +270,20 @@
   .heroEditorial .heroAside { border-left: 0; border-top: 1px solid var(--lm-line); padding: 18px 0 0; }
   .destaqueObra { grid-template-columns: minmax(90px, 120px) minmax(0,1fr); }
 }
+
+/* F09.12 — refinamento final. */
+.listasHome { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; list-style: none; padding: 0; margin: 0; }
+.listasHome li { min-width: 0; }
+.listaHome { display: block; color: var(--lm-text); text-decoration: none; }
+.listaHome strong { font: 700 19px/1.2 var(--lm-serif); overflow-wrap: anywhere; }
+.listaHome:hover strong, .listaHome:focus-visible strong { text-decoration: underline; }
+.listasHome p { margin: 4px 0 0; color: var(--lm-muted); font-size: 12px; }
+.listasHome p a { color: inherit; text-decoration: none; }
+.listasHome p a:hover, .listasHome p a:focus-visible { text-decoration: underline; }
+.tituloDescoberta { align-items: baseline; }
+.tituloDescoberta h2 { margin-bottom: 0; }
+.tituloDescoberta a, .heroMain .heroLinks, .destaqueInfo p { font-size: 13px; }
+.searchPage .message { margin-top: 18px; font-size: 14px; line-height: 1.5; }
+.searchPage .results { margin-top: 18px; }
+@media(max-width:650px) { .listasHome { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:390px) { .listasHome { grid-template-columns: 1fr; } }

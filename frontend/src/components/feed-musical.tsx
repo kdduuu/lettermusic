@@ -24,7 +24,7 @@ export async function DestaquesMusicais({ tipo }: { tipo: TipoDestaque }) {
     tipo === "mais-ouvidas" ? consultarDestaques("melhor-avaliadas") : Promise.resolve(null),
   ]);
   if (!resultado.ok) return <p role="alert" className={styles.mensagem}>{resultado.mensagem}</p>;
-  if (!resultado.dados.length) return <p className={styles.mensagem}>Os destaques aparecerão conforme a comunidade registrar suas atividades.</p>;
+  if (!resultado.dados.length) return <p className={styles.mensagem}>Nenhuma atividade registrada ainda.</p>;
   const capas = await consultarCapas(resultado.dados);
   const notas = new Map(avaliacoes?.ok
     ? avaliacoes.dados.map((obra) => [obra.id_musicbrainz, obra.media] as const)

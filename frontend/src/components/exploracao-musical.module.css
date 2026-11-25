@@ -94,3 +94,11 @@
 .dadosGaleria h3 { min-height: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
 .info a { text-decoration: none; }
 .info a:hover, .info a:focus-visible { text-decoration: underline; }
+
+/* F09.12 — refinamento final. */
+.dadosGaleria p, .dadosGaleria span, .dadosLinha span, .info p { font-size: 13px; color: var(--lm-muted); }
+.dadosLinha { gap: 3px 8px; }
+.dadosGaleria h3 { line-height: 1.25; }
+.dadosGaleria h3 a { display: block; }
+.info { min-width: 0; overflow-wrap: anywhere; }
+@media(max-width:560px) { .dadosGaleria p, .dadosGaleria span, .dadosLinha span { font-size: 12px; } }

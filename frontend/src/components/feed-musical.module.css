@@ -255,3 +255,11 @@
 .grade, .grade[data-count] { grid-template-columns: repeat(4,minmax(0,1fr)); }
 @media(max-width:780px) { .grade, .grade[data-count] { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @media(max-width:560px) { .grade, .grade[data-count] { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+
+/* F09.12 — refinamento final. */
+.dadosScore span { font-size: 12px; color: var(--lm-muted); }
+.reviewConteudo h3, .album strong { overflow-wrap: anywhere; }
+.reviewConteudo .meta { font-size: 12px; line-height: 1.45; }
+.reviewConteudo .artista { font-size: 13px; }
+.reviewConteudo .texto, .reviewConteudo .resumo { overflow-wrap: anywhere; }
+@media(max-width:450px) { .reviewTituloLinha { flex-wrap: wrap; gap: 5px; } }
