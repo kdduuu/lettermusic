@@ -250,3 +250,8 @@
 @media(max-width:1070px) { .grade, .grade[data-count] { grid-template-columns: repeat(4,minmax(0,1fr)); } }
 @media(max-width:780px) { .grade, .grade[data-count] { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @media(max-width:560px) { .grade, .grade[data-count] { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; } }
+
+/* F09.11 — a vitrine da home tem presença maior que a grade de catálogo. */
+.grade, .grade[data-count] { grid-template-columns: repeat(4,minmax(0,1fr)); }
+@media(max-width:780px) { .grade, .grade[data-count] { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width:560px) { .grade, .grade[data-count] { grid-template-columns: repeat(2,minmax(0,1fr)); } }

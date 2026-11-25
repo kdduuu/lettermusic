@@ -172,3 +172,16 @@
 
 /* F09.10 — foco visível sem moldura vermelha agressiva. */
 .nav a:focus-visible, .brand:focus-visible, .conta a:focus-visible, .conta button:focus-visible { outline: 2px solid var(--lm-accent); outline-offset: 3px; border-radius: 4px; }
+
+/* F09.11 — um único indicador de foco na navegação, sem contorno duplicado. */
+.nav a:focus-visible, .brand:focus-visible, .conta a:focus-visible, .conta button:focus-visible {
+  outline: 2px solid transparent;
+  text-decoration: underline;
+  text-decoration-color: var(--lm-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+.nav a:focus-visible::after { right: 100%; }
+@media(forced-colors:active) {
+  .nav a:focus-visible, .brand:focus-visible, .conta a:focus-visible, .conta button:focus-visible { outline-color: Highlight; }
+}

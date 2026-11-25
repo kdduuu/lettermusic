@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { tipoMusicalEmPortugues } from "@/lib/visual-metadados";
 import { CapaAlbum } from "@/components/capa-album";
 import { FaixasDoAlbum } from "@/components/exploracao-musical";
 import { FormularioInteracoes } from "@/components/formulario-interacoes";
@@ -37,7 +38,7 @@ async function BlocoSocial({ id }: { id: string }) {
           resumo.dados.quantidade_avaliacoes > 0 ? (
             <p>
               <strong>{resumo.dados.media_avaliacoes?.toLocaleString("pt-BR")} ★</strong>
-              <span> · {resumo.dados.quantidade_avaliacoes} avaliações</span>
+              <span> · {resumo.dados.quantidade_avaliacoes} {resumo.dados.quantidade_avaliacoes === 1 ? "avaliação" : "avaliações"}</span>
             </p>
           ) : <p className={styles.muted}>Sem avaliações.</p>
         ) : <p className={styles.muted} role="status">{resumo.mensagem}</p>}
@@ -130,7 +131,7 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
             ) : obra.artista ?? "Artista não informado"}
           </p>
           <p className={styles.meta}>
-            {[obra.data_lancamento?.slice(0, 4), obra.tipo].filter(Boolean).join(" · ")}
+            {[obra.data_lancamento?.slice(0, 4), tipoMusicalEmPortugues(obra.tipo)].filter(Boolean).join(" · ")}
           </p>
         </div>
       </article>

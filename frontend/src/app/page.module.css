@@ -246,3 +246,27 @@
 .searchPage h1 { font-size: clamp(43px,5vw,58px); margin-bottom: 16px; }
 .catalogoHero { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 @media(max-width:680px) { .hero.heroEditorial { padding: 8px 0 14px; gap: 18px; } .destaqueObra { grid-template-columns: 88px minmax(0,1fr); } }
+
+/* F09.11 — composição única para a abertura; sem destaque solto ou caixa dupla. */
+.hero.heroEditorial {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.05fr);
+  align-items: center;
+  gap: 28px;
+  padding: 24px 28px;
+  background: var(--lm-panel);
+  border: 1px solid var(--lm-line);
+  border-radius: 8px;
+  margin-bottom: 0;
+}
+.heroEditorial .heroAside { padding: 0 0 0 24px; border-left: 1px solid var(--lm-line); border-radius: 0; max-width: none; }
+.heroEditorial .heroMain h1 { margin: 0 0 16px; }
+.heroMain .heroLinks { margin-top: 0; }
+.destaqueObra { grid-template-columns: minmax(112px, 42%) minmax(0,1fr); gap: 18px; }
+.heroEditorial + .descobertaSecao { margin-top: 22px; border-top: 0; padding-top: 0; }
+.tituloDescoberta .shelfInfo { margin-bottom: 0; }
+@media(max-width: 760px) {
+  .hero.heroEditorial { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+  .heroEditorial .heroAside { border-left: 0; border-top: 1px solid var(--lm-line); padding: 18px 0 0; }
+  .destaqueObra { grid-template-columns: minmax(90px, 120px) minmax(0,1fr); }
+}
