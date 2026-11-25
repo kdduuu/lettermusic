@@ -37,17 +37,17 @@ export function FormularioEsqueci() {
 
   return (
     <form action={acao} className={styles.form}>
-      <label htmlFor="email-recuperacao">E-mail cadastrado</label>
+      <label htmlFor="email-recuperacao">Email address</label>
       <input
         id="email-recuperacao" name="email" type="email"
         autoComplete="email" maxLength={254} required
       />
       <Resultado {...estado} />
       <button type="submit" disabled={pendente}>
-        {pendente ? "Enviando..." : "Enviar link de recuperação"}
+        {pendente ? "Sending…" : "Send reset link"}
       </button>
       <p className={styles.alternativa}>
-        <Link href="/entrar">Voltar para o login</Link>
+        <Link href="/entrar">Back to sign in</Link>
       </p>
     </form>
   );
@@ -62,7 +62,7 @@ export function FormularioReenviar({
 
   return (
     <form action={acao} className={styles.form}>
-      <label htmlFor="email-confirmacao">E-mail cadastrado</label>
+      <label htmlFor="email-confirmacao">Email address</label>
       <input
         id="email-confirmacao" name="email" type="email"
         defaultValue={emailInicial}
@@ -70,7 +70,7 @@ export function FormularioReenviar({
       />
       <Resultado {...estado} />
       <button type="submit" disabled={pendente}>
-        {pendente ? "Enviando..." : "Reenviar confirmação"}
+        {pendente ? "Sending…" : "Resend confirmation"}
       </button>
     </form>
   );
@@ -86,8 +86,8 @@ export function FormularioRedefinicao() {
   if (!TOKEN_VALIDO.test(token)) {
     return (
       <p role="alert" className={styles.mensagem}>
-        Link inválido.{" "}
-        <Link href="/esqueci-senha">Solicitar outro link</Link>
+        Invalid link.{" "}
+        <Link href="/esqueci-senha">Request another link</Link>
       </p>
     );
   }
@@ -97,7 +97,7 @@ export function FormularioRedefinicao() {
       <>
         <Resultado {...estado} />
         <p className={styles.alternativa}>
-          <Link href="/entrar">Entrar no Lettermusic</Link>
+          <Link href="/entrar">Sign in to Lettermusic</Link>
         </p>
       </>
     );
@@ -107,7 +107,7 @@ export function FormularioRedefinicao() {
     <form action={acao} className={styles.form}>
       <input type="hidden" name="token" value={token} />
 
-      <label htmlFor="nova-senha">Nova senha</label>
+      <label htmlFor="nova-senha">New password</label>
       <input
         id="nova-senha" name="senha_nova"
         type="password" autoComplete="new-password"
@@ -115,7 +115,7 @@ export function FormularioRedefinicao() {
       />
 
       <label htmlFor="confirmar-nova-senha">
-        Confirmar nova senha
+        Confirm new password
       </label>
       <input
         id="confirmar-nova-senha" name="confirmacao"
@@ -125,7 +125,7 @@ export function FormularioRedefinicao() {
 
       <Resultado {...estado} />
       <button type="submit" disabled={pendente}>
-        {pendente ? "Redefinindo..." : "Salvar nova senha"}
+        {pendente ? "Resetting…" : "Save new password"}
       </button>
     </form>
   );
@@ -141,8 +141,8 @@ export function FormularioConfirmarEmail() {
   if (!TOKEN_VALIDO.test(token)) {
     return (
       <p role="alert" className={styles.mensagem}>
-        Link inválido.{" "}
-        <Link href="/reenviar-confirmacao">Solicitar outro link</Link>
+        Invalid link.{" "}
+        <Link href="/reenviar-confirmacao">Request another link</Link>
       </p>
     );
   }
@@ -152,7 +152,7 @@ export function FormularioConfirmarEmail() {
       <>
         <Resultado {...estado} />
         <p className={styles.alternativa}>
-          <Link href="/entrar">Ir para o login</Link>
+          <Link href="/entrar">Go to sign in</Link>
         </p>
       </>
     );
@@ -163,7 +163,7 @@ export function FormularioConfirmarEmail() {
       <input type="hidden" name="token" value={token} />
       <Resultado {...estado} />
       <button type="submit" disabled={pendente}>
-        {pendente ? "Confirmando..." : "Confirmar e-mail"}
+        {pendente ? "Confirming…" : "Confirm email"}
       </button>
     </form>
   );

@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 export default function RedefinirSenhaPage() {
   return (
     <main className={styles.container}>
-      <h1>Nova senha</h1>
+      <h1>New password</h1>
       <p className={styles.introducao}>
         Escolha uma nova senha para sua conta.
       </p>
-      <Suspense fallback={<p>Carregando formulário...</p>}>
+      <Suspense fallback={<p>Loading form…</p>}>
         <FormularioRedefinicao />
       </Suspense>
     </main>

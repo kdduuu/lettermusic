@@ -4,7 +4,7 @@ import styles from "../autenticacao.module.css";
 export default function EntrarPage() {
   return (
     <main className={styles.container}>
-      <h1>Entrar</h1>
+      <h1>Sign in</h1>
       
       <FormularioLogin />
     </main>

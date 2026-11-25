@@ -4,7 +4,7 @@ import { FormularioConfirmarEmail } from "@/components/formularios-recuperacao";
 import styles from "../autenticacao.module.css";
 
 export const metadata: Metadata = {
-  title: "Confirmar e-mail | Lettermusic",
+  title: "Confirm email | Lettermusic",
   referrer: "no-referrer",
   robots: { index: false, follow: false },
 };
@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 export default function ConfirmarEmailPage() {
   return (
     <main className={styles.container}>
-      <h1>Confirmar e-mail</h1>
+      <h1>Confirm email</h1>
       <p className={styles.introducao}>
-        Confirme seu endereço para proteger sua conta.
+        Confirm your email address to secure your account.
       </p>
-      <Suspense fallback={<p>Carregando confirmação...</p>}>
+      <Suspense fallback={<p>Loading confirmation…</p>}>
         <FormularioConfirmarEmail />
       </Suspense>
     </main>

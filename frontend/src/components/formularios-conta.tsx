@@ -12,7 +12,7 @@ export function FormularioNome({ nome }: { nome: string }) {
 
   return (
     <form action={acao} className={styles.form}>
-      <label htmlFor="nome_exibicao">Nome de exibição</label>
+      <label htmlFor="nome_exibicao">Display name</label>
       <input
         id="nome_exibicao"
         name="nome_exibicao"
@@ -25,7 +25,7 @@ export function FormularioNome({ nome }: { nome: string }) {
         <p role="status" className={styles.mensagem}>{estado.mensagem}</p>
       )}
       <button disabled={pendente}>
-        {pendente ? "Salvando..." : "Salvar nome"}
+        {pendente ? "Saving…" : "Save name"}
       </button>
     </form>
   );
@@ -38,20 +38,20 @@ export function FormularioSenha() {
 
   return (
     <form action={acao} className={styles.form}>
-      <label htmlFor="senha_atual">Senha atual</label>
+      <label htmlFor="senha_atual">Current password</label>
       <input
         id="senha_atual" name="senha_atual"
         type="password" autoComplete="current-password" required
       />
 
-      <label htmlFor="senha_nova">Nova senha</label>
+      <label htmlFor="senha_nova">New password</label>
       <input
         id="senha_nova" name="senha_nova"
         type="password" minLength={12} maxLength={128}
         autoComplete="new-password" required
       />
 
-      <label htmlFor="confirmacao">Confirmar nova senha</label>
+      <label htmlFor="confirmacao">Confirm new password</label>
       <input
         id="confirmacao" name="confirmacao"
         type="password" minLength={12} maxLength={128}
@@ -62,7 +62,7 @@ export function FormularioSenha() {
         <p role="alert" className={styles.mensagem}>{estado.mensagem}</p>
       )}
       <button disabled={pendente}>
-        {pendente ? "Alterando..." : "Alterar senha"}
+        {pendente ? "Updating…" : "Change password"}
       </button>
     </form>
   );
@@ -79,14 +79,14 @@ export function FormularioExcluirConta() {
       className={styles.form}
       onSubmit={(evento) => {
         if (!window.confirm(
-          "Excluir sua conta e todos os seus registros? Esta ação é permanente."
+          "Delete your account and all your records? This cannot be undone."
         )) {
           evento.preventDefault();
         }
       }}
     >
       <label htmlFor="exclusao_senha">
-        Confirme sua senha
+        Confirm password
       </label>
       <input
         id="exclusao_senha"
@@ -97,13 +97,13 @@ export function FormularioExcluirConta() {
       />
 
       <label htmlFor="confirmacao_exclusao">
-        Digite EXCLUIR para confirmar
+        Type DELETE to confirm
       </label>
       <input
         id="confirmacao_exclusao"
         name="confirmacao_exclusao"
         autoComplete="off"
-        pattern="EXCLUIR"
+        pattern="DELETE"
         required
       />
 
@@ -117,7 +117,7 @@ export function FormularioExcluirConta() {
         type="submit"
         disabled={pendente}
       >
-        {pendente ? "Excluindo..." : "Excluir minha conta"}
+        {pendente ? "Deleting…" : "Delete my account"}
       </button>
     </form>
   );
