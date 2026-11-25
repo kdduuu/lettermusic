@@ -166,3 +166,5 @@
 .membros li { background:var(--lm-panel); border:1px solid var(--lm-line); padding:10px; border-radius:6px; margin-bottom:8px; }
 .obras li { background:transparent; border:0; padding:9px 0; margin-bottom:4px; }
 .cabecalho { border-bottom:0; }
+/* Written reviews are editorial entries, not cards. Other activity is unchanged. */
+.atividade[data-activity="review"] { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:14px 0 18px; margin-bottom:10px; }

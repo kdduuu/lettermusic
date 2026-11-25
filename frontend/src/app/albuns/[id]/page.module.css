@@ -123,4 +123,4 @@
 .listasDoAlbum[open] .listAction svg:last-child { transform:rotate(90deg); }
 .listAction:hover { color:var(--lm-accent); }
 .reviews { margin-top:18px; }
-.reviewLista li { background:var(--lm-bg); border:1px solid var(--lm-line); border-radius:6px; padding:12px; margin-bottom:8px; }
+.reviewLista li { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:12px 0; margin-bottom:8px; }

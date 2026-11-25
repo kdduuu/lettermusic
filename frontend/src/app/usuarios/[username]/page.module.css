@@ -328,5 +328,6 @@
 .feed li,.listaColecoes li { border-color:var(--lm-line); }
 @media(max-width:650px) { .avatar { width:96px;height:96px;font-size:52px; } .perfilHero { padding:8px 0 20px; } .corpoEditorial { grid-template-columns:1fr; gap:var(--lm-section); } }
 
-.feed .itemReview,.listaColecoes li,.feed li:last-child,.listaColecoes li:last-child { border:1px solid var(--lm-line); border-radius:7px; background:var(--lm-panel); padding:12px; margin-bottom:9px; }
+.listaColecoes li,.listaColecoes li:last-child { border:1px solid var(--lm-line); border-radius:7px; background:var(--lm-panel); padding:12px; margin-bottom:9px; }
+.feed .itemReview,.feed .itemReview:last-child { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:15px 0; margin-bottom:8px; }
 .itemCapa { background:transparent; border:0; padding:0; }

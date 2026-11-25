@@ -70,6 +70,6 @@
 .container > ul > li:first-child { padding:24px 0 28px; }
 @media(max-width:650px) { .container > ul > li:first-child { padding:18px 0; } }
 
-.container > ul { gap:14px; align-items:stretch; }
-.container > ul > li,.container > ul > li:first-child { padding:16px; }
+.container > ul { gap:12px 34px; align-items:start; }
+.container > ul > li,.container > ul > li:first-child { padding:16px 0; }
 .container header.cabecalhoEditorial { border:0; padding:8px 0 14px; }

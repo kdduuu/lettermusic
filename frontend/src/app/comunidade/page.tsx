@@ -21,7 +21,7 @@ function album(id: string) {
 async function ItemAtividade({ item }: { item: Atividade }) {
   const capa = item.tipo === "lista" ? null : await obterCapaAlbum(item.id_musicbrainz);
   return (
-    <li className={styles.atividade}>
+    <li className={styles.atividade} data-activity={item.tipo}>
       <div className={styles.avatar} aria-hidden="true">{Array.from(item.nome_exibicao.trim())[0]?.toLocaleUpperCase("en-US") || "♪"}</div>
       <article>
         <p className={styles.meta}>

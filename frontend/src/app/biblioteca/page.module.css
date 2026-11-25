@@ -130,7 +130,7 @@
 @media(max-width:560px) { .libraryTabs { gap:4px 16px; } }
 
 .collection > li { background:transparent; border:0; padding:0; }
-.diary[data-category="reviews"] > li { background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:7px; padding:12px; }
+.diary[data-category="reviews"] > li { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:12px 0; }
 .diary { gap:12px; }
 .diary[data-category="escutas"] > li { background:transparent; border:0; padding:8px 0; }
 .collectionInfo { padding-top:7px; }

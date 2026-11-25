@@ -285,24 +285,27 @@
 .reviewsPagina .texto { line-height:1.65; }
 @media(max-width:650px) { .reviewsPagina .review:first-child { grid-template-columns:85px minmax(0,1fr); gap:14px; } }
 
-/* Uniform review cards: no arbitrary first-item ranking. */
+/* Uniform review entries: no arbitrary first-item ranking or outer card. */
 .reviews,.reviewsPagina { gap:12px; align-items:stretch; max-width:none; }
-.reviews .review,.reviewsPagina .review:first-child { grid-column:auto; grid-template-columns:90px minmax(0,1fr); gap:14px; padding:16px; background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:var(--lm-card-radius); align-items:start; }
+.reviews .review,.reviewsPagina .review:first-child { grid-column:auto; grid-template-columns:90px minmax(0,1fr); gap:14px; padding:16px 0; background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; align-items:start; }
 .reviews .review .capaReview,.reviewsPagina .review:first-child .capaReview { width:90px; }
 .reviews .review h3,.reviewsPagina .review:first-child h3 { font-size:21px; line-height:1.15; margin:0; }
 .reviewsPagina .review:first-child .texto,.reviewsPagina .texto { font-size:14px; max-width:none; }
 .reviewTituloLinha { justify-content:flex-start; flex-wrap:wrap; align-items:baseline; gap:6px 12px; }
 .reviewNota { font-size:12px; }
 .reviewsHome { grid-template-columns:1fr; gap:8px; }
-.reviewsHome .review,.reviewsHome .review:first-child { grid-template-columns:68px minmax(0,1fr); padding:12px; }
+.reviewsHome .review,.reviewsHome .review:first-child { grid-template-columns:68px minmax(0,1fr); padding:12px 0; }
 .reviewsHome .review .capaReview { width:68px; }
 .reviewsHome .review h3 { font-size:18px; }
 .grade,.grade[data-count] { grid-template-columns:repeat(4,minmax(0,1fr)); }
 .grade > li { min-width:0; }
 @media(max-width:780px) { .grade,.grade[data-count] { grid-template-columns:repeat(3,minmax(0,1fr)); } }
-@media(max-width:560px) { .grade,.grade[data-count] { grid-template-columns:repeat(2,minmax(0,1fr)); } .reviews .review,.reviewsPagina .review:first-child { grid-template-columns:65px minmax(0,1fr); padding:12px; } .reviews .review .capaReview,.reviewsPagina .review:first-child .capaReview { width:65px; } }
+@media(max-width:560px) { .grade,.grade[data-count] { grid-template-columns:repeat(2,minmax(0,1fr)); } .reviews .review,.reviewsPagina .review:first-child { grid-template-columns:65px minmax(0,1fr); padding:12px 0; } .reviews .review .capaReview,.reviewsPagina .review:first-child .capaReview { width:65px; } }
 
-/* F09.16 — album art is the surface; review cards remain social content. */
+/* F09.16 — album art and reviews breathe without outer frames. */
 .grade,.grade[data-count] { gap:16px; }
 .grade > li { padding:0; background:transparent; border:0; }
 .grade .capaDestaque { box-shadow:none; }
+
+.reviews,.reviewsPagina { column-gap:32px; }
+.reviewsHome { gap:6px; }
