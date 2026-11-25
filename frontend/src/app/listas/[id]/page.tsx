@@ -115,7 +115,13 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
             
             <h2 id="albuns-lista">Albums</h2>
           </div>
-          
+          {dono ? <div className={styles.listToolbar}>
+            <details className={styles.editPopover}>
+              <summary title="Edit list" aria-label="Edit list"><UiIcon name="pen"/></summary>
+              <div className={styles.editPanel}><FormularioEditarLista key={lista.atualizada_em ?? lista.criada_em} lista={lista}/><FormularioExcluirLista id={lista.id}/></div>
+            </details>
+            <Link href={"/buscar?lista="+lista.id} className={styles.iconLink} title="Add an album" aria-label="Add an album"><UiIcon name="plus"/></Link>
+          </div> : null}
         </div>
         {itens.length ? (
           <Suspense fallback={<p className={styles.vazio}>Loading albums…</p>}>
