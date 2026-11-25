@@ -1,4 +1,6 @@
 "use client";
+import { UiIcon } from "@/components/ui-icon";
+
 
 import { useActionState } from "react";
 import {
@@ -105,7 +107,7 @@ export function BotaoAdicionarBusca({ id, listaId }: { id: string; listaId: numb
     <form action={acao} className={styles.botaoBusca}>
       <input type="hidden" name="id_musicbrainz" value={id} />
       <input type="hidden" name="lista_id" value={listaId} />
-      <button type="submit" disabled={pendente}>{pendente ? "Adding…" : "+ Add to list"}</button>
+      <button type="submit" disabled={pendente} title="Add to list" aria-label="Add to list"><UiIcon name="plus"/></button>
       <Mensagem {...estado} />
     </form>
   );
@@ -132,18 +134,18 @@ export function ControlesItemLista({
         <input type="hidden" name="lista_id" value={listaId} />
         <input type="hidden" name="obra_id" value={obraId} />
         <input type="hidden" name="nova_posicao" value={Math.max(1, posicao - 1)} />
-        <button type="submit" title="Move up" disabled={posicao <= 1 || pendenteAcima}>↑</button>
+        <button type="submit" title="Move up" aria-label="Move up" disabled={posicao <= 1 || pendenteAcima}><UiIcon name="arrow-up"/></button>
       </form>
       <form action={moverAbaixo}>
         <input type="hidden" name="lista_id" value={listaId} />
         <input type="hidden" name="obra_id" value={obraId} />
         <input type="hidden" name="nova_posicao" value={posicao + 1} />
-        <button type="submit" title="Move down" disabled={!podeDescer || pendenteAbaixo}>↓</button>
+        <button type="submit" title="Move down" aria-label="Move down" disabled={!podeDescer || pendenteAbaixo}><UiIcon name="arrow-down"/></button>
       </form>
       <form action={remover}>
         <input type="hidden" name="lista_id" value={listaId} />
         <input type="hidden" name="obra_id" value={obraId} />
-        <button type="submit" disabled={pendenteRemocao} title="Remove album from list">Remove</button>
+        <button type="submit" disabled={pendenteRemocao} title="Remove album from list" aria-label="Remove album from list"><UiIcon name="trash"/></button>
       </form>
       {[acima, abaixo, remocao].filter((e) => e.mensagem).map((e, i) => <Mensagem key={i} {...e} />)}
     </div>

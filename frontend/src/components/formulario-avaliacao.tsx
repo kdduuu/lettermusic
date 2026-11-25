@@ -1,93 +1,39 @@
 "use client";
-
 import { useActionState } from "react";
 import { salvarAvaliacao, salvarReview, removerReview } from "@/app/acoes";
 import { ESTADO_INICIAL } from "@/lib/estado-acoes";
 import type { EstadoAlbum } from "@/lib/estado-album";
-import styles from "./formulario-avaliacao.module.css";
-
-const NOTAS = Array.from({ length: 10 }, (_, indice) => (indice + 1) / 2);
-
-export function FormularioAvaliacao({ id, estado }: { id: string; estado: EstadoAlbum }) {
-  const [resultadoNota, avaliar, salvandoNota] = useActionState(salvarAvaliacao, ESTADO_INICIAL);
-  const [resultadoReview, publicar, salvandoReview] = useActionState(salvarReview, ESTADO_INICIAL);
-  const [resultadoRemocao, excluir, excluindo] = useActionState(removerReview, ESTADO_INICIAL);
-
-  return (
-    <section className={styles.container} aria-label="Rate and review">
-      <form action={avaliar} className={styles.avaliacao}>
-        <input type="hidden" name="id_musicbrainz" value={id} />
-        <label htmlFor={`nota-${id}`}>Your rating</label>
-        <div className={styles.linha}>
-          <select id={`nota-${id}`} name="nota" defaultValue={estado.nota?.toString() ?? ""} required>
-            <option value="" disabled>Choose a rating</option>
-            {NOTAS.map((nota) => (
-              <option key={nota} value={nota}>{nota.toLocaleString("en-US")} ★</option>
-            ))}
-          </select>
-          <button disabled={salvandoNota} type="submit">
-            {salvandoNota ? "Saving…" : estado.nota !== null ? "Update rating" : "Rate"}
-          </button>
-        </div>
-        {resultadoNota.mensagem && (
-          <p className={resultadoNota.sucesso ? styles.sucesso : styles.erro} role="status">
-            {resultadoNota.mensagem}
-          </p>
-        )}
+import { UiIcon } from "@/components/ui-icon";
+import styles from "./social-actions.module.css";
+export function FormularioAvaliacao({id,estado}:{id:string;estado:EstadoAlbum}) {
+  const [rating,rate,saving]=useActionState(salvarAvaliacao,ESTADO_INICIAL);
+  const [review,publish,publishing]=useActionState(salvarReview,ESTADO_INICIAL);
+  const [removed,remove,removing]=useActionState(removerReview,ESTADO_INICIAL);
+  return <section className={styles.ratingArea} aria-label="Rate and review">
+    <form action={rate}>
+      <input type="hidden" name="id_musicbrainz" value={id}/>
+      <div className={styles.ratingHeading}><span>Your rating</span><strong>{estado.nota === null ? "—" : estado.nota.toFixed(1)}</strong></div>
+      <div className={styles.stars} role="group" aria-label="Rate in half-star increments">
+        {Array.from({length:5},(_,i)=><span className={styles.starPair} key={i}>
+          {[0.5,1].map((part)=><button key={part} type="submit" name="nota" value={i+part} disabled={saving} aria-label={`Rate ${i+part} out of 5 stars`} title={`${i+part} stars`} data-filled={(estado.nota??0)>=i+part} className={part===0.5?styles.halfLeft:styles.halfRight}><span aria-hidden="true">★</span></button>)}
+        </span>)}
+      </div>
+      {rating.mensagem ? <p role="status" className={rating.sucesso?styles.success:styles.error}>{rating.mensagem}</p>:null}
+    </form>
+    <details className={styles.disclosure}>
+      <summary title={estado.review===null?"Write a review":"Edit review"}><UiIcon name="pen"/><span>{estado.review===null?"Write a review":"Edit review"}</span><UiIcon name="chevron-right"/></summary>
+      <form action={publish} className={styles.editor}>
+        <input type="hidden" name="id_musicbrainz" value={id}/>
+        <textarea aria-label="Your review" name="texto" maxLength={5000} required rows={4} defaultValue={estado.review??""} placeholder="Your thoughts…"/>
+        <button type="submit" disabled={publishing}>{publishing?"Saving…":estado.review===null?"Publish":"Save"}</button>
+        {review.mensagem?<p role="status" className={review.sucesso?styles.success:styles.error}>{review.mensagem}</p>:null}
       </form>
-
-      <form action={publicar} className={styles.review}>
-        <input type="hidden" name="id_musicbrainz" value={id} />
-        <label htmlFor={`review-${id}`}>Your review</label>
-        <textarea
-          id={`review-${id}`} name="texto" maxLength={5000} minLength={1}
-          required rows={4} defaultValue={estado.review ?? ""}
-          placeholder="What did you think of this album?"
-        />
-        <button disabled={salvandoReview} type="submit">
-          {salvandoReview ? "Saving…" : estado.review !== null ? "Update review" : "Publish review"}
-        </button>
-        {resultadoReview.mensagem && (
-          <p className={resultadoReview.sucesso ? styles.sucesso : styles.erro} role="status">
-            {resultadoReview.mensagem}
-          </p>
-        )}
-      </form>
-
-      {estado.review !== null ? (
-        <form
-          action={excluir}
-          className={styles.review}
-          onSubmit={(evento) => {
-            if (!window.confirm("Delete your review of this album?")) {
-              evento.preventDefault();
-            }
-          }}
-        >
-          <input
-            type="hidden"
-            name="id_musicbrainz"
-            value={id}
-          />
-          <button
-            type="submit"
-            className={styles.botaoExcluir}
-            disabled={excluindo}
-          >
-            {excluindo ? "Deleting…" : "Delete review"}
-          </button>
-          {resultadoRemocao.mensagem && (
-            <p
-              role="status"
-              className={resultadoRemocao.sucesso ? styles.sucesso : styles.erro}
-            >
-              {resultadoRemocao.mensagem}
-            </p>
-          )}
-        </form>
-      ) : null}
-
-      <p className={styles.nota}>Your first rating or review logs a play. Editing does not.</p>
-    </section>
-  );
+      {estado.review!==null?<form action={remove} onSubmit={e=>{if(!window.confirm("Delete your review?"))e.preventDefault();}}>
+        <input type="hidden" name="id_musicbrainz" value={id}/>
+        <button className={styles.delete} type="submit" disabled={removing} aria-label="Delete review" title="Delete review"><UiIcon name="trash"/></button>
+        {removed.mensagem?<p role="status" className={removed.sucesso?styles.success:styles.error}>{removed.mensagem}</p>:null}
+      </form>:null}
+    </details>
+    <p className={styles.hint}>First rating or review logs a play.</p>
+  </section>;
 }

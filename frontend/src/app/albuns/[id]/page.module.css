@@ -113,3 +113,14 @@
 .interacoes,.listasDoAlbum,.resumo,.reviewLista li { border-color:var(--lm-line); }
 @media(max-width:950px) { .corpoAlbum { grid-template-columns:1fr; gap:var(--lm-section); } .colunaSocial { padding-top:20px; border-top:1px solid var(--lm-line); } }
 @media(max-width:650px) { .album { grid-template-columns:1fr; gap:20px; padding:6px 0 20px; } }
+
+.colunaSocial { background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:8px; padding:18px; }
+.interacoes { padding-bottom:10px; border-bottom:0; }
+.listasDoAlbum { padding:9px 0; border-top:1px solid var(--lm-line); border-bottom:0; }
+.listAction { display:flex; align-items:center; gap:9px; cursor:pointer; list-style:none; padding:7px 3px; }
+.listAction::-webkit-details-marker { display:none; }
+.listAction svg:last-child { margin-left:auto; }
+.listasDoAlbum[open] .listAction svg:last-child { transform:rotate(90deg); }
+.listAction:hover { color:var(--lm-accent); }
+.reviews { margin-top:18px; }
+.reviewLista li { background:var(--lm-bg); border:1px solid var(--lm-line); border-radius:6px; padding:12px; margin-bottom:8px; }

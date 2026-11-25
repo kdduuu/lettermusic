@@ -1,73 +1,33 @@
 "use client";
-
 import { useActionState } from "react";
 import { registrarEscuta, registrarInteracao } from "@/app/acoes";
 import { ESTADO_INICIAL } from "@/lib/estado-acoes";
 import type { EstadoAlbum } from "@/lib/estado-album";
-import styles from "./formulario-interacoes.module.css";
-
-type TipoInteracao = "ouvida" | "favorito" | "quero-ouvir";
-
-function AcaoAlbum({ id, tipo, ativo, rotulo }: {
-  id: string;
-  tipo: TipoInteracao;
-  ativo: boolean;
-  rotulo: string;
-}) {
-  const [estado, acao, pendente] = useActionState(registrarInteracao, ESTADO_INICIAL);
-
-  if (tipo === "ouvida" && ativo) {
-    return <span className={styles.confirmado}>✓ Listened</span>;
-  }
-
-  return (
-    <form action={acao} className={styles.acao}>
-      <input type="hidden" name="id_musicbrainz" value={id} />
-      <input type="hidden" name="tipo" value={tipo} />
-      <input type="hidden" name="operacao" value={ativo ? "remover" : "adicionar"} />
-      <button disabled={pendente} type="submit" aria-pressed={tipo === "ouvida" ? undefined : ativo} title={ativo ? `Remove: ${rotulo}` : undefined}>
-        {pendente ? "Saving…" : ativo ? `✓ ${rotulo}` : rotulo}
-      </button>
-      {estado.mensagem && (
-        <p className={estado.sucesso ? styles.sucesso : styles.erro} role="status">
-          {estado.mensagem}
-        </p>
-      )}
-    </form>
-  );
+import { UiIcon, type IconName } from "@/components/ui-icon";
+import styles from "./social-actions.module.css";
+type Tipo = "ouvida" | "favorito" | "quero-ouvir";
+function Acao({ id, tipo, ativo, label, icon }: { id:string; tipo:Tipo; ativo:boolean; label:string; icon:IconName }) {
+  const [r, action, pending] = useActionState(registrarInteracao, ESTADO_INICIAL);
+  const done = tipo === "ouvida" && ativo;
+  return <form action={action} className={styles.action}>
+    <input type="hidden" name="id_musicbrainz" value={id}/><input type="hidden" name="tipo" value={tipo}/><input type="hidden" name="operacao" value={ativo ? "remover":"adicionar"}/>
+    <button type="submit" disabled={pending || done} aria-pressed={ativo} aria-label={label} title={done ? "Already listened" : ativo ? "Remove: "+label : label} className={styles.iconAction}><UiIcon name={icon}/><span>{label}</span></button>
+    {r.mensagem ? <p role="status" className={r.sucesso ? styles.success : styles.error}>{r.mensagem}</p>:null}
+  </form>;
 }
-
-function AcaoEscuta({ id, quantidade }: { id: string; quantidade: number }) {
-  const [estado, acao, pendente] = useActionState(registrarEscuta, ESTADO_INICIAL);
-
-  return (
-    <form action={acao} className={styles.escuta}>
-      <input type="hidden" name="id_musicbrainz" value={id} />
-      <button type="submit" disabled={pendente}>
-        {pendente ? "Logging…" : "Log a play"}
-      </button>
-      <span className={styles.contador}>
-        {quantidade} {quantidade === 1 ? "play logged" : "plays logged"}
-      </span>
-      {estado.mensagem && (
-        <p className={estado.sucesso ? styles.sucesso : styles.erro} role="status">
-          {estado.mensagem}
-        </p>
-      )}
+export function FormularioInteracoes({id,estado}:{id:string;estado:EstadoAlbum}) {
+  const [r,action,pending]=useActionState(registrarEscuta,ESTADO_INICIAL);
+  return <section aria-label="Your album activity" className={styles.interactions}>
+    <div className={styles.actionGrid}>
+      <Acao id={id} tipo="ouvida" ativo={estado.ouvida} label="Listened" icon="check-circle"/>
+      <Acao id={id} tipo="favorito" ativo={estado.favorito} label="Favorite" icon="heart"/>
+      <Acao id={id} tipo="quero-ouvir" ativo={estado.quero_ouvir} label="Later" icon="bookmark"/>
+    </div>
+    <form action={action} className={styles.play}>
+      <input type="hidden" name="id_musicbrainz" value={id}/>
+      <button type="submit" disabled={pending} className={styles.actionLink} aria-label="Log a play" title="Log a play"><UiIcon name="headphones"/> <span>Log a play</span></button>
+      <span className={styles.count}>{estado.quantidade_escutas} {estado.quantidade_escutas===1?"play":"plays"}</span>
+      {r.mensagem ? <p role="status" className={r.sucesso ? styles.success : styles.error}>{r.mensagem}</p>:null}
     </form>
-  );
-}
-
-export function FormularioInteracoes({ id, estado }: { id: string; estado: EstadoAlbum }) {
-  return (
-    <section className={styles.container} aria-label="Your album activity">
-      <h2>Your activity</h2>
-      <div className={styles.grupo}>
-        <AcaoAlbum id={id} tipo="ouvida" ativo={estado.ouvida} rotulo="Listened" />
-        <AcaoAlbum id={id} tipo="favorito" ativo={estado.favorito} rotulo="Favorite" />
-        <AcaoAlbum id={id} tipo="quero-ouvir" ativo={estado.quero_ouvir} rotulo="Want to listen" />
-      </div>
-      <AcaoEscuta id={id} quantidade={estado.quantidade_escutas} />
-    </section>
-  );
+  </section>;
 }

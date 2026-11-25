@@ -1,3 +1,4 @@
+import { UiIcon } from "@/components/ui-icon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -107,26 +108,6 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
           
         </div>
       </section>
-
-      {dono ? (
-        <section className={styles.edicao} aria-label="Manage list">
-          <details>
-            <summary>Edit details and privacy</summary>
-            <div className={styles.editar}>
-              <FormularioEditarLista key={lista.atualizada_em ?? lista.criada_em} lista={lista} />
-              <FormularioExcluirLista id={lista.id} />
-            </div>
-          </details>
-          <form action="/buscar" method="get" role="search" className={styles.buscar}>
-            <input type="hidden" name="lista" value={lista.id} />
-            <label htmlFor="buscar-lista">Add an album</label>
-            <div className={styles.buscarLinha}>
-              <input id="buscar-lista" name="termo" type="search" minLength={2} maxLength={100} required placeholder="Album or artist" />
-              <button type="submit">Search</button>
-            </div>
-          </form>
-        </section>
-      ) : null}
 
       <section className={styles.conteudo} aria-labelledby="albuns-lista">
         <div className={styles.cabecalhoGrade}>

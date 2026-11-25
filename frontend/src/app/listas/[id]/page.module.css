@@ -268,3 +268,14 @@
 .capaAlbum { border-radius:var(--lm-cover-radius); }
 .numero { border-radius:2px; }
 @media(max-width:700px) { .hero { grid-template-columns:1fr; gap:18px; } .edicao { grid-template-columns:1fr; } .buscarLinha input { min-width:0; } }
+
+.hero { padding-bottom:18px; }
+.conteudo { padding-top:21px; }
+.cabecalhoGrade { align-items:center; }
+.listToolbar { display:flex; gap:9px; align-items:center; }
+.listToolbar summary,.iconLink { width:38px; height:38px; display:grid; place-items:center; background:var(--lm-panel); color:var(--lm-text); border:1px solid var(--lm-line); border-radius:5px; cursor:pointer; text-decoration:none; list-style:none; }
+.listToolbar summary::-webkit-details-marker { display:none; }
+.listToolbar summary:hover,.iconLink:hover { color:var(--lm-accent); border-color:var(--lm-accent); }
+.editPopover { position:relative; }
+.editPanel { position:absolute; top:46px; right:0; z-index:5; width:min(340px,calc(100vw - 40px)); padding:16px; border:1px solid var(--lm-line); border-radius:7px; background:var(--lm-panel); box-shadow:0 12px 32px #0008; }
+.acoesAlbum button svg { display:block; width:15px; height:15px; }

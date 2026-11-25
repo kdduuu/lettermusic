@@ -1,3 +1,4 @@
+import { UiIcon } from "@/components/ui-icon";
 import Link from "next/link";
 import { Suspense } from "react";
 import { tipoMusicalEmPortugues } from "@/lib/visual-metadados";
@@ -60,8 +61,8 @@ async function BlocoSocial({ id }: { id: string }) {
       )}
 
       {usuario && listas ? (
-        <section className={styles.listasDoAlbum} aria-label="Add to a list">
-          <h2>Lists</h2>
+        <details className={styles.listasDoAlbum}>
+          <summary className={styles.listAction}><UiIcon name="list-plus"/><span>Add to a list</span><UiIcon name="chevron-right"/></summary>
           {listas.ok && listas.dados.length ? (
             <FormularioAdicionarAlbum idMusicBrainz={id} listas={listas.dados} />
           ) : (
@@ -71,7 +72,7 @@ async function BlocoSocial({ id }: { id: string }) {
             </p>
           )}
           
-        </section>
+        </details>
       ) : null}
 
       <div className={styles.reviews}>
