@@ -263,3 +263,24 @@
 .reviewConteudo .artista { font-size: 13px; }
 .reviewConteudo .texto, .reviewConteudo .resumo { overflow-wrap: anywhere; }
 @media(max-width:450px) { .reviewTituloLinha { flex-wrap: wrap; gap: 5px; } }
+
+/* F09.14 — reviews as a reading surface rather than identical cards. */
+.grade { gap:var(--lm-gutter); }
+.capaDestaque,.capaReview { border-radius:var(--lm-cover-radius); box-shadow:none; }
+.album { gap:8px; }
+.album strong { font-size:17px; line-height:1.22; }
+.dadosScore { min-height:0; margin-top:4px; gap:9px; }
+.scoreAlbum,.reviewNota { color:var(--lm-gold); }
+.reviewNota { background:transparent; border:0; padding:3px 0; }
+.reviewsHome { grid-template-columns:1fr; gap:0; }
+.reviewsHome .review { grid-template-columns:76px minmax(0,1fr); padding:13px 0; gap:14px; }
+.reviewsHome .review:first-child { padding-top:0; }
+.reviewsHome .capaReview { width:76px; }
+.reviewsHome .review h3 { font-size:20px; }
+.reviewsHome .resumo { margin-top:6px; line-height:1.55; }
+.reviewsPagina .review:first-child { grid-column:1/-1; grid-template-columns:minmax(120px,170px) minmax(0,1fr); gap:25px; }
+.reviewsPagina .review:first-child .capaReview { width:100%; }
+.reviewsPagina .review:first-child h3 { font-size:clamp(25px,3vw,37px); letter-spacing:-.035em; }
+.reviewsPagina .review:first-child .texto { max-width:76ch; font-size:15px; }
+.reviewsPagina .texto { line-height:1.65; }
+@media(max-width:650px) { .reviewsPagina .review:first-child { grid-template-columns:85px minmax(0,1fr); gap:14px; } }

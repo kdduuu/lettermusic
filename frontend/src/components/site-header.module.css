@@ -196,3 +196,14 @@
 .conta { flex-wrap: wrap; }
 @media(max-width:650px) { .nav { gap: 10px 15px; } .conta { gap: 10px; } .search { flex-basis: 100%; margin-left: 0; } }
 @media(prefers-reduced-motion:reduce) { .nav a, .nav a::after { transition: none; } }
+
+/* The masthead follows the same horizontal measure as the content. */
+.inner { max-width:var(--lm-content); gap:17px; }
+.brand { font-size:26px; letter-spacing:-.065em; }
+.header { border-bottom-color:var(--lm-line); }
+.nav { gap:16px; }
+.nav a { font-weight:500; }
+.search { width:min(100%,218px); }
+.search input,.search button { border-radius:4px; }
+@media(max-width:1120px) { .inner { gap:12px; } }
+@media(max-width:650px) { .inner { padding:12px 16px; } .search { width:100%; } .nav { gap:10px 16px; } }

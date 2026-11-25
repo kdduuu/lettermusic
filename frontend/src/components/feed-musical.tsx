@@ -62,7 +62,7 @@ export async function CardsReviews({
   if (!reviews.length) return <p className={styles.mensagem}>No reviews yet.</p>;
   const capas = await consultarCapas(reviews);
   return (
-    <ul className={apresentacao === "editorial" ? styles.reviews + " " + styles.reviewsPagina : styles.reviews}>
+    <ul className={apresentacao === "editorial" ? styles.reviews + " " + styles.reviewsPagina : styles.reviews + " " + styles.reviewsHome}>
       {reviews.map((review) => (
         <li key={review.id} className={styles.review}>
           <Link href={`/albuns/${encodeURIComponent(review.id_musicbrainz)}`} aria-label={`Open album ${review.titulo}`}>

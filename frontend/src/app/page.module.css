@@ -303,3 +303,34 @@
 .editorialHome .tituloDescoberta > a:hover { text-decoration: underline; }
 .editorialHome .listasHome { gap: 16px; }
 @media(max-width:760px) { .editorialHome { gap: 28px; } .editorialHome .hero.heroEditorial { grid-template-columns: 1fr; gap: 18px; } .editorialHome .destaqueObra { grid-template-columns: 110px minmax(0,1fr); } }
+
+/* F09.14 — editorial composition, one canvas with a cover-led opening. */
+.editorialHome { gap:var(--lm-section); }
+.editorialHome .hero.heroEditorial { grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:32px; padding:8px 0 27px; border-bottom:1px solid var(--lm-line); }
+.editorialHome .heroEditorial .heroMain h1 { font-size:clamp(54px,6vw,78px); line-height:.94; letter-spacing:-.065em; margin:0 0 19px; }
+.discoverLink { color:var(--lm-muted); font-size:13px; text-decoration:none; }
+.discoverLink:hover { color:var(--lm-text); text-decoration:underline; }
+.editorialHome .destaqueObra { grid-template-columns:minmax(0,1fr) minmax(0,.85fr); gap:22px; padding:0; }
+.editorialHome .destaqueCapa { border-radius:var(--lm-cover-radius); box-shadow:none; }
+.editorialHome .destaqueInfo h2 { font:700 clamp(26px,3.3vw,45px)/1.02 var(--lm-serif); letter-spacing:-.045em; margin:8px 0; overflow-wrap:anywhere; }
+.editorialHome .destaqueInfo span { font-size:10px; color:var(--lm-accent); letter-spacing:.09em; }
+.editorialHome .destaqueInfo p { font-size:14px; color:var(--lm-muted); }
+.editorialHome .descobertaSecao h2 { font-size:28px; }
+.editorialHome .tituloDescoberta,.editorialHome .shelfInfo { margin:0 0 16px; }
+.editorialHome .tituloDescoberta .shelfInfo { margin:0; }
+.editorialColumns { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(0,1fr); align-items:start; gap:36px; }
+.editorialColumns > section { min-width:0; }
+.editorialColumns .listasHome { grid-template-columns:1fr; gap:0; }
+.editorialColumns .listasHome li { position:relative; padding:12px 0; border-bottom:1px solid var(--lm-line); }
+.editorialColumns .listasHome li:first-child { padding-top:0; }
+.editorialColumns .listaHome { display:grid; grid-template-columns:110px minmax(0,1fr); align-items:center; gap:14px; }
+.editorialColumns .listaHome > div { margin:0; }
+.editorialColumns .listaHome strong { font-size:19px; }
+.editorialColumns .listasHome p { margin:3px 0 0 124px; }
+.editorialHome .message { margin:10px 0; font-size:14px; }
+.searchPage .buscaCategorias { gap:20px; padding-bottom:0; }
+.searchPage .buscaCategorias a { border:0; border-radius:0; background:transparent; padding:8px 0; border-bottom:2px solid transparent; }
+.searchPage .buscaCategorias a[aria-current="page"] { background:transparent; border-bottom-color:var(--lm-accent); }
+.searchPage .results { margin-top:28px; }
+.searchPage .results h2 { font-size:25px; letter-spacing:-.025em; }
+@media(max-width:760px) { .editorialHome .hero.heroEditorial { grid-template-columns:1fr; gap:20px; } .editorialHome .destaqueObra { grid-template-columns:minmax(0,145px) minmax(0,1fr); gap:16px; } .editorialColumns { grid-template-columns:1fr; gap:var(--lm-section); } }

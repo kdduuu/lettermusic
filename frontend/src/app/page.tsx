@@ -40,14 +40,14 @@ async function DestaqueReal() {
 
 async function ListasDaComunidade() {
   const resultado = await obterListasPublicas(1);
-  if (!resultado.ok || !resultado.dados.resultados.length) return null;
+  if (!resultado.ok) return <section className={styles.descobertaSecao}><h2>Lists</h2><p role="alert" className={styles.message}>{resultado.mensagem}</p></section>;
   return (
     <section className={styles.descobertaSecao} aria-labelledby="listas-comunidade">
       <div className={styles.tituloDescoberta}>
         <h2 id="listas-comunidade">Lists</h2>
         <Link href="/listas/explorar">View all</Link>
       </div>
-      <ul className={styles.listasHome}>
+      {resultado.dados.resultados.length ? <ul className={styles.listasHome}>
         {resultado.dados.resultados.slice(0, 3).map(lista => (
           <li key={lista.id}>
             <Link className={styles.listaHome} href={"/listas/" + lista.id}>
@@ -57,7 +57,7 @@ async function ListasDaComunidade() {
             <p><Link href={"/usuarios/" + encodeURIComponent(lista.username)}>{lista.nome_exibicao}</Link> · {lista.total_itens} {lista.total_itens === 1 ? "album" : "albums"}</p>
           </li>
         ))}
-      </ul>
+      </ul> : <p className={styles.message}>No public lists yet.</p>}
     </section>
   );
 }
@@ -70,10 +70,7 @@ export default function Home() {
           
           <h1 id="titulo-descobrir">Discover</h1>
           
-          <div className={styles.heroLinks}>
-            <Link href="/albuns">Browse albums</Link>
-            <Link href="/listas/explorar">Lists ↗</Link>
-          </div>
+          <Link className={styles.discoverLink} href="/albuns">Browse albums <span aria-hidden="true">↗</span></Link>
         </div>
         <div className={styles.heroAside}>
           <Suspense fallback={<p className={styles.destaqueVazio}>Loading album…</p>}>
@@ -90,6 +87,7 @@ export default function Home() {
           <DestaquesMusicais tipo="mais-ouvidas" />
         </Suspense>
       </section>
+      <div className={styles.editorialColumns}>
       <section className={styles.descobertaSecao} aria-labelledby="reviews-recentes">
         <div className={styles.tituloDescoberta}>
           <div className={styles.shelfInfo}>
@@ -103,6 +101,7 @@ export default function Home() {
         </Suspense>
       </section>
       <Suspense fallback={null}><ListasDaComunidade /></Suspense>
+      </div>
     </main>
   );
 }

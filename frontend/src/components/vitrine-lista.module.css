@@ -21,3 +21,15 @@
 @media(max-width:600px) {
   .compacta { width: 62px; height: 62px; min-width: 62px; flex-basis: 62px; }
 }
+
+/* A numbered collection series; differences in ink, not decoration. */
+.arte { border-radius:var(--lm-cover-radius); border-color:#ffffff16; background:#34363b; }
+.arte[data-edition="1"] { background:#42383d; }
+.arte[data-edition="2"] { background:#343d3b; }
+.arte[data-edition="3"] { background:#403d36; }
+.marca { letter-spacing:-.075em; }
+.rodape { font-size:9px; letter-spacing:.09em; }
+.miniatura { padding:13px 15px; margin-bottom:8px; }
+.miniatura .marca { font-size:clamp(22px,3vw,36px); }
+.ampla { border-radius:var(--lm-cover-radius); }
+@media(max-width:560px) { .miniatura { padding:10px; } .rodape { font-size:8px; } }

@@ -10,6 +10,7 @@ type Props = {
 function ArteDaLista({ listaId, titulo, ampla = false, compacta = false }: Props & { ampla?: boolean }) {
   return (
     <div role="img" aria-label={"Cover for list " + (titulo ?? "music")}
+      data-edition={String(Math.abs(listaId) % 4)}
       className={[styles.arte, ampla ? styles.ampla : compacta ? styles.compacta : styles.miniatura].join(" ")}>
       <span className={styles.marca} aria-hidden="true">LM.</span>
       {!compacta ? (
