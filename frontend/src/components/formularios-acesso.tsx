@@ -20,8 +20,8 @@ export function FormularioLogin() {
       </p>
       {estado.mensagem && <p role="alert" className={styles.mensagem}>{estado.mensagem}</p>}
       <button type="submit" disabled={pendente}>{pendente ? "Signing in…" : "Sign in"}</button>
-      <p className={styles.alternativa}>Don't have an account? <Link href="/cadastro">Sign up</Link></p>
-      <p className={styles.alternativa}>Didn't receive a confirmation email? <Link href="/reenviar-confirmacao">Resend link</Link></p>
+      <p className={styles.alternativa}>New here? <Link href="/cadastro">Sign up</Link></p>
+      <p className={styles.alternativa}>Missing your confirmation email? <Link href="/reenviar-confirmacao">Resend link</Link></p>
     </form>
   );
 }

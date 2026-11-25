@@ -14,7 +14,7 @@ export function CapaAlbum({ url, titulo, className }: CapaAlbumProps) {
 
   if (!url || falhaImagem) {
     return (
-      <div className={className} role="img" aria-label={`Capa indisponível: ${titulo}`}>
+      <div className={className} role="img" aria-label={`Cover unavailable: ${titulo}`}>
         ♪
       </div>
     );

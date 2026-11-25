@@ -68,29 +68,29 @@ function reviewValida(v: unknown): v is ReviewFeed {
 export async function consultarDestaques(tipo: TipoDestaque): Promise<Resultado<ObraDestaque[]>> {
   try {
     const resposta = await requisitarBackend(`/descoberta/${tipo}?limite=4`);
-    if (!resposta.ok) return { ok: false, mensagem: "Não foi possível carregar os destaques." };
+    if (!resposta.ok) return { ok: false, mensagem: "Unable to load highlights." };
     const dados: unknown = await resposta.json();
     if (!Array.isArray(dados) || !dados.every((v: unknown) => destaqueValido(v, tipo))) {
-      return { ok: false, mensagem: "Resposta inesperada da API de descoberta." };
+      return { ok: false, mensagem: "Unexpected discovery response." };
     }
     return { ok: true, dados };
   } catch {
-    return { ok: false, mensagem: "Não foi possível conectar à API de descoberta." };
+    return { ok: false, mensagem: "Unable to connect to the discovery service." };
   }
 }
 
 export async function consultarFeedReviews(pagina = 1, porPagina = 12): Promise<Resultado<PaginaReviews>> {
   try {
     const resposta = await requisitarBackend(`/social/reviews?pagina=${pagina}&por_pagina=${porPagina}`);
-    if (!resposta.ok) return { ok: false, mensagem: "Não foi possível carregar as reviews." };
+    if (!resposta.ok) return { ok: false, mensagem: "Unable to load reviews." };
     const dados: unknown = await resposta.json();
     if (!objeto(dados) || dados.pagina !== pagina || dados.por_pagina !== porPagina ||
         typeof dados.tem_proxima !== "boolean" || !Array.isArray(dados.resultados) ||
         !dados.resultados.every(reviewValida)) {
-      return { ok: false, mensagem: "Resposta inesperada da API de reviews." };
+      return { ok: false, mensagem: "Unexpected reviews response." };
     }
     return { ok: true, dados: { pagina, por_pagina: porPagina, tem_proxima: dados.tem_proxima, resultados: dados.resultados } };
   } catch {
-    return { ok: false, mensagem: "Não foi possível conectar à API de reviews." };
+    return { ok: false, mensagem: "Unable to connect to the review service." };
   }
 }

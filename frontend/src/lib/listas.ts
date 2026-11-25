@@ -67,9 +67,9 @@ function itemValido(valor: unknown): valor is ItemLista {
 }
 
 function erro(status: number): string {
-  if (status === 401) return "Sua sessão expirou. Entre novamente.";
-  if (status === 404) return "Lista não encontrada ou indisponível.";
-  return "Não foi possível consultar as listas agora.";
+  if (status === 401) return "Session expired. Sign in again.";
+  if (status === 404) return "List not found or unavailable.";
+  return "Unable to load lists.";
 }
 
 async function consulta<T>(
@@ -86,11 +86,11 @@ async function consulta<T>(
     }
     const dados: unknown = await resposta.json();
     if (!validar(dados)) {
-      return { ok: false, status: 502, mensagem: "A API retornou dados inesperados." };
+      return { ok: false, status: 502, mensagem: "Unexpected service response." };
     }
     return { ok: true, dados };
   } catch {
-    return { ok: false, status: 503, mensagem: "API indisponível. Confira o FastAPI." };
+    return { ok: false, status: 503, mensagem: "Service unavailable. Try again later." };
   }
 }
 

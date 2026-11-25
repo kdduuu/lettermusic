@@ -96,7 +96,7 @@ async function consultar<T>(
   token?: string,
 ): Promise<Resultado<T>> {
   if (!MBID_VALIDO.test(id)) {
-    return { ok: false, status: 422, mensagem: "Identificador musical inválido." };
+    return { ok: false, status: 422, mensagem: "Invalid music ID." };
   }
   try {
     const resposta = await requisitarBackend(
@@ -108,17 +108,17 @@ async function consultar<T>(
         ok: false,
         status: resposta.status,
         mensagem: resposta.status === 401
-          ? "Sua sessão expirou. Entre novamente."
-          : "Não foi possível carregar os registros deste álbum.",
+          ? "Session expired. Sign in again."
+          : "Unable to load album activity.",
       };
     }
     const dados: unknown = await resposta.json();
     const convertido = converter(dados);
     return convertido === null
-      ? { ok: false, status: 502, mensagem: "A API retornou dados inesperados." }
+      ? { ok: false, status: 502, mensagem: "Unexpected service response." }
       : { ok: true, dados: convertido };
   } catch {
-    return { ok: false, status: 503, mensagem: "API indisponível. Tente novamente." };
+    return { ok: false, status: 503, mensagem: "Service unavailable. Try again." };
   }
 }
 
