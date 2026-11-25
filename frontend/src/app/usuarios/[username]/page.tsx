@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CapaAlbum } from "@/components/capa-album";
 import { VitrineLista } from "@/components/vitrine-lista";
+import { FavoritosPerfil } from "@/components/favoritos-perfil";
+import { obterUsuarioAutenticado } from "@/lib/sessao";
 import { obterCapaAlbum } from "@/lib/catalogo";
 import { consultarPerfilPublico, type AlbumRecente, type ReviewRecente } from "@/lib/perfis";
 import styles from "./page.module.css";
@@ -65,7 +67,7 @@ async function ReviewsPerfil({ reviews }: { reviews: ReviewRecente[] }) {
 
 async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
   const { username } = await params;
-  const resultado = await consultarPerfilPublico(username);
+  const [resultado, usuario] = await Promise.all([consultarPerfilPublico(username), obterUsuarioAutenticado()]);
   if (!resultado.ok) {
     if (resultado.status === 404) notFound();
     return <p role="alert" className={styles.erro}>{resultado.mensagem}</p>;
@@ -92,6 +94,14 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
           <div><dd>{perfil.estatisticas.listas_publicas}</dd><dt>Public lists</dt></div>
         </dl>
       </header>
+
+      {(perfil.albuns_favoritos.length > 0 || usuario?.id === perfil.id) ? (
+        <FavoritosPerfil
+          key={perfil.albuns_favoritos.map(album => album.id_musicbrainz).join(",")}
+          albuns={perfil.albuns_favoritos}
+          dono={usuario?.id === perfil.id}
+        />
+      ) : null}
 
       <section className={styles.discografia} aria-labelledby="albuns-recentes">
         <div className={styles.tituloSecao}>

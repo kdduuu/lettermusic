@@ -1,6 +1,12 @@
 // Leitura publica de perfis. Executar somente no servidor Next.js.
 import { requisitarBackend } from "@/lib/backend";
 
+export type AlbumFavorito = {
+  id_musicbrainz: string;
+  titulo: string;
+  artista: string | null;
+};
+
 export type AlbumRecente = {
   id_musicbrainz: string;
   titulo: string;
@@ -35,6 +41,7 @@ export type PerfilSocial = {
     reviews: number;
     listas_publicas: number;
   };
+  albuns_favoritos: AlbumFavorito[];
   albuns_recentes: AlbumRecente[];
   reviews_recentes: ReviewRecente[];
   listas_publicas: ListaRecente[];
@@ -59,6 +66,14 @@ function perfilValido(valor: unknown): valor is PerfilSocial {
     typeof e.avaliacoes === "number" &&
     typeof e.reviews === "number" &&
     typeof e.listas_publicas === "number" &&
+    Array.isArray(valor.albuns_favoritos) &&
+    valor.albuns_favoritos.length <= 4 &&
+    valor.albuns_favoritos.every((album: unknown) =>
+      objeto(album) && typeof album.id_musicbrainz === "string" &&
+      /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(album.id_musicbrainz) &&
+      typeof album.titulo === "string" &&
+      (album.artista === null || typeof album.artista === "string")
+    ) &&
     Array.isArray(valor.albuns_recentes) &&
     valor.albuns_recentes.every((album: unknown) =>
       objeto(album) && typeof album.id_musicbrainz === "string" &&

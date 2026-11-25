@@ -24,7 +24,7 @@ export function CapaAlbum({ url, titulo, className }: CapaAlbumProps) {
     <div className={className}>
       <Image
         src={url}
-        alt={`Capa de ${titulo}`}
+        alt={`Cover of ${titulo}`}
         fill
         sizes="(max-width: 700px) 100vw, 340px"
         unoptimized
