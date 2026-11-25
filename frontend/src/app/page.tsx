@@ -50,11 +50,13 @@ async function ListasDaComunidade() {
       {resultado.dados.resultados.length ? <ul className={styles.listasHome}>
         {resultado.dados.resultados.slice(0, 3).map(lista => (
           <li key={lista.id}>
-            <Link className={styles.listaHome} href={"/listas/" + lista.id}>
-              <VitrineLista listaId={lista.id} titulo={lista.titulo} />
-              <strong>{lista.titulo}</strong>
+            <Link className={styles.listaCover} href={"/listas/" + lista.id} aria-label={"Open list " + lista.titulo}>
+              <VitrineLista listaId={lista.id} titulo={lista.titulo} compacta />
             </Link>
-            <p><Link href={"/usuarios/" + encodeURIComponent(lista.username)}>{lista.nome_exibicao}</Link> · {lista.total_itens} {lista.total_itens === 1 ? "album" : "albums"}</p>
+            <div className={styles.listaMeta}>
+              <Link className={styles.listaTitle} href={"/listas/" + lista.id}>{lista.titulo}</Link>
+              <p><Link href={"/usuarios/" + encodeURIComponent(lista.username)}>{lista.nome_exibicao}</Link> · {lista.total_itens} {lista.total_itens === 1 ? "album" : "albums"}</p>
+            </div>
           </li>
         ))}
       </ul> : <p className={styles.message}>No public lists yet.</p>}

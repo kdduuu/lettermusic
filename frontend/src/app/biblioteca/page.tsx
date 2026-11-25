@@ -72,7 +72,7 @@ function Complemento({ registro, tipo }: { registro: Registro; tipo: Categoria["
     const data = new Date(registro.ouvida_em);
     return !Number.isNaN(data.getTime()) ? (
       <span className={styles.detalhe}>
-        {new Intl.DateTimeFormat("en-US", { dateStyle: "short", timeZone: "America/Sao_Paulo" }).format(data)}
+        {new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "America/Sao_Paulo" }).format(data)}
       </span>
     ) : null;
   }

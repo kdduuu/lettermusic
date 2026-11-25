@@ -81,3 +81,12 @@
 .fechar { min-width: 40px; min-height: 40px; }
 @media(max-width:600px) { .card { gap: 18px; padding: 46px 20px 26px; } }
 @media(hover:none) { .seta { opacity: .7; } }
+
+/* Editorial track index. */
+.faixas,.faixas > li { border-color:var(--lm-line); }
+.linha { padding:12px 4px; }
+.linha:hover,.linha:focus-visible { background:var(--lm-panel); }
+.dialogo { border-radius:6px; background:var(--lm-panel); }
+.card::before { display:none; }
+.capa { border-radius:var(--lm-cover-radius); box-shadow:none; }
+.numeroModal { color:var(--lm-muted); letter-spacing:.08em; }

@@ -334,3 +334,10 @@
 .searchPage .results { margin-top:28px; }
 .searchPage .results h2 { font-size:25px; letter-spacing:-.025em; }
 @media(max-width:760px) { .editorialHome .hero.heroEditorial { grid-template-columns:1fr; gap:20px; } .editorialHome .destaqueObra { grid-template-columns:minmax(0,145px) minmax(0,1fr); gap:16px; } .editorialColumns { grid-template-columns:1fr; gap:var(--lm-section); } }
+
+.editorialColumns .listasHome li { display:grid; grid-template-columns:68px minmax(0,1fr); gap:14px; align-items:center; }
+.listaCover { display:block; text-decoration:none; }
+.listaMeta { min-width:0; }
+.listaTitle { color:var(--lm-text); font:700 19px/1.2 var(--lm-serif); text-decoration:none; overflow-wrap:anywhere; }
+.listaTitle:hover,.listaTitle:focus-visible { text-decoration:underline; }
+.editorialColumns .listasHome .listaMeta p { margin:5px 0 0; }
