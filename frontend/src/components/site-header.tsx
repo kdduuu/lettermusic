@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { sair } from "@/app/acoes";
 import { obterUsuarioAutenticado } from "@/lib/sessao";
 import styles from "./site-header.module.css";
-import { NavegacaoPrincipal } from "./navegacao-principal";
+import { NavegacaoPrincipal, NavegacaoPrincipalEstatica } from "./navegacao-principal";
 
 type SearchFormProps = {
   variant?: "header" | "hero";
@@ -69,7 +69,9 @@ export function SiteHeader() {
         <Link className={styles.brand} href="/" aria-label="Lettermusic, início">
           Lettermusic<span aria-hidden="true">*</span>
         </Link>
-        <NavegacaoPrincipal />
+        <Suspense fallback={<NavegacaoPrincipalEstatica />}>
+          <NavegacaoPrincipal />
+        </Suspense>
         <SearchForm />
         <Suspense fallback={<span className={styles.aguardando}>Conta</span>}>
           <AreaConta />

@@ -12,8 +12,7 @@ const rotas = [
   { href: "/comunidade", prefixo: "/comunidade", titulo: "Comunidade" },
 ] as const;
 
-export function NavegacaoPrincipal() {
-  const pathname = usePathname();
+function LinksPrincipais({ pathname }: { pathname: string }) {
   return (
     <nav className={styles.nav} aria-label="Navegação principal">
       {rotas.map(({ href, prefixo, titulo }) => {
@@ -23,4 +22,13 @@ export function NavegacaoPrincipal() {
       })}
     </nav>
   );
+}
+
+export function NavegacaoPrincipal() {
+  const pathname = usePathname();
+  return <LinksPrincipais pathname={pathname ?? ""} />;
+}
+
+export function NavegacaoPrincipalEstatica() {
+  return <LinksPrincipais pathname="" />;
 }
