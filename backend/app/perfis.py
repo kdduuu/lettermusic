@@ -6,6 +6,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from backend.app.models import Avaliacao, ListaMusical, Obra, Review, Usuario
+from backend.app.favoritos_perfil import consultar_favoritos_perfil
 
 
 def instante_utc(data: datetime) -> datetime:
@@ -126,6 +127,7 @@ def consultar_perfil_social(sessao: Session, username: str) -> dict | None:
             "reviews": int(total_reviews or 0),
             "listas_publicas": int(total_listas_publicas or 0),
         },
+        "albuns_favoritos": consultar_favoritos_perfil(sessao, usuario.id),
         "albuns_recentes": albuns_recentes,
         "reviews_recentes": reviews_recentes,
         "listas_publicas": listas_publicas,

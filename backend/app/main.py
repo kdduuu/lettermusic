@@ -78,6 +78,7 @@ from backend.app.listas import (
 from backend.app.models import Usuario
 from backend.app.musicbrainz import pesquisar_obras
 from backend.app.perfis import consultar_perfil_social
+from backend.app.rotas_favoritos_perfil import router as router_favoritos_perfil
 from backend.app.reviews import (
     ObraDeReviewNaoEncontrada,
     ReviewJaExiste,
@@ -138,6 +139,7 @@ app.include_router(router_recuperacao)
 app.include_router(router_feed)
 app.include_router(router_listas_publicas)
 app.include_router(router_exploracao)
+app.include_router(router_favoritos_perfil)
 
 
 # -----------------------------------------

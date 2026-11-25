@@ -1,7 +1,8 @@
 """Contratos de dados publicos do perfil social."""
 from datetime import datetime
+from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class EstatisticasPerfilPublico(BaseModel):
@@ -36,6 +37,24 @@ class ListaPublicaPerfil(BaseModel):
     criada_em: datetime
 
 
+class AlbumFavoritoPerfil(BaseModel):
+    id_musicbrainz: str
+    titulo: str
+    artista: str | None
+
+
+class FavoritosPerfilEntrada(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    albuns: list[UUID] = Field(max_length=4)
+
+    @field_validator("albuns")
+    @classmethod
+    def validar_distintos(cls, albuns: list[UUID]) -> list[UUID]:
+        if len(set(albuns)) != len(albuns):
+            raise ValueError("Os albuns devem ser distintos.")
+        return albuns
+
+
 class PerfilSocialPublico(BaseModel):
     id: int
     username: str
@@ -43,6 +62,7 @@ class PerfilSocialPublico(BaseModel):
     bio: str | None
     criado_em: datetime
     estatisticas: EstatisticasPerfilPublico
+    albuns_favoritos: list[AlbumFavoritoPerfil]
     albuns_recentes: list[AlbumRecentePerfil]
     reviews_recentes: list[ReviewRecentePerfil]
     listas_publicas: list[ListaPublicaPerfil]
