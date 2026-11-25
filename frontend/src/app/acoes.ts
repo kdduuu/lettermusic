@@ -19,12 +19,12 @@ async function autenticar(identificador: string, senha: string): Promise<EstadoA
       return {
         sucesso: false,
         mensagem: resposta.status === 429
-          ? "Muitas tentativas. Aguarde um minuto."
+          ? "Too many attempts. Wait one minute."
           : resposta.status === 401
-            ? "Usuário/e-mail ou senha incorretos."
+            ? "Incorrect username/email or password."
             : resposta.status === 403
-              ? "Confirme seu e-mail antes de entrar. Solicite outro link, se necessário."
-              : "Não foi possível entrar agora. Tente novamente.",
+              ? "Confirm your email before signing in. Request another link if needed."
+              : "Unable to sign in. Try again.",
       };
     }
 
@@ -34,7 +34,7 @@ async function autenticar(identificador: string, senha: string): Promise<EstadoA
       !("access_token" in dados) || typeof dados.access_token !== "string" ||
       !dados.access_token
     ) {
-      return { sucesso: false, mensagem: "Resposta inesperada da autenticação." };
+      return { sucesso: false, mensagem: "Unexpected authentication response." };
     }
 
     const armazenamento = await cookies();
@@ -47,7 +47,7 @@ async function autenticar(identificador: string, senha: string): Promise<EstadoA
     });
     return { sucesso: true, mensagem: "" };
   } catch {
-    return { sucesso: false, mensagem: "API indisponível. Confira se o FastAPI está ligado." };
+    return { sucesso: false, mensagem: "Service unavailable. Try again later." };
   }
 }
 
@@ -58,7 +58,7 @@ export async function entrar(
   const identificador = String(formulario.get("identificador") ?? "").trim();
   const senha = String(formulario.get("senha") ?? "");
   if (!identificador || !senha) {
-    return { sucesso: false, mensagem: "Preencha seu usuário/e-mail e sua senha." };
+    return { sucesso: false, mensagem: "Enter your username/email and password." };
   }
 
   const resultado = await autenticar(identificador, senha);
@@ -81,7 +81,7 @@ export async function cadastrar(
       nome_exibicao.length < 2 || nome_exibicao.length > 80 ||
       email.length > 254 || !email.includes("@") ||
       senha.length < 12 || senha.length > 128) {
-    return { sucesso: false, mensagem: "Confira os campos e use uma senha de 12 a 128 caracteres." };
+    return { sucesso: false, mensagem: "Check the fields and use a password of 12 to 128 characters." };
   }
 
   try {
@@ -93,19 +93,19 @@ export async function cadastrar(
       return {
         sucesso: false,
         mensagem: resposta.status === 409
-          ? "Nome de usuário ou e-mail indisponível."
+          ? "Username or email unavailable."
           : resposta.status === 422
-            ? "Dados inválidos. Verifique os campos informados."
-            : "Não foi possível criar a conta agora.",
+            ? "Invalid details. Check the fields."
+            : "Unable to create account.",
       };
     }
   } catch {
-    return { sucesso: false, mensagem: "API indisponível. Confira se o FastAPI está ligado." };
+    return { sucesso: false, mensagem: "Service unavailable. Try again later." };
   }
 
   const login = await autenticar(username, senha);
   if (!login.sucesso) {
-    return { sucesso: false, mensagem: "Conta criada! Entre pela página de login." };
+    return { sucesso: false, mensagem: "Account created. Sign in." };
   }
 
   revalidatePath("/", "layout");
@@ -146,10 +146,10 @@ type ContextoAlbum =
 
 async function contextoAlbum(formulario: FormData): Promise<ContextoAlbum> {
   const id = String(formulario.get("id_musicbrainz") ?? "").toLowerCase();
-  if (!MBID_VALIDO.test(id)) return { ok: false, mensagem: "ID musical inválido." };
+  if (!MBID_VALIDO.test(id)) return { ok: false, mensagem: "Invalid music ID." };
 
   const token = await obterTokenSessao();
-  if (!token) return { ok: false, mensagem: "Entre na sua conta para continuar." };
+  if (!token) return { ok: false, mensagem: "Sign in to continue." };
 
   // O ID interno vem da nossa API autenticada, nunca de um campo oculto confiado ao cliente.
   const consulta = await obterEstadoAlbum(id, token);
@@ -168,12 +168,12 @@ function atualizarAlbum(id: string): void {
 }
 
 function mensagemFalha(status: number): string {
-  if (status === 401) return "Sua sessão expirou. Entre novamente.";
-  if (status === 404) return "Registro não encontrado. Atualize a página.";
-  if (status === 409) return "O registro já existe. Atualize a página.";
-  if (status === 422) return "Os dados enviados foram recusados pela API.";
-  if (status === 502) return "MusicBrainz indisponível. Tente novamente.";
-  return "Não foi possível concluir sua ação.";
+  if (status === 401) return "Session expired. Sign in again.";
+  if (status === 404) return "Record not found. Refresh the page.";
+  if (status === 409) return "Record already exists. Refresh the page.";
+  if (status === 422) return "Invalid request.";
+  if (status === 502) return "MusicBrainz unavailable. Try again.";
+  return "Unable to complete your action.";
 }
 
 export async function registrarInteracao(
@@ -185,7 +185,7 @@ export async function registrarInteracao(
   if (!Object.prototype.hasOwnProperty.call(ENDPOINTS, tipo) ||
       (operacao !== "adicionar" && operacao !== "remover") ||
       (tipo === "ouvida" && operacao === "remover")) {
-    return { sucesso: false, mensagem: "Ação inválida." };
+    return { sucesso: false, mensagem: "Invalid action." };
   }
 
   const contexto = await contextoAlbum(formulario);
@@ -193,7 +193,7 @@ export async function registrarInteracao(
   const caminho = ENDPOINTS[tipo as TipoInteracao];
 
   if (operacao === "remover" && contexto.obraId === null) {
-    return { sucesso: false, mensagem: "Este álbum ainda não está na sua biblioteca." };
+    return { sucesso: false, mensagem: "This album is not in your library yet." };
   }
 
   try {
@@ -208,19 +208,19 @@ export async function registrarInteracao(
       },
     );
 
-    // DELETE é 204; "Já ouvi" repetido é idempotente. O estado é revalidado no servidor.
+    // DELETE é 204; "Listened" repetido é idempotente. O estado é revalidado no servidor.
     if (resposta.status === 409 && operacao === "adicionar") {
       atualizarAlbum(contexto.id);
-      return { sucesso: true, mensagem: "Este álbum já estava registrado." };
+      return { sucesso: true, mensagem: "This album was already logged." };
     }
     if (!resposta.ok) return { sucesso: false, mensagem: mensagemFalha(resposta.status) };
     atualizarAlbum(contexto.id);
     return {
       sucesso: true,
-      mensagem: operacao === "remover" ? "Removido da biblioteca." : "Salvo na biblioteca!",
+      mensagem: operacao === "remover" ? "Removed from library." : "Saved to library.",
     };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
@@ -239,9 +239,9 @@ export async function registrarEscuta(
     });
     if (!resposta.ok) return { sucesso: false, mensagem: mensagemFalha(resposta.status) };
     atualizarAlbum(contexto.id);
-    return { sucesso: true, mensagem: "Escuta registrada no histórico!" };
+    return { sucesso: true, mensagem: "Play logged." };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
@@ -251,14 +251,14 @@ export async function salvarAvaliacao(
 ): Promise<EstadoAcao> {
   const nota = Number(formulario.get("nota"));
   if (!Number.isFinite(nota) || nota < 0.5 || nota > 5 || nota * 2 % 1 !== 0) {
-    return { sucesso: false, mensagem: "Escolha uma nota entre 0,5 e 5 estrelas." };
+    return { sucesso: false, mensagem: "Choose a rating from 0.5 to 5 stars." };
   }
   const contexto = await contextoAlbum(formulario);
   if (!contexto.ok) return { sucesso: false, mensagem: contexto.mensagem };
 
   const edicao = contexto.nota !== null;
   if (edicao && contexto.obraId === null) {
-    return { sucesso: false, mensagem: "Avaliação sem álbum correspondente." };
+    return { sucesso: false, mensagem: "Album not found for rating." };
   }
 
   try {
@@ -276,10 +276,10 @@ export async function salvarAvaliacao(
     atualizarAlbum(contexto.id);
     return {
       sucesso: true,
-      mensagem: edicao ? "Avaliação atualizada!" : "Avaliação registrada! Uma escuta foi adicionada.",
+      mensagem: edicao ? "Rating updated." : "Rating saved and play logged.",
     };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
@@ -289,14 +289,14 @@ export async function salvarReview(
 ): Promise<EstadoAcao> {
   const texto = String(formulario.get("texto") ?? "").trim();
   if (!texto || texto.length > 5000) {
-    return { sucesso: false, mensagem: "Escreva uma review de até 5.000 caracteres." };
+    return { sucesso: false, mensagem: "Write a review of up to 5,000 characters." };
   }
   const contexto = await contextoAlbum(formulario);
   if (!contexto.ok) return { sucesso: false, mensagem: contexto.mensagem };
 
   const edicao = contexto.review !== null;
   if (edicao && contexto.obraId === null) {
-    return { sucesso: false, mensagem: "Review sem álbum correspondente." };
+    return { sucesso: false, mensagem: "Album not found for review." };
   }
 
   try {
@@ -314,10 +314,10 @@ export async function salvarReview(
     atualizarAlbum(contexto.id);
     return {
       sucesso: true,
-      mensagem: edicao ? "Review atualizada!" : "Review publicada! Uma escuta foi adicionada.",
+      mensagem: edicao ? "Review updated." : "Review published and play logged.",
     };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
@@ -334,7 +334,7 @@ export async function removerReview(
   if (contexto.obraId === null || contexto.review === null) {
     return {
       sucesso: false,
-      mensagem: "Você não possui uma review desse álbum.",
+      mensagem: "You have no review for this album.",
     };
   }
 
@@ -362,12 +362,12 @@ export async function removerReview(
 
     return {
       sucesso: true,
-      mensagem: "Review excluída com sucesso.",
+      mensagem: "Review deleted.",
     };
   } catch {
     return {
       sucesso: false,
-      mensagem: "Falha de conexão. Tente novamente.",
+      mensagem: "Connection failed. Try again.",
     };
   }
 }

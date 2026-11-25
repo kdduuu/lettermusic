@@ -17,7 +17,7 @@ function AcaoAlbum({ id, tipo, ativo, rotulo }: {
   const [estado, acao, pendente] = useActionState(registrarInteracao, ESTADO_INICIAL);
 
   if (tipo === "ouvida" && ativo) {
-    return <span className={styles.confirmado}>✓ Já ouvi</span>;
+    return <span className={styles.confirmado}>✓ Listened</span>;
   }
 
   return (
@@ -25,8 +25,8 @@ function AcaoAlbum({ id, tipo, ativo, rotulo }: {
       <input type="hidden" name="id_musicbrainz" value={id} />
       <input type="hidden" name="tipo" value={tipo} />
       <input type="hidden" name="operacao" value={ativo ? "remover" : "adicionar"} />
-      <button disabled={pendente} type="submit" aria-pressed={tipo === "ouvida" ? undefined : ativo} title={ativo ? `Remover: ${rotulo}` : undefined}>
-        {pendente ? "Salvando..." : ativo ? `✓ ${rotulo}` : rotulo}
+      <button disabled={pendente} type="submit" aria-pressed={tipo === "ouvida" ? undefined : ativo} title={ativo ? `Remove: ${rotulo}` : undefined}>
+        {pendente ? "Saving…" : ativo ? `✓ ${rotulo}` : rotulo}
       </button>
       {estado.mensagem && (
         <p className={estado.sucesso ? styles.sucesso : styles.erro} role="status">
@@ -44,10 +44,10 @@ function AcaoEscuta({ id, quantidade }: { id: string; quantidade: number }) {
     <form action={acao} className={styles.escuta}>
       <input type="hidden" name="id_musicbrainz" value={id} />
       <button type="submit" disabled={pendente}>
-        {pendente ? "Registrando..." : "Registrar escuta"}
+        {pendente ? "Logging…" : "Log a play"}
       </button>
       <span className={styles.contador}>
-        {quantidade} {quantidade === 1 ? "escuta registrada" : "escutas registradas"}
+        {quantidade} {quantidade === 1 ? "play logged" : "plays logged"}
       </span>
       {estado.mensagem && (
         <p className={estado.sucesso ? styles.sucesso : styles.erro} role="status">
@@ -60,12 +60,12 @@ function AcaoEscuta({ id, quantidade }: { id: string; quantidade: number }) {
 
 export function FormularioInteracoes({ id, estado }: { id: string; estado: EstadoAlbum }) {
   return (
-    <section className={styles.container} aria-label="Seus registros deste álbum">
-      <h2>Seus registros</h2>
+    <section className={styles.container} aria-label="Your album activity">
+      <h2>Your activity</h2>
       <div className={styles.grupo}>
-        <AcaoAlbum id={id} tipo="ouvida" ativo={estado.ouvida} rotulo="Já ouvi" />
-        <AcaoAlbum id={id} tipo="favorito" ativo={estado.favorito} rotulo="Favorito" />
-        <AcaoAlbum id={id} tipo="quero-ouvir" ativo={estado.quero_ouvir} rotulo="Quero ouvir" />
+        <AcaoAlbum id={id} tipo="ouvida" ativo={estado.ouvida} rotulo="Listened" />
+        <AcaoAlbum id={id} tipo="favorito" ativo={estado.favorito} rotulo="Favorite" />
+        <AcaoAlbum id={id} tipo="quero-ouvir" ativo={estado.quero_ouvir} rotulo="Want to listen" />
       </div>
       <AcaoEscuta id={id} quantidade={estado.quantidade_escutas} />
     </section>

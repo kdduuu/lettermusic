@@ -22,16 +22,16 @@ export function FormularioCriarLista() {
   const [estado, acao, pendente] = useActionState(criarLista, ESTADO_INICIAL);
   return (
     <form action={acao} className={styles.form}>
-      <label htmlFor="criar-titulo">Nome da lista</label>
-      <input id="criar-titulo" name="titulo" maxLength={120} required placeholder="Ex.: Noite Indie" />
-      <label htmlFor="criar-descricao">Descrição (opcional)</label>
-      <textarea id="criar-descricao" name="descricao" maxLength={500} rows={3} placeholder="O que reúne esses álbuns?" />
+      <label htmlFor="criar-titulo">List name</label>
+      <input id="criar-titulo" name="titulo" maxLength={120} required placeholder="e.g. Indie nights" />
+      <label htmlFor="criar-descricao">Description (optional)</label>
+      <textarea id="criar-descricao" name="descricao" maxLength={500} rows={3} placeholder="What connects these albums?" />
       <label className={styles.checkbox}>
-        <input type="checkbox" name="publica" defaultChecked /> Lista pública
+        <input type="checkbox" name="publica" defaultChecked /> Public list
       </label>
-      <p className={styles.ajuda}>Listas privadas ficam visíveis apenas para sua conta.</p>
+      <p className={styles.ajuda}>Private lists are only visible to you.</p>
       <button disabled={pendente} type="submit" className={styles.primario}>
-        {pendente ? "Criando..." : "Criar lista"}
+        {pendente ? "Creating…" : "Create list"}
       </button>
       <Mensagem {...estado} />
     </form>
@@ -43,14 +43,14 @@ export function FormularioEditarLista({ lista }: { lista: ListaMusical }) {
   return (
     <form action={acao} className={styles.form}>
       <input type="hidden" name="lista_id" value={lista.id} />
-      <label htmlFor="editar-titulo">Nome da lista</label>
+      <label htmlFor="editar-titulo">List name</label>
       <input id="editar-titulo" name="titulo" defaultValue={lista.titulo} maxLength={120} required />
-      <label htmlFor="editar-descricao">Descrição</label>
+      <label htmlFor="editar-descricao">Description</label>
       <textarea id="editar-descricao" name="descricao" defaultValue={lista.descricao ?? ""} maxLength={500} rows={3} />
       <label className={styles.checkbox}>
-        <input type="checkbox" name="publica" defaultChecked={lista.publica} /> Lista pública
+        <input type="checkbox" name="publica" defaultChecked={lista.publica} /> Public list
       </label>
-      <button disabled={pendente} type="submit">{pendente ? "Salvando..." : "Salvar alterações"}</button>
+      <button disabled={pendente} type="submit">{pendente ? "Saving…" : "Save changes"}</button>
       <Mensagem {...estado} />
     </form>
   );
@@ -60,12 +60,12 @@ export function FormularioExcluirLista({ id }: { id: number }) {
   const [estado, acao, pendente] = useActionState(excluirLista, ESTADO_INICIAL);
   return (
     <details className={styles.excluir}>
-      <summary>Excluir esta lista</summary>
-      <p>A lista e seus itens serão removidos. As obras e escutas do catálogo permanecem.</p>
+      <summary>Delete list</summary>
+      <p>The list and its items will be removed. Albums and listening history are kept.</p>
       <form action={acao}>
         <input type="hidden" name="lista_id" value={id} />
         <button type="submit" disabled={pendente} className={styles.perigo}>
-          {pendente ? "Excluindo..." : "Confirmar exclusão"}
+          {pendente ? "Deleting…" : "Confirm deletion"}
         </button>
         <Mensagem {...estado} />
       </form>
@@ -84,15 +84,15 @@ export function FormularioAdicionarAlbum({
   return (
     <form action={acao} className={styles.adicionar}>
       <input type="hidden" name="id_musicbrainz" value={idMusicBrainz} />
-      <label htmlFor="album-lista">Adicionar a uma lista</label>
+      <label htmlFor="album-lista">Add to a list</label>
       <div className={styles.linha}>
         <select name="lista_id" id="album-lista" required defaultValue="">
-          <option value="" disabled>Escolha uma lista</option>
+          <option value="" disabled>Choose a list</option>
           {listas.map((lista) => (
-            <option key={lista.id} value={lista.id}>{lista.titulo}{lista.publica ? "" : " · Privada"}</option>
+            <option key={lista.id} value={lista.id}>{lista.titulo}{lista.publica ? "" : " · Private"}</option>
           ))}
         </select>
-        <button type="submit" disabled={pendente}>{pendente ? "Adicionando..." : "Adicionar"}</button>
+        <button type="submit" disabled={pendente}>{pendente ? "Adding…" : "Add"}</button>
       </div>
       <Mensagem {...estado} />
     </form>
@@ -105,7 +105,7 @@ export function BotaoAdicionarBusca({ id, listaId }: { id: string; listaId: numb
     <form action={acao} className={styles.botaoBusca}>
       <input type="hidden" name="id_musicbrainz" value={id} />
       <input type="hidden" name="lista_id" value={listaId} />
-      <button type="submit" disabled={pendente}>{pendente ? "Adicionando..." : "+ Adicionar à lista"}</button>
+      <button type="submit" disabled={pendente}>{pendente ? "Adding…" : "+ Add to list"}</button>
       <Mensagem {...estado} />
     </form>
   );
@@ -132,18 +132,18 @@ export function ControlesItemLista({
         <input type="hidden" name="lista_id" value={listaId} />
         <input type="hidden" name="obra_id" value={obraId} />
         <input type="hidden" name="nova_posicao" value={Math.max(1, posicao - 1)} />
-        <button type="submit" title="Subir uma posição" disabled={posicao <= 1 || pendenteAcima}>↑</button>
+        <button type="submit" title="Move up" disabled={posicao <= 1 || pendenteAcima}>↑</button>
       </form>
       <form action={moverAbaixo}>
         <input type="hidden" name="lista_id" value={listaId} />
         <input type="hidden" name="obra_id" value={obraId} />
         <input type="hidden" name="nova_posicao" value={posicao + 1} />
-        <button type="submit" title="Descer uma posição" disabled={!podeDescer || pendenteAbaixo}>↓</button>
+        <button type="submit" title="Move down" disabled={!podeDescer || pendenteAbaixo}>↓</button>
       </form>
       <form action={remover}>
         <input type="hidden" name="lista_id" value={listaId} />
         <input type="hidden" name="obra_id" value={obraId} />
-        <button type="submit" disabled={pendenteRemocao} title="Remover álbum da lista">Remover</button>
+        <button type="submit" disabled={pendenteRemocao} title="Remove album from list">Remove</button>
       </form>
       {[acima, abaixo, remocao].filter((e) => e.mensagem).map((e, i) => <Mensagem key={i} {...e} />)}
     </div>
