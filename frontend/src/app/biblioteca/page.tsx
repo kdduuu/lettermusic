@@ -81,6 +81,9 @@ function AlbumLink({ registro, children }: { registro: Registro; children: React
 const historyDate = new Intl.DateTimeFormat("en-US", {
   year: "numeric", month: "long", day: "numeric", weekday: "long", timeZone: "America/Sao_Paulo",
 });
+const historyMonthYear = new Intl.DateTimeFormat("en-US", {
+  month: "short", year: "numeric", timeZone: "America/Sao_Paulo",
+});
 const historyDayKey = new Intl.DateTimeFormat("en-CA", {
   year: "numeric", month: "2-digit", day: "2-digit", timeZone: "America/Sao_Paulo",
 });
@@ -97,19 +100,31 @@ function listeningDate(registro: Registro): Date | null {
 function History({ registros, capas }: { registros: Registro[]; capas: Map<string, string | null> }) {
   // The API already orders events by listening timestamp and ID, descending.
   // Group only this page; never merge or remove repeated listens.
-  const days = new Map<string, { label: string; records: Registro[] }>();
+  const days = new Map<string, { label: string; dayNumber: string; monthYear: string; records: Registro[] }>();
   for (const registro of registros) {
     const date = listeningDate(registro);
     const parts = date ? historyDayKey.formatToParts(date) : [];
     const key = date ? ["year", "month", "day"].map(type => parts.find(part => part.type === type)?.value ?? "").join("-") : "unknown";
     const group = days.get(key);
     if (group) group.records.push(registro);
-    else days.set(key, { label: date ? historyDate.format(date) : "Unknown date", records: [registro] });
+    else days.set(key, {
+      label: date ? historyDate.format(date) : "Unknown date",
+      dayNumber: date ? String(Number(parts.find(part => part.type === "day")?.value)) : "",
+      monthYear: date ? historyMonthYear.format(date) : "",
+      records: [registro],
+    });
   }
   return <div className={styles.history}>
     {[...days].map(([day, group]) => (
       <section className={styles.historyDay} key={day} aria-labelledby={"history-"+day}>
-        <h2 id={"history-"+day}>{day === "unknown" ? group.label : <time dateTime={day}>{group.label}</time>}</h2>
+        <h2 id={"history-"+day} className={styles.historyDate}>
+          {day === "unknown" ? group.label : (
+            <time dateTime={day} aria-label={group.label}>
+              <span className={styles.historyDateNumber}>{group.dayNumber}</span>
+              <span className={styles.historyDateMonth}>{group.monthYear}</span>
+            </time>
+          )}
+        </h2>
         <ol className={styles.historyEntries}>
           {group.records.map(registro => {
             const date = listeningDate(registro);
