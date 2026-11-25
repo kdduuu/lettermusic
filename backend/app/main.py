@@ -220,6 +220,10 @@ def criar_usuario(
     ip = request.client.host if request.client else "desconhecido"
     verificar_cadastro(ip, str(dados.email))
 
+    # Nao cria contas impossiveis de confirmar por erro de configuracao.
+    if rec.verificacao_obrigatoria() and not rec.email_configurado():
+        raise HTTPException(503, "Confirmacao de e-mail indisponivel.")
+
     try:
         usuario = cadastrar_usuario(sessao, dados)
 

@@ -24,3 +24,12 @@ Nenhum deploy nesta etapa. Nao considerar pronto para producao ate F11/F12.
 ## F10.3 — Discografia
 
 Ordenacao por data no servidor antes da paginacao, preservando o filtro MusicBrainz. Lotes de 100 com cache existente, maximo de 500 lancamentos filtrados por consulta ordenada; acima disso retorna erro explicito e orienta usar categoria ou ordem de catalogo. Nao retorna amostra como discografia completa. Datas desconhecidas ao final, desempate deterministico. A ordem de catalogo continua paginada diretamente no provedor. Grupos visuais continuam por pagina. Testes verificam ordenacao entre lotes, cache, filtro e limite. Validar com artistas reais; latencia externa e classificacao dependem dos metadados MusicBrainz.
+
+
+## F11.1 — Seguranca e confiabilidade (parte 1)
+
+- Recuperacao e confirmacao: bloqueio de Usuario antes de TokenConta, com revalidacao atomica apos adquirir o bloqueio; testes de concorrencia em PostgreSQL.
+- Cadastro com confirmacao obrigatoria e SMTP nao configurado retorna 503 antes de criar a conta. Interface confirma criacao e orienta entrar ou reenviar link. Mensagens transacionais em ingles.
+- Hidratacao: divergencia de estilos --dm-* no HTML apenas no Opera GX; usuario confirmou que desaparece nos outros navegadores. Nao ocultar avisos.
+- Pendente: limites contra abuso (origem confiavel e compartilhamento entre processos), configuracao real de SMTP/HTTPS, validacao de entrega, testes browser e verificacoes de producao.
+- Nenhum deploy. Main preservada; consolidar PR #15 apos CI e validacao.

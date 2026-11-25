@@ -29,6 +29,14 @@ export function FormularioLogin() {
 export function FormularioCadastro() {
   const [estado, acao, pendente] = useActionState(cadastrar, ESTADO_INICIAL);
 
+  if (estado.sucesso) {
+    return <div className={styles.form}>
+      <p role="status">{estado.mensagem}</p>
+      <p className={styles.alternativa}><Link href="/entrar">Sign in</Link></p>
+      <p className={styles.alternativa}>Missing your confirmation email? <Link href="/reenviar-confirmacao">Resend link</Link></p>
+    </div>;
+  }
+
   return (
     <form action={acao} className={styles.form}>
       <label htmlFor="username">Username</label>

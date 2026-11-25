@@ -170,3 +170,100 @@ def test_rollback_da_obra_em_postgresql(banco_postgresql):
 
     with Session(banco_postgresql) as sessao:
         assert sessao.scalar(select(func.count()).select_from(Obra)) == 0
+
+
+@pytest.mark.parametrize("finalidade", ["senha", "verificacao"])
+def test_tokens_distintos_da_mesma_conta_em_concorrencia(banco_postgresql, finalidade):
+    """Duas operacoes concorrentes nao podem consumir dois links da mesma conta."""
+    from fastapi import HTTPException
+    from backend.app import recuperacao_email as rec
+    from backend.app.models import TokenConta
+    from backend.app.usuarios import protetor_senhas
+
+    usuario_id, _ = preparar_usuario_e_obra(banco_postgresql)
+    with Session(banco_postgresql) as sessao:
+        usuario = sessao.get(Usuario, usuario_id)
+        versao = usuario.sessao_versao
+        tokens = [rec.emitir_token(sessao, usuario, finalidade) for _ in range(2)]
+
+    inicio = Barrier(2)
+
+    def executar(indice):
+        with Session(banco_postgresql) as sessao:
+            inicio.wait(timeout=10)
+            try:
+                if finalidade == "senha":
+                    rec.redefinir_senha(sessao, tokens[indice], f"NovaSenhaSegura#{indice}2026")
+                else:
+                    rec.confirmar_email(sessao, tokens[indice])
+                return indice
+            except HTTPException as erro:
+                assert erro.status_code == 400
+                return None
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        tarefas = [executor.submit(executar, i) for i in range(2)]
+        resultados = [tarefa.result(timeout=25) for tarefa in tarefas]
+    assert sum(r is not None for r in resultados) == 1
+    vencedor = next(r for r in resultados if r is not None)
+    with Session(banco_postgresql) as sessao:
+        usuario = sessao.get(Usuario, usuario_id)
+        assert sessao.scalar(select(func.count()).select_from(TokenConta).where(
+            TokenConta.usuario_id == usuario_id, TokenConta.usado_em.is_(None)
+        )) == 0
+        if finalidade == "senha":
+            assert usuario.sessao_versao == versao + 1
+            assert protetor_senhas.verify(f"NovaSenhaSegura#{vencedor}2026", usuario.senha_hash)
+        else:
+            assert usuario.email_confirmado
+
+
+def test_troca_manual_e_recuperacao_concorrentes(banco_postgresql):
+    """Troca autenticada e recuperacao usam a mesma ordem de bloqueios."""
+    from fastapi import HTTPException
+    from backend.app import recuperacao_email as rec
+    from backend.app.rotas_conta import alterar_senha
+    from backend.app.schemas_conta import AlterarSenhaEntrada
+    from backend.app.usuarios import protetor_senhas
+
+    usuario_id, _ = preparar_usuario_e_obra(banco_postgresql)
+    original = "SenhaOriginal#2026"
+    with Session(banco_postgresql) as sessao:
+        usuario = sessao.get(Usuario, usuario_id)
+        usuario.senha_hash = protetor_senhas.hash(original)
+        sessao.commit()
+        versao = usuario.sessao_versao
+        token = rec.emitir_token(sessao, usuario, "senha")
+
+    inicio = Barrier(2)
+
+    def manual():
+        with Session(banco_postgresql) as sessao:
+            usuario = sessao.get(Usuario, usuario_id)
+            inicio.wait(timeout=10)
+            try:
+                alterar_senha(AlterarSenhaEntrada(senha_atual=original, senha_nova="SenhaManual#2026"), usuario, sessao)
+                return "manual"
+            except HTTPException as erro:
+                assert erro.status_code in (400, 409)
+                return None
+
+    def recuperacao():
+        with Session(banco_postgresql) as sessao:
+            inicio.wait(timeout=10)
+            try:
+                rec.redefinir_senha(sessao, token, "SenhaRecuperada#2026")
+                return "recuperacao"
+            except HTTPException as erro:
+                assert erro.status_code == 400
+                return None
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        tarefas = [executor.submit(manual), executor.submit(recuperacao)]
+        resultados = [tarefa.result(timeout=25) for tarefa in tarefas]
+    assert sum(r is not None for r in resultados) == 1
+    with Session(banco_postgresql) as sessao:
+        usuario = sessao.get(Usuario, usuario_id)
+        assert usuario.sessao_versao == versao + 1
+        senha = "SenhaManual#2026" if "manual" in resultados else "SenhaRecuperada#2026"
+        assert protetor_senhas.verify(senha, usuario.senha_hash)
