@@ -15,6 +15,14 @@ TipoDiscografia = Literal[
     "todos", "album", "single", "ep", "compilation", "live"
 ]
 MAX_CANDIDATOS = 60
+OrdemDiscografia = Literal["catalogo", "antigos", "recentes"]
+MAX_DISCOGRAFIA_ORDENADA = 500
+LOTE_DISCOGRAFIA = 100
+
+
+class DiscografiaExtensa(Exception):
+    """Evita ordenar parcialmente um catalogo acima do limite seguro."""
+
 
 
 class LancamentoRelacionado(BaseModel):
@@ -374,7 +382,11 @@ def consultar_discografia(
     pagina: int,
     limite: int,
     tipo: TipoDiscografia = "todos",
+    ordem: OrdemDiscografia = "catalogo",
 ):
+    if ordem != "catalogo":
+        return ordenar_discografia(mbid, pagina, limite, tipo, ordem)
+
     parametros = {
         "artist": mbid,
         "fmt": "json",
@@ -395,6 +407,62 @@ def consultar_discografia(
             dados, "release-groups", converter_album,
             pagina, limite, "release-group-count",
         ),
+    )
+
+
+def ordenar_discografia(
+    mbid: str, pagina: int, limite: int, tipo: TipoDiscografia,
+    ordem: OrdemDiscografia,
+) -> PaginaExploracao:
+    """Ordena a colecao filtrada inteira antes de paginar; nao persiste obras."""
+    parametros = {
+        "artist": mbid, "fmt": "json", "inc": "artist-credits",
+        "limit": LOTE_DISCOGRAFIA, "release-group-status": "website-default",
+    }
+    if tipo != "todos":
+        parametros["type"] = tipo
+
+    def interpretar(dados):
+        linhas = registros(dados, "release-groups")
+        total = dados.get("release-group-count")
+        if type(total) is not int or total < 0:
+            raise ValueError("Contagem MusicBrainz invalida.")
+        return total, [converter_album(item) for item in linhas]
+
+    itens = {}
+    offset = 0
+    total_esperado = None
+    while total_esperado is None or offset < total_esperado:
+        total, lote = mb._consultar(
+            BASE + "release-group/", {**parametros, "offset": offset},
+            "busca", mb.TTL_DETALHE, interpretar,
+        )
+        if total > MAX_DISCOGRAFIA_ORDENADA:
+            raise DiscografiaExtensa()
+        if total_esperado is None:
+            total_esperado = total
+        if total != total_esperado or len(lote) != min(LOTE_DISCOGRAFIA, total - offset):
+            raise ValueError("Discografia alterada durante a consulta.")
+        for item in lote:
+            if item.id_musicbrainz in itens:
+                raise ValueError("Discografia retornou registros duplicados.")
+            itens[item.id_musicbrainz] = item
+        offset += len(lote)
+
+    # Datas parciais do MusicBrainz (YYYY, YYYY-MM, YYYY-MM-DD)
+    # mantem a precisao original. Desconhecidas ficam ao final em ambas as ordens.
+    conhecidos = [item for item in itens.values() if item.data]
+    desconhecidos = [item for item in itens.values() if not item.data]
+    desempate = lambda item: (item.titulo.casefold(), item.id_musicbrainz)
+    conhecidos.sort(key=desempate)
+    conhecidos.sort(key=lambda item: item.data or "", reverse=ordem == "recentes")
+    desconhecidos.sort(key=desempate)
+    ordenados = conhecidos + desconhecidos
+    inicio = (pagina - 1) * limite
+    recorte = ordenados[inicio:inicio + limite]
+    return PaginaExploracao(
+        resultados=recorte, pagina=pagina,
+        tem_proxima=inicio + len(recorte) < len(ordenados) and bool(recorte),
     )
 
 

@@ -89,7 +89,9 @@ async function consultar<T>(
       ok: false,
       mensagem: resposta.status === 404
         ? "Record not found."
-        : "Search temporarily unavailable.",
+        : resposta.status === 422 && caminho.includes("/discografia")
+          ? "Catalog too large for date sorting. Choose a release type or Catalog order."
+          : "Search temporarily unavailable.",
     };
 
     const dados: unknown = await resposta.json();
@@ -130,8 +132,8 @@ export function artista(id: string) {
   return consultar(`/artistas/${encodeURIComponent(id)}`, itemValido);
 }
 
-export function discografia(id: string, pagina: number, tipo = "todos") {
-  const parametros = new URLSearchParams({ pagina: String(pagina), tipo });
+export function discografia(id: string, pagina: number, tipo = "todos", ordem = "catalogo") {
+  const parametros = new URLSearchParams({ pagina: String(pagina), tipo, ordem });
   return consultar(`/artistas/${encodeURIComponent(id)}/discografia?${parametros}`, paginaValida);
 }
 

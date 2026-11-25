@@ -464,3 +464,59 @@ def test_previa_faixas_evitar_consulta_musicbrainz_extra(
     assert r.status_code == 200
     assert r.json()["resultados"][0]["titulo"] == "Come As You Are"
     assert r.json()["resultados"][0]["relacionados"] == []
+
+
+def test_discografia_ordena_antes_de_paginar(cliente, monkeypatch):
+    grupos = [
+        {**GRUPO, "id": f"00000000-0000-0000-0000-{n:012d}",
+         "title": f"Album {n:03d}", "first-release-date": str(1900 + n)}
+        for n in range(1, 102)
+    ]
+    # A pagina mais antiga inclui um registro encontrado apenas no segundo lote.
+    grupos[100]["first-release-date"] = "1800"
+    grupos[0].pop("first-release-date")
+    chamadas = []
+
+    def resposta(url, **kwargs):
+        params = kwargs["params"]
+        chamadas.append(params)
+        inicio = params["offset"]
+        return httpx.Response(
+            200, json={"release-group-count": len(grupos),
+                       "release-groups": grupos[inicio:inicio + params["limit"]]},
+            request=httpx.Request("GET", url),
+        )
+
+    monkeypatch.setattr(mb.httpx, "get", resposta)
+    c, _ = cliente
+    base = f"/catalogo/explorar/artistas/{ARTISTA}/discografia?limite=2"
+    primeira = c.get(base + "&ordem=antigos").json()
+    segunda = c.get(base + "&ordem=antigos&pagina=2").json()
+    assert [r["titulo"] for r in primeira["resultados"]] == ["Album 101", "Album 002"]
+    assert [r["titulo"] for r in segunda["resultados"]] == ["Album 003", "Album 004"]
+    assert len(chamadas) == 2  # Os lotes sao reutilizados pelo cache.
+    recentes = c.get(base + "&ordem=recentes").json()
+    assert [r["titulo"] for r in recentes["resultados"]] == ["Album 100", "Album 099"]
+    ultima = c.get(base + "&ordem=recentes&pagina=51").json()
+    assert [r["titulo"] for r in ultima["resultados"]] == ["Album 001"]
+    assert not ultima["tem_proxima"]
+
+
+def test_discografia_extensa_nao_ordena_amostra(cliente, monkeypatch):
+    simular(monkeypatch, {"release-group-count": 501, "release-groups": [GRUPO]})
+    c, _ = cliente
+    base = f"/catalogo/explorar/artistas/{ARTISTA}/discografia"
+    assert c.get(base + "?ordem=antigos").status_code == 422
+    assert c.get(base).status_code == 200
+
+
+def test_discografia_ordenada_preserva_filtro(cliente, monkeypatch):
+    chamadas = simular(monkeypatch, {
+        "release-group-count": 1,
+        "release-groups": [{**GRUPO, "secondary-types": ["Compilation"]}],
+    })
+    c, _ = cliente
+    r = c.get(f"/catalogo/explorar/artistas/{ARTISTA}/discografia?tipo=compilation&ordem=recentes")
+    assert r.status_code == 200
+    assert chamadas[0][1]["type"] == "compilation"
+    assert r.json()["resultados"][0]["subtitulo"] == "Compilation"

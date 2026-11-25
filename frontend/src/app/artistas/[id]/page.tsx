@@ -50,19 +50,8 @@ async function Conteudo({ params, searchParams }: Props) {
   const perfil = await artista(id);
   if (!perfil.ok) return <p role="alert" className={styles.message}>{perfil.mensagem}</p>;
 
-  const obras = await discografia(id, pagina, tipo);
-  const itens = obras.ok ? [...obras.dados.resultados] : [];
-
-  if (ordem !== "catalogo") {
-    itens.sort((a, b) => {
-      if (!a.data && !b.data) return a.titulo.localeCompare(b.titulo);
-      if (!a.data) return 1;
-      if (!b.data) return -1;
-      return ordem === "antigos"
-        ? a.data.localeCompare(b.data)
-        : b.data.localeCompare(a.data);
-    });
-  }
+  const obras = await discografia(id, pagina, tipo, ordem);
+  const itens = obras.ok ? obras.dados.resultados : [];
 
   return (
     <>
@@ -82,7 +71,7 @@ async function Conteudo({ params, searchParams }: Props) {
         </nav>
         <form action={`/artistas/${id}`} className={visual.sort}>
           <input type="hidden" name="tipo" value={tipo}/>
-          <label htmlFor="ordem-discografia">Sort this page</label>
+          <label htmlFor="ordem-discografia">Sort by</label>
           <select className={controles.selecao} id="ordem-discografia" name="ordem" defaultValue={ordem}>
             <option value="catalogo">Catalog order</option><option value="antigos">Oldest first</option><option value="recentes">Newest first</option>
           </select>

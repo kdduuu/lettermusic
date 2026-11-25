@@ -19,3 +19,8 @@ F10.1: main consolidada via PR #14, com a identidade visual aprovada e CI fronte
 4. Revisar documentacao, variaveis de ambiente, configuracao de deploy, backup, HTTPS e custos.
 
 Nenhum deploy nesta etapa. Nao considerar pronto para producao ate F11/F12.
+
+
+## F10.3 — Discografia
+
+Ordenacao por data no servidor antes da paginacao, preservando o filtro MusicBrainz. Lotes de 100 com cache existente, maximo de 500 lancamentos filtrados por consulta ordenada; acima disso retorna erro explicito e orienta usar categoria ou ordem de catalogo. Nao retorna amostra como discografia completa. Datas desconhecidas ao final, desempate deterministico. A ordem de catalogo continua paginada diretamente no provedor. Grupos visuais continuam por pagina. Testes verificam ordenacao entre lotes, cache, filtro e limite. Validar com artistas reais; latencia externa e classificacao dependem dos metadados MusicBrainz.
