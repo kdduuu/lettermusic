@@ -27,11 +27,11 @@ async function CapasRecentes({ albuns }: { albuns: AlbumRecente[] }) {
           key={album.id_musicbrainz}
           href={"/albuns/" + encodeURIComponent(album.id_musicbrainz)}
           className={styles.itemCapa}
-          title={album.titulo + " — " + (album.artista ?? "Artista não informado")}
+          title={album.titulo + " — " + (album.artista ?? "Unknown artist")}
         >
           <CapaAlbum url={urls[indice]} titulo={album.titulo} className={styles.capa} />
           <span className={styles.nomeAlbum}>{album.titulo}</span>
-          <span className={styles.artistaAlbum}>{album.artista ?? "Artista não informado"}</span>
+          <span className={styles.artistaAlbum}>{album.artista ?? "Unknown artist"}</span>
         </Link>
       ))}
     </div>
@@ -45,7 +45,7 @@ async function ReviewsPerfil({ reviews }: { reviews: ReviewRecente[] }) {
     <ul className={styles.feed}>
       {reviews.map((review, indice) => (
         <li key={review.id} className={styles.itemReview}>
-          <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.linkCapaReview} aria-label={"Abrir " + review.titulo}>
+          <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.linkCapaReview} aria-label={"Open " + review.titulo}>
             <CapaAlbum url={urls[indice]} titulo={review.titulo} className={styles.capaReview} />
           </Link>
           <div className={styles.conteudoReview}>
@@ -53,7 +53,7 @@ async function ReviewsPerfil({ reviews }: { reviews: ReviewRecente[] }) {
               <Link href={"/albuns/" + encodeURIComponent(review.id_musicbrainz)} className={styles.reviewAlbum}>{review.titulo}</Link>
               <time dateTime={review.criada_em}>{dataResumida(review.criada_em)}</time>
             </div>
-            <p className={styles.reviewArtista}>{review.artista ?? "Artista não informado"}</p>
+            <p className={styles.reviewArtista}>{review.artista ?? "Unknown artist"}</p>
             <p className={styles.reviewTexto}>{review.texto}</p>
 
           </div>
@@ -71,25 +71,25 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
     return <p role="alert" className={styles.erro}>{resultado.mensagem}</p>;
   }
   const { perfil } = resultado;
-  const inicial = Array.from(perfil.nome_exibicao.trim()).slice(0, 1).join("").toLocaleUpperCase("pt-BR") || "♪";
+  const inicial = Array.from(perfil.nome_exibicao.trim()).slice(0, 1).join("").toLocaleUpperCase("en-US") || "♪";
   const ano = anoCadastro(perfil.criado_em);
 
   return (
     <>
       <header className={styles.perfilHero}>
         <div className={styles.identidade}>
-          <div className={styles.avatar} aria-label={"Inicial de " + perfil.nome_exibicao} role="img">{inicial}</div>
+          <div className={styles.avatar} aria-label={"Initial of " + perfil.nome_exibicao} role="img">{inicial}</div>
           <div className={styles.informacoes}>
-            {ano ? <p className={styles.sobretitulo}>Desde {ano}</p> : null}
+            {ano ? <p className={styles.sobretitulo}>Since {ano}</p> : null}
             <h1>{perfil.nome_exibicao}</h1>
             <p className={styles.username}>@{perfil.username}</p>
             {perfil.bio ? <p className={styles.bio}>{perfil.bio}</p> : null}
           </div>
         </div>
-        <dl className={styles.estatisticas} aria-label="Atividade pública do perfil">
-          <div><dd>{perfil.estatisticas.avaliacoes}</dd><dt>Avaliações</dt></div>
+        <dl className={styles.estatisticas} aria-label="Public profile activity">
+          <div><dd>{perfil.estatisticas.avaliacoes}</dd><dt>Ratings</dt></div>
           <div><dd>{perfil.estatisticas.reviews}</dd><dt>Reviews</dt></div>
-          <div><dd>{perfil.estatisticas.listas_publicas}</dd><dt>Listas públicas</dt></div>
+          <div><dd>{perfil.estatisticas.listas_publicas}</dd><dt>Public lists</dt></div>
         </dl>
       </header>
 
@@ -97,15 +97,15 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
         <div className={styles.tituloSecao}>
           <div>
             
-            <h2 id="albuns-recentes">Atividade recente</h2>
+            <h2 id="albuns-recentes">Recent activity</h2>
           </div>
           
         </div>
         {perfil.albuns_recentes.length ? (
-          <Suspense fallback={<p className={styles.vazio}>Carregando capas...</p>}>
+          <Suspense fallback={<p className={styles.vazio}>Loading covers…</p>}>
             <CapasRecentes albuns={perfil.albuns_recentes} />
           </Suspense>
-        ) : <p className={styles.vazio}>Sem atividade recente.</p>}
+        ) : <p className={styles.vazio}>No recent activity.</p>}
       </section>
 
       <div className={styles.corpoEditorial}>
@@ -120,32 +120,32 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
             <Suspense fallback={<p className={styles.vazio}>Carregando reviews...</p>}>
               <ReviewsPerfil reviews={perfil.reviews_recentes} />
             </Suspense>
-          ) : <p className={styles.vazio}>Sem reviews.</p>}
+          ) : <p className={styles.vazio}>No reviews yet.</p>}
         </section>
 
         <aside className={styles.listas} aria-labelledby="listas-publicas">
           <div className={styles.tituloSecao}>
             <div>
               
-              <h2 id="listas-publicas">Listas</h2>
+              <h2 id="listas-publicas">Lists</h2>
             </div>
           </div>
           {perfil.listas_publicas.length ? (
             <ol className={styles.listaColecoes}>
               {perfil.listas_publicas.map((lista) => (
                 <li key={lista.id}>
-                  <Link href={"/listas/" + lista.id} className={styles.capaColecao} aria-label={"Abrir lista " + lista.titulo}>
+                  <Link href={"/listas/" + lista.id} className={styles.capaColecao} aria-label={"Open list " + lista.titulo}>
                     <VitrineLista listaId={lista.id} titulo={lista.titulo} compacta />
                   </Link>
                   <div className={styles.listaTexto}>
                     <h3><Link href={"/listas/" + lista.id}>{lista.titulo}</Link></h3>
                     
                   </div>
-                  <Link href={"/listas/" + lista.id} aria-label={"Abrir " + lista.titulo} className={styles.seta}>↗</Link>
+                  <Link href={"/listas/" + lista.id} aria-label={"Open " + lista.titulo} className={styles.seta}>↗</Link>
                 </li>
               ))}
             </ol>
-          ) : <p className={styles.vazio}>Sem listas públicas.</p>}
+          ) : <p className={styles.vazio}>No public lists.</p>}
         </aside>
       </div>
     </>
@@ -156,10 +156,10 @@ export default function PerfilPage({ params }: { params: ParametrosPerfil }) {
   return (
     <main className={styles.container}>
       <div className={styles.interior}>
-        <nav className={styles.breadcrumb} aria-label="Navegação">
-          <Link href="/">Descobrir</Link><span aria-hidden="true">/</span><span>Perfil</span>
+        <nav className={styles.breadcrumb} aria-label="Navigation">
+          <Link href="/">Discover</Link><span aria-hidden="true">/</span><span>Profile</span>
         </nav>
-        <Suspense fallback={<p className={styles.vazio}>Carregando perfil...</p>}>
+        <Suspense fallback={<p className={styles.vazio}>Loading profile…</p>}>
           <ConteudoPerfil params={params} />
         </Suspense>
       </div>

@@ -34,17 +34,17 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
   return (
     <>
       <form action="/albuns" className={controles.formulario}>
-        <label htmlFor="termo-catalogo" className={styles.visuallyHidden}>Pesquisar álbuns</label>
+        <label htmlFor="termo-catalogo" className={styles.visuallyHidden}>Search albums</label>
         <div className={controles.linha + " " + controles.catalogo}>
-          <input className={controles.campo} id="termo-catalogo" name="termo" type="search" maxLength={100} defaultValue={termo} placeholder="Título ou artista" />
-          <label htmlFor="tipo-catalogo" className={styles.visuallyHidden}>Tipo de lançamento</label>
+          <input className={controles.campo} id="termo-catalogo" name="termo" type="search" maxLength={100} defaultValue={termo} placeholder="Title or artist" />
+          <label htmlFor="tipo-catalogo" className={styles.visuallyHidden}>Release type</label>
           <select className={controles.selecao} id="tipo-catalogo" name="tipo" defaultValue={tipo}>
-            <option value="todos">Todos</option>
-            <option value="Album">Álbuns</option>
+            <option value="todos">All</option>
+            <option value="Album">Albums</option>
             <option value="Single">Singles</option>
             <option value="EP">EPs</option>
           </select>
-          <button className={controles.primario} type="submit">Filtrar</button>
+          <button className={controles.primario} type="submit">Filter</button>
         </div>
       </form>
 
@@ -67,11 +67,11 @@ export default function AlbunsPage({ searchParams }: { searchParams: Parametros 
     <main className={styles.container}>
       <section className={styles.hero + " " + styles.catalogoHero}>
         
-        <h1>Álbuns</h1>
+        <h1>Albums</h1>
         
-        <Link href="/buscar" className={styles.linkExternoCatalogo}>Buscar no catálogo completo ↗</Link>
+        <Link href="/buscar" className={styles.linkExternoCatalogo}>Search full catalog</Link>
       </section>
-      <Suspense fallback={<p className={styles.message}>Carregando catálogo...</p>}>
+      <Suspense fallback={<p className={styles.message}>Loading catalog…</p>}>
         <Conteudo searchParams={searchParams} />
       </Suspense>
     </main>

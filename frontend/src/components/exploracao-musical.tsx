@@ -17,7 +17,7 @@ export function ResultadosMusicais({
   apresentacao?: "lista" | "galeria";
   avaliacoes?: Record<string, { media: number; quantidade: number }>;
 }) {
-  if (!itens.length) return <p className={styles.mensagem}>Nenhum resultado encontrado.</p>;
+  if (!itens.length) return <p className={styles.mensagem}>No results found.</p>;
 
   if (categoria === "albuns" && apresentacao === "galeria") {
     return (
@@ -26,7 +26,7 @@ export function ResultadosMusicais({
           const endereco = "/albuns/" + encodeURIComponent(item.id_musicbrainz);
           return (
             <li key={item.id_musicbrainz} className={styles.albumGaleria}>
-              <Link href={endereco} className={styles.linkCapaGaleria} aria-label={"Abrir " + item.titulo}>
+              <Link href={endereco} className={styles.linkCapaGaleria} aria-label={"Open " + item.titulo}>
                 <CapaAlbum
                   url={"https://coverartarchive.org/release-group/" + item.id_musicbrainz.toLowerCase() + "/front-500"}
                   titulo={item.titulo}
@@ -35,15 +35,15 @@ export function ResultadosMusicais({
               </Link>
               <div className={styles.dadosGaleria}>
                 <h3><Link href={endereco}>{item.titulo}</Link></h3>
-                <p>{item.artista ?? "Artista não informado"}</p>
+                <p>{item.artista ?? "Unknown artist"}</p>
                 <div className={styles.dadosLinha}>
                   <span>{[tipoMusicalEmPortugues(item.tipo), item.data?.slice(0, 4)].filter(Boolean).join(" · ")}</span>
                   {avaliacoes?.[item.id_musicbrainz] ? (
                     <strong className={styles.notaGaleria} title={
                       String(avaliacoes[item.id_musicbrainz].quantidade) +
-                      " avaliações da comunidade"
+                      " community ratings"
                     }>
-                      ★ {avaliacoes[item.id_musicbrainz].media.toLocaleString("pt-BR", {
+                      ★ {avaliacoes[item.id_musicbrainz].media.toLocaleString("en-US", {
                         minimumFractionDigits: 1,
                         maximumFractionDigits: 1,
                       })}
@@ -92,7 +92,7 @@ export function ResultadosMusicais({
               <div className={styles.relacionados}>
                 {item.relacionados.length ? (
                   <>
-                    <p>Lançamentos associados</p>
+                    <p>Related releases</p>
                     {item.relacionados.map((r) => (
                       <Link prefetch={false} key={r.id_musicbrainz} href={`/albuns/${r.id_musicbrainz}`}>
                         {r.titulo}
@@ -101,7 +101,7 @@ export function ResultadosMusicais({
                   </>
                 ) : (
                   <a href={`https://musicbrainz.org/recording/${item.id_musicbrainz}`} target="_blank" rel="noreferrer">
-                    Consultar gravação no MusicBrainz
+                    View recording on MusicBrainz
                   </a>
                 )}
               </div>
@@ -124,10 +124,10 @@ export function Paginacao({
   const separador = endereco.includes("?") ? "&" : "?";
 
   return (
-    <nav className={styles.paginacao} aria-label="Paginação">
-      {pagina > 1 ? <Link prefetch={false} href={`${endereco}${separador}pagina=${pagina - 1}`}>Anterior</Link> : null}
-      <span>Página {pagina}</span>
-      {temProxima && pagina < 1000 ? <Link prefetch={false} href={`${endereco}${separador}pagina=${pagina + 1}`}>Próxima</Link> : null}
+    <nav className={styles.paginacao} aria-label="Pagination">
+      {pagina > 1 ? <Link prefetch={false} href={`${endereco}${separador}pagina=${pagina - 1}`}>Previous</Link> : null}
+      <span>Page {pagina}</span>
+      {temProxima && pagina < 1000 ? <Link prefetch={false} href={`${endereco}${separador}pagina=${pagina + 1}`}>Next</Link> : null}
     </nav>
   );
 }
@@ -141,12 +141,11 @@ export async function FaixasDoAlbum({
 }) {
   const [resultado, capa] = await Promise.all([faixasAlbum(id), obterCapaAlbum(id)]);
   return (
-    <section className={styles.faixas}>
-      <h2>Faixas</h2>
+    <section className={styles.faixas} aria-label="Tracks">
       {!resultado.ok ? (
         <p role="alert" className={styles.mensagem}>{resultado.mensagem}</p>
       ) : !resultado.dados.faixas.length ? (
-        <p className={styles.mensagem}>Faixas indisponíveis nesta edição.</p>
+        <p className={styles.mensagem}>Tracks unavailable for this release.</p>
       ) : (
         <FaixasInterativas faixas={resultado.dados.faixas} capa={capa} artista={artista} album={album} />
       )}

@@ -1,7 +1,7 @@
 const TIPOS: Record<string, string> = {
-  album: "Álbum", single: "Single", ep: "EP", compilation: "Coletânea",
-  live: "Ao vivo", group: "Grupo", person: "Pessoa", orchestra: "Orquestra",
-  choir: "Coral", character: "Personagem", other: "Outro",
+  album: "Album", single: "Single", ep: "EP", compilation: "Compilation",
+  live: "Live", group: "Group", person: "Person", orchestra: "Orchestra",
+  choir: "Choir", character: "Character", other: "Other",
 };
 
 export function tipoMusicalEmPortugues(tipo: string | null | undefined) {

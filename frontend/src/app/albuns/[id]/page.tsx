@@ -31,16 +31,16 @@ async function BlocoSocial({ id }: { id: string }) {
   ]);
 
   return (
-    <section className={styles.social} aria-label="Atividade social do álbum">
+    <section className={styles.social} aria-label="Album activity">
       <div className={styles.resumo}>
-        <h2>Avaliações</h2>
+        <h2>Ratings</h2>
         {resumo.ok ? (
           resumo.dados.quantidade_avaliacoes > 0 ? (
             <p>
-              <strong>{resumo.dados.media_avaliacoes?.toLocaleString("pt-BR")} ★</strong>
-              <span> · {resumo.dados.quantidade_avaliacoes} {resumo.dados.quantidade_avaliacoes === 1 ? "avaliação" : "avaliações"}</span>
+              <strong>{resumo.dados.media_avaliacoes?.toLocaleString("en-US")} ★</strong>
+              <span> · {resumo.dados.quantidade_avaliacoes} {resumo.dados.quantidade_avaliacoes === 1 ? "rating" : "ratings"}</span>
             </p>
-          ) : <p className={styles.muted}>Sem avaliações.</p>
+          ) : <p className={styles.muted}>No ratings yet.</p>
         ) : <p className={styles.muted} role="status">{resumo.mensagem}</p>}
       </div>
 
@@ -51,23 +51,23 @@ async function BlocoSocial({ id }: { id: string }) {
             <FormularioAvaliacao id={id} estado={estado.dados} />
           </div>
         ) : <p className={styles.muted} role="status">
-          {estado?.mensagem ?? "Não foi possível consultar seus registros."}
+          {estado?.mensagem ?? "Unable to load your activity."}
         </p>
       ) : (
         <p className={styles.muted}>
-          <Link href="/entrar">Entre</Link> para registrar sua música.
+          <Link href="/entrar">Sign in</Link> to log music.
         </p>
       )}
 
       {usuario && listas ? (
-        <section className={styles.listasDoAlbum} aria-label="Adicionar a uma lista musical">
-          <h2>Listas</h2>
+        <section className={styles.listasDoAlbum} aria-label="Add to a list">
+          <h2>Lists</h2>
           {listas.ok && listas.dados.length ? (
             <FormularioAdicionarAlbum idMusicBrainz={id} listas={listas.dados} />
           ) : (
             <p className={styles.muted}>
-              {listas.ok ? "Você ainda não criou uma lista." : listas.mensagem}{" "}
-              <Link href="/listas">Gerenciar listas</Link>
+              {listas.ok ? "You have no lists yet." : listas.mensagem}{" "}
+              <Link href="/listas">Manage lists</Link>
             </p>
           )}
           
@@ -91,7 +91,7 @@ async function BlocoSocial({ id }: { id: string }) {
             ))}
           </ul>
         ) : <p className={styles.muted}>
-          {resumo.ok ? "Sem reviews." : "Reviews temporariamente indisponíveis."}
+          {resumo.ok ? "No reviews yet." : "Reviews temporarily unavailable."}
         </p>}
       </div>
     </section>
@@ -110,8 +110,8 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
   return (
     <>
       <article className={styles.album}>
-        <Suspense fallback={<div className={styles.cover} aria-label="Carregando capa">♪</div>}>
-          <CapaDaObra id={id} titulo={obra.titulo ?? "Álbum"} />
+        <Suspense fallback={<div className={styles.cover} aria-label="Loading cover">♪</div>}>
+          <CapaDaObra id={id} titulo={obra.titulo ?? "Album"} />
         </Suspense>
         <div className={styles.info}>
           <span className={styles.accent} aria-hidden="true" />
@@ -128,7 +128,7 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
                   {credito.separador}
                 </span>
               ))
-            ) : obra.artista ?? "Artista não informado"}
+            ) : obra.artista ?? "Unknown artist"}
           </p>
           <p className={styles.meta}>
             {[obra.data_lancamento?.slice(0, 4), tipoMusicalEmPortugues(obra.tipo)].filter(Boolean).join(" · ")}
@@ -137,12 +137,12 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
       </article>
       <div className={styles.corpoAlbum}>
         <div className={styles.colunaFaixas}>
-          <Suspense fallback={<p className={styles.message}>Carregando faixas...</p>}>
-            <FaixasDoAlbum id={id} artista={obra.artista ?? "Artista não informado"} album={obra.titulo ?? "Álbum"} />
+          <Suspense fallback={<p className={styles.message}>Loading tracks…</p>}>
+            <FaixasDoAlbum id={id} artista={obra.artista ?? "Unknown artist"} album={obra.titulo ?? "Album"} />
           </Suspense>
         </div>
         <aside className={styles.colunaSocial}>
-          <Suspense fallback={<p className={styles.message}>Carregando atividade musical...</p>}>
+          <Suspense fallback={<p className={styles.message}>Loading activity…</p>}>
             <BlocoSocial id={id} />
           </Suspense>
         </aside>
@@ -154,8 +154,8 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
 export default function AlbumPage({ params }: { params: ParametrosAlbum }) {
   return (
     <main className={styles.container}>
-      <Link href="/albuns" className={styles.back}>← Álbuns</Link>
-      <Suspense fallback={<p className={styles.message}>Carregando álbum...</p>}>
+      <Link href="/albuns" className={styles.back}>← Albums</Link>
+      <Suspense fallback={<p className={styles.message}>Loading album…</p>}>
         <ConteudoAlbum params={params} />
       </Suspense>
     </main>

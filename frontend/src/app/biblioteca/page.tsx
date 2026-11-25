@@ -113,6 +113,7 @@ async function ConteudoBiblioteca({ searchParams }: { searchParams: Parametros }
   ]);
   if (!usuario || !token) redirect("/entrar");
   const categoria = CATEGORIAS.find(c => c.tipo === parametros.categoria) ?? CATEGORIAS[0];
+  if (!categoria) throw new Error("Library categories not configured.");
   const numero = typeof parametros.pagina === "string" ? parametros.pagina : "";
   const pagina = /^[1-9]\d{0,4}$/.test(numero) ? Math.min(10000, Number(numero)) : 1;
   const itens = await buscarRegistros(categoria.caminho, token, pagina);

@@ -71,7 +71,7 @@ export default function Home() {
           <h1 id="titulo-descobrir">Discover</h1>
           
           <div className={styles.heroLinks}>
-            <Link href="/albuns">Explorar albums ↗</Link>
+            <Link href="/albuns">Browse albums</Link>
             <Link href="/listas/explorar">Lists ↗</Link>
           </div>
         </div>
@@ -86,7 +86,7 @@ export default function Home() {
           <h2 id="mais-ouvidas">Most played</h2>
           
         </div>
-        <Suspense fallback={<p className={styles.message}>Carregando albums...</p>}>
+        <Suspense fallback={<p className={styles.message}>Loading albums…</p>}>
           <DestaquesMusicais tipo="mais-ouvidas" />
         </Suspense>
       </section>

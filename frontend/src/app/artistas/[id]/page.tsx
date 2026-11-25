@@ -57,29 +57,29 @@ async function Conteudo({ params, searchParams }: Props) {
       </section>
 
       <section className={visual.discografia}>
-        <h2>Discografia</h2>
+        <h2>Discography</h2>
         
         <form action={`/artistas/${id}`} className={controles.linha}>
           <div className={controles.grupo}>
-          <label htmlFor="tipo-discografia">Lançamentos</label>
+          <label htmlFor="tipo-discografia">Releases</label>
           <select className={controles.selecao} id="tipo-discografia" name="tipo" defaultValue={tipo}>
-            <option value="todos">Todos</option>
-            <option value="album">Álbuns</option>
+            <option value="todos">All</option>
+            <option value="album">Albums</option>
             <option value="single">Singles</option>
             <option value="ep">EPs</option>
-            <option value="compilation">Coletâneas</option>
-            <option value="live">Ao vivo</option>
+            <option value="compilation">Compilations</option>
+            <option value="live">Live</option>
           </select>
           </div>
           <div className={controles.grupo}>
-          <label htmlFor="ordem-discografia">Ordem</label>
+          <label htmlFor="ordem-discografia">Sort by</label>
           <select className={controles.selecao} id="ordem-discografia" name="ordem" defaultValue={ordem}>
-            <option value="catalogo">Catálogo</option>
-            <option value="antigos">Mais antigos</option>
-            <option value="recentes">Mais recentes</option>
+            <option value="catalogo">Catalog</option>
+            <option value="antigos">Oldest first</option>
+            <option value="recentes">Newest first</option>
           </select>
           </div>
-          <button className={controles.primario} type="submit">Aplicar</button>
+          <button className={controles.primario} type="submit">Apply</button>
         </form>
         {obras.ok ? (
           <>
@@ -95,8 +95,8 @@ async function Conteudo({ params, searchParams }: Props) {
 export default function ArtistaPage(props: Props) {
   return (
     <main className={styles.container}>
-      <Link href="/buscar" className={visual.voltar}>← Buscar</Link>
-      <Suspense fallback={<p className={styles.message}>Carregando artista...</p>}>
+      <Link href="/buscar" className={visual.voltar}>← Search</Link>
+      <Suspense fallback={<p className={styles.message}>Loading artist…</p>}>
         <Conteudo {...props} />
       </Suspense>
     </main>
