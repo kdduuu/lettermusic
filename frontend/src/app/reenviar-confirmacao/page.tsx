@@ -5,13 +5,13 @@ import styles from "../autenticacao.module.css";
 export default function ReenviarConfirmacaoPage() {
   return (
     <main className={styles.container}>
-      <h1>Confirmar e-mail</h1>
+      <h1>Confirm email</h1>
       <p className={styles.introducao}>
-        Não recebeu a mensagem? Solicite outro link.
+        Missing your email? Request another link.
       </p>
       <FormularioReenviar />
       <p className={styles.alternativa}>
-        <Link href="/entrar">Voltar para o login</Link>
+        <Link href="/entrar">Back to sign in</Link>
       </p>
     </main>
   );

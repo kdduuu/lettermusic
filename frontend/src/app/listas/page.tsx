@@ -1,7 +1,9 @@
+import { UiIcon } from "@/components/ui-icon";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { FormularioCriarLista } from "@/components/formularios-listas";
+import { VitrineLista } from "@/components/vitrine-lista";
 import { minhasListas } from "@/lib/listas";
 import { obterTokenSessao, obterUsuarioAutenticado } from "@/lib/sessao";
 import styles from "./page.module.css";
@@ -22,43 +24,42 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
     <>
       <div className={styles.cabecalho}>
         <div>
-          <span className={styles.etiqueta}>Sua coleção</span>
-          <h1>Listas musicais</h1>
-          <p>Organize álbuns e compartilhe suas descobertas com a comunidade.</p>
+          
+          <h1>My lists</h1>
+          
         </div>
-        <Link href={`/usuarios/${encodeURIComponent(usuario.username)}`} className={styles.linkPerfil}>Meu perfil</Link>
+        <Link href={`/usuarios/${encodeURIComponent(usuario.username)}`} className={styles.linkPerfil}>My profile</Link>
       </div>
 
       <details className={styles.nova}>
-        <summary>+ Criar nova lista</summary>
+        <summary aria-label="New list" title="New list"><UiIcon name="plus"/></summary>
         <div className={styles.formulario}><FormularioCriarLista /></div>
       </details>
 
-      <section className={styles.listagem} aria-labelledby="minhas-listas">
-        <h2 id="minhas-listas">Minhas listas</h2>
+      <section className={styles.listagem} aria-label="My lists">
         {!resultado.ok ? (
           <p role="alert" className={styles.erro}>{resultado.mensagem}</p>
         ) : resultado.dados.listas.length === 0 ? (
-          <p className={styles.vazio}>{pagina > 1 ? "Não há mais listas nesta página." : "Nenhuma lista ainda. Crie a primeira acima!"}</p>
+          <p className={styles.vazio}>{pagina > 1 ? "No more lists." : "No lists yet."}</p>
         ) : (
           <ul className={styles.grade}>
             {resultado.dados.listas.map((lista) => (
               <li key={lista.id}>
                 <Link className={styles.cartao} href={`/listas/${lista.id}`}>
-                  <div className={styles.icone} aria-hidden="true">♪</div>
-                  <span className={styles.visibilidade}>{lista.publica ? "Pública" : "Privada"}</span>
+                  <VitrineLista listaId={lista.id} titulo={lista.titulo} />
                   <h3>{lista.titulo}</h3>
-                  {lista.descricao ? <p>{lista.descricao}</p> : <p>Seleção de álbuns</p>}
+                  <span className={styles.visibilidade}>{lista.publica ? "Public" : "Private"}</span>
+                  
                 </Link>
               </li>
             ))}
           </ul>
         )}
         {resultado.ok && (pagina > 1 || resultado.dados.temProxima) ? (
-          <nav className={styles.paginacao} aria-label="Páginas de listas">
-            {pagina > 1 ? <Link href={`/listas?pagina=${pagina - 1}`}>Anterior</Link> : null}
-            <span>Página {pagina}</span>
-            {resultado.dados.temProxima ? <Link href={`/listas?pagina=${pagina + 1}`}>Próxima</Link> : null}
+          <nav className={styles.paginacao} aria-label="List pages">
+            {pagina > 1 ? <Link href={`/listas?pagina=${pagina - 1}`}>Previous</Link> : null}
+            <span>Page {pagina}</span>
+            {resultado.dados.temProxima ? <Link href={`/listas?pagina=${pagina + 1}`}>Next</Link> : null}
           </nav>
         ) : null}
       </section>
@@ -69,7 +70,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
 export default function ListasPage({ searchParams }: { searchParams: Parametros }) {
   return (
     <main className={styles.container}>
-      <Suspense fallback={<p className={styles.vazio}>Carregando suas listas...</p>}>
+      <Suspense fallback={<p className={styles.vazio}>Loading lists…</p>}>
         <Conteudo searchParams={searchParams} />
       </Suspense>
     </main>

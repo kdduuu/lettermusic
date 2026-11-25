@@ -4,7 +4,7 @@ import { FormularioRedefinicao } from "@/components/formularios-recuperacao";
 import styles from "../autenticacao.module.css";
 
 export const metadata: Metadata = {
-  title: "Redefinir senha | Lettermusic",
+  title: "Reset password | Lettermusic",
   referrer: "no-referrer",
   robots: { index: false, follow: false },
 };
@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 export default function RedefinirSenhaPage() {
   return (
     <main className={styles.container}>
-      <h1>Nova senha</h1>
+      <h1>New password</h1>
       <p className={styles.introducao}>
-        Escolha uma nova senha para sua conta.
+        Choose a new password.
       </p>
-      <Suspense fallback={<p>Carregando formulário...</p>}>
+      <Suspense fallback={<p>Loading form…</p>}>
         <FormularioRedefinicao />
       </Suspense>
     </main>

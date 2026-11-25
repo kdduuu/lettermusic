@@ -1,0 +1,92 @@
+
+.faixas { list-style: none; margin: 12px 0 0; padding: 0; border-top: 1px solid #414047; }
+.faixas > li { display: block; padding: 0; margin: 0; border-bottom: 1px solid #414047; }
+.linha {
+  display: grid; grid-template-columns: 34px minmax(0,1fr) 52px 18px;
+  align-items: center; width: 100%; min-width: 0; gap: 14px; padding: 16px 10px;
+  background: transparent; color: #f3edef; border: 0;
+  cursor: pointer; text-align: left; transition: background-color .16s ease;
+}
+.linha:hover, .linha:focus-visible { background-color: #302d33; }
+.numero { color: #9f969f; font: 15px/1 Georgia,serif; font-variant-numeric: tabular-nums; }
+.titulo {
+  display: block; min-width: 0; color: #f2ebee; font: 500 15px/1.4 Arial,sans-serif;
+  white-space: normal; overflow-wrap: break-word; word-break: normal;
+}
+.duracao { justify-self: end; color: #aea5ad; font-size: 12px; font-variant-numeric: tabular-nums; }
+.seta { color: #cb9aa3; font-size: 14px; opacity: 0; transition: opacity .16s ease; }
+.linha:hover .seta, .linha:focus-visible .seta { opacity: 1; }
+.dialogo {
+  width: min(625px, calc(100% - 32px)); max-width: 625px; max-height: calc(100dvh - 36px);
+  padding: 0; border: 1px solid #514a54; border-radius: 14px;
+  background: #29272d; color: #f7f0f1; box-shadow: 0 35px 100px #000b;
+}
+.dialogo::backdrop { background: #0b0b10d4; }
+.card {
+  position: relative; display: grid; grid-template-columns: minmax(0,190px) minmax(0,1fr);
+  align-items: center; gap: 35px; padding: 50px 42px 46px;
+}
+.card::before {
+  content: ""; position: absolute; height: 3px; width: 55px;
+  top: 0; left: 42px; background: #d68d9c;
+}
+.capa {
+  position: relative; display: grid; place-items: center; overflow: hidden; width: 100%;
+  aspect-ratio: 1; border-radius: 8px; background: #38343d;
+  box-shadow: 0 18px 30px #0006; font-size: 40px; color: #b0a7b0;
+}
+.capa img { object-fit: cover; }
+.info { min-width: 0; }
+.numeroModal { display: inline-block; color: #d797a4; font: 600 12px Arial,sans-serif; letter-spacing: .16em; margin: 0 0 18px; }
+.info h3 {
+  margin: 0 0 13px; font: 700 clamp(29px,3.5vw,44px)/1.06 Georgia,serif;
+  letter-spacing: -.04em; overflow-wrap: anywhere;
+}
+.artista { color: #cfc4ca; font-size: 15px; margin: 0; overflow-wrap: anywhere; }
+.tempo { color: #b5abb3; font-size: 13px; font-variant-numeric: tabular-nums; margin: 20px 0 0; }
+.filete { display: block; width: 48px; height: 1px; background: #b07c88; margin-top: 24px; }
+.fechar {
+  position: absolute; top: 10px; right: 12px; border: 0; background: transparent;
+  padding: 8px 12px; font-size: 26px; line-height: 1; color: #bfb2ba;
+  cursor: pointer;
+}
+.fechar:hover, .fechar:focus-visible { color: #fff; }
+.oculto { position: absolute; height: 1px; width: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 600px) {
+  .card { grid-template-columns: 130px minmax(0,1fr); gap: 19px; padding: 46px 22px 30px; }
+  .card::before { left: 22px; }
+  .info h3 { font-size: 27px; }
+  .linha { grid-template-columns: 28px minmax(0,1fr) 45px 12px; gap: 9px; padding: 14px 6px; }
+}
+@media (max-width: 420px) { .card { grid-template-columns: 1fr; }.capa { max-width: 180px; } }
+@media (prefers-reduced-motion: reduce) {
+  .linha, .seta { transition: none; }
+}
+
+
+/* F09.6 — tracklist mais próxima da densidade de fichas musicais. */
+.linha { padding: 11px 8px; grid-template-columns: 28px minmax(0,1fr) 48px 13px; gap: 10px; }
+.titulo { font-size: 13px; }
+.numero { font-size: 13px; }
+.duracao { font-size: 11px; }
+@media(max-width:520px) { .linha { padding: 13px 5px; } .titulo { font-size: 14px; } }
+
+/* F09.12 — refinamento final. */
+.numero { grid-column: 1; }
+.titulo { grid-column: 2; }
+.duracao { grid-column: 3; font-size: 12px; }
+.seta { grid-column: 4; }
+.card { gap: 26px; padding: 42px 34px 36px; }
+.tempo { margin-top: 12px; font-size: 14px; overflow-wrap: anywhere; }
+.fechar { min-width: 40px; min-height: 40px; }
+@media(max-width:600px) { .card { gap: 18px; padding: 46px 20px 26px; } }
+@media(hover:none) { .seta { opacity: .7; } }
+
+/* Editorial track index. */
+.faixas,.faixas > li { border-color:var(--lm-line); }
+.linha { padding:12px 4px; }
+.linha:hover,.linha:focus-visible { background:var(--lm-panel); }
+.dialogo { border-radius:6px; background:var(--lm-panel); }
+.card::before { display:none; }
+.capa { border-radius:var(--lm-cover-radius); box-shadow:none; }
+.numeroModal { color:var(--lm-muted); letter-spacing:.08em; }

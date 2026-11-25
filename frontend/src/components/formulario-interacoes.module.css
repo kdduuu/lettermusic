@@ -15,3 +15,22 @@
 .sucesso, .erro { width: 100%; margin: 0; font-size: 12px; }
 .sucesso { color: #a8c5ab; }
 .erro { color: #ee979c; }
+
+/* F09 - ações compactas, sem preenchimento chamativo. */
+.acao button, .escuta button { background: #343139; border-color: #615964; }
+.acao button:hover, .escuta button:hover { background: #413c45; }
+.contador { color: #b3a8b1; }
+
+
+/* F09.6 — controles compactos, com áreas de clique confortáveis. */
+.container { margin-top: 20px; }
+.container h2 { font-size: 15px; margin-bottom: 10px; }
+.grupo { gap: 8px; }
+.acao button,.escuta button { font-size: 12px; padding: 9px 12px; border-radius: 5px; }
+.escuta { margin-top: 12px; }
+
+/* F09.12 — refinamento final. */
+.acao button[aria-pressed="true"] { color: var(--lm-accent); border-color: var(--lm-accent); background: var(--lm-panel); }
+.acao button,.escuta button,.confirmado { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; }
+.acao { min-width: 0; }
+.contador { font-size: 12px; }

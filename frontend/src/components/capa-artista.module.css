@@ -1,0 +1,19 @@
+.capa {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #56565d;
+  border-radius: 7px;
+  background: #373a40;
+  color: var(--lm-text);
+}
+.mini { width: 80px; height: 80px; flex: 0 0 80px; }
+.grande { width: 156px; height: 156px; flex: 0 0 156px; border-radius: 9px; }
+.monograma { font: 700 34px/1 var(--lm-serif); }
+.grande .monograma { font-size: 74px; }
+@media(max-width:560px) {
+  .mini { width: 65px; height: 65px; flex-basis: 65px; }
+  .mini .monograma { font-size: 28px; }
+  .grande { width: 108px; height: 108px; flex-basis: 108px; }
+  .grande .monograma { font-size: 52px; }
+}

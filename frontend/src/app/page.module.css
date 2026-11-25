@@ -51,3 +51,328 @@
 .filtroCatalogo { align-items: center; }
 .filtroCatalogo button { background: #ededed; color: #151515; border: 0; border-radius: 6px; padding: 10px 14px; font: inherit; cursor: pointer; }
 .notaExploracao { color: #bdbdbd; font-size: 13px; margin-top: 20px; }
+/* F09 - páginas editoriais e busca / catálogo. */
+.container { max-width: 1300px; padding: 45px 28px 110px; }
+.hero { min-height: unset; padding: 42px 0 52px; border-bottom: 1px solid var(--lm-line); }
+.heroEditorial {
+  min-height: 0;
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(370px, .95fr);
+  gap: clamp(32px, 5vw, 78px); align-items: center;
+  padding: clamp(28px, 4vw, 50px); border: 1px solid #3d3a41;
+  border-radius: 15px; background: #26252a; margin-bottom: 64px;
+}
+.heroMain { min-width: 0; }
+.heroEyebrow { color: #ef8996; font-size: 11px; letter-spacing: .16em; font-weight: 700; text-transform: uppercase; margin: 0 0 16px; }
+.hero h1, .searchPage h1 { font-size: clamp(56px, 7vw, 96px); letter-spacing: -.055em; line-height: .98; }
+.hero > p, .heroMain > p { color: #c3babf; font-size: 17px; line-height: 1.65; }
+.heroMain > p { max-width: 510px; margin: 22px 0 0; }
+.heroMain .heroLinks { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 25px; font-size: 13px; }
+.heroLinks a { color: #f3edec; text-decoration: none; border-bottom: 1px solid #817980; padding-bottom: 6px; }
+.heroLinks a:hover { color: #ef8996; border-color: #ef8996; }
+.heroAside { min-width: 0; padding: 10px; border: 1px solid #444149; border-radius: 12px; background: #201f23; }
+.destaqueObra { display: grid; grid-template-columns: minmax(130px, 45%) minmax(0, 1fr); gap: 22px; align-items: center; padding: 12px; color: #f1ebeb; text-decoration: none; }
+.destaqueObra:hover h2, .destaqueObra:focus-visible h2 { text-decoration: underline; }
+.destaqueCapa { width: 100%; aspect-ratio: 1; position: relative; display: grid; place-items: center; background: #37343b; border-radius: 7px; overflow: hidden; font-size: 42px; color: #a9a0a7; }
+.destaqueCapa img { object-fit: cover; }
+.destaqueInfo { min-width: 0; }
+.destaqueInfo span { color: #ee8795; text-transform: uppercase; letter-spacing: .13em; font-size: 10px; font-weight: 700; }
+.destaqueInfo h2 { margin: 12px 0 10px; font: 700 clamp(24px, 2.6vw, 40px)/1.08 var(--lm-serif); letter-spacing: -.025em; overflow-wrap: anywhere; }
+.destaqueInfo p { color: #b5abb1; font-size: 13px; line-height: 1.5; }
+.destaqueVazio { margin: 0; padding: 32px; line-height: 1.6; color: #aca4aa; }
+.shelfInfo { margin-bottom: 26px; }
+.shelfInfo h2 { margin: 0 0 7px; }
+.shelfInfo p { color: #b4abb1; font-size: 14px; }
+.descobertaSecao { margin-top: 58px; padding-top: 38px; border-top: 1px solid #3c3a40; }
+.descobertaSecao h2 { font: 700 clamp(29px, 3.4vw, 43px)/1.1 var(--lm-serif); letter-spacing: -.035em; }
+.descobertaSecao > p { color: #b4abb1; }
+.tituloDescoberta { margin-bottom: 24px; }
+.tituloDescoberta a { text-decoration: none; color: #ef8996; }
+.tituloDescoberta a:hover { text-decoration: underline; }
+.searchPage { padding: 42px clamp(22px, 4vw, 48px); border: 1px solid var(--lm-line); background: #26252a; border-radius: 14px; }
+.searchPage h1 { margin-bottom: 24px; }
+.results { max-width: none; padding-top: 4px; }
+.results h2 { font: 700 30px var(--lm-serif); }
+.buscaLista { max-width: 750px; margin-top: 16px; }
+.buscaLista input, .filtroCatalogo select { color: #f6efef; background: #2d2b31; border-color: #5d5661; }
+.buscaLista button, .filtroCatalogo button { background: #eae3e6; color: #19171b; font-weight: 700; }
+.buscaLista button:hover, .filtroCatalogo button:hover { background: #fff; }
+.buscaCategorias { border-bottom-color: #49444c; }
+.buscaCategorias a[aria-current="page"] { border-color: #ee8995; }
+.notaExploracao { color: #ada4ac; }
+@media (max-width: 900px) {
+  .heroEditorial { grid-template-columns: 1fr; }
+  .heroAside { max-width: 680px; }
+}
+@media (max-width: 600px) {
+  .container { padding: 25px 17px 70px; }
+  .heroEditorial { padding: 26px 20px; gap: 25px; margin-bottom: 40px; }
+  .hero h1, .searchPage h1 { font-size: clamp(46px, 12vw, 64px); }
+  .destaqueObra { grid-template-columns: 110px minmax(0,1fr); gap: 15px; }
+  .destaqueInfo h2 { font-size: 22px; }
+  .descobertaSecao { margin-top: 38px; padding-top: 28px; }
+  .searchPage { padding: 25px 18px; }
+}
+
+
+/* F09.3 — catálogo visual, sem repetir os painéis de destaque da home. */
+.catalogoHero { min-height: 0; border-bottom: 0; padding: 34px 0 20px; }
+.catalogoHero h1 { font-size: clamp(57px, 7vw, 82px); }
+.catalogoHero > p { color: #bfb3bb; }
+.catalogoHero a { color: #e8dfe4; text-underline-offset: 5px; font-size: 14px; }
+.catalogoHero a:hover { color: #ef8996; }
+.catalogoResultados { border-top: 1px solid #454048; padding-top: 40px; }
+.catalogoTitulo { display: flex; align-items: baseline; justify-content: space-between; gap: 22px; margin-bottom: 27px; }
+.catalogoTitulo h2 { font: 700 clamp(29px,3.3vw,40px)/1.1 Georgia,serif; margin: 0; }
+.catalogoTitulo p { color: #a9a0a8; font-size: 13px; margin: 0; }
+@media (max-width: 650px) { .catalogoHero { padding-top: 25px; } .catalogoTitulo { align-items: start; flex-direction: column; gap: 10px; } .catalogoResultados { padding-top: 28px; } }
+
+/* F09.3 — ranking editorial com ritmo diferente das galerias. */
+.secaoRankings {
+  display: grid; grid-template-columns: minmax(0,.7fr) minmax(0,1.3fr);
+  gap: clamp(40px, 6vw, 100px); align-items: start;
+  padding: 50px 0; margin-top: 58px; border-top: 1px solid #403c43;
+}
+.secaoRankings h2 { font: 700 clamp(30px,3.8vw,48px)/1.05 Georgia,serif; letter-spacing: -.045em; margin: 0 0 15px; }
+.secaoRankings .shelfInfo > p:last-child { max-width: 350px; color: #afa5ad; font-size: 15px; line-height: 1.65; }
+@media (max-width: 820px) { .secaoRankings { grid-template-columns: 1fr; gap: 12px; margin-top: 35px; padding: 32px 0; } }
+
+/* F09.4 — menos leitura de apoio, foco em música. */
+.heroEditorial { padding: clamp(28px, 3.5vw, 45px); margin-bottom: 46px; }
+.heroMain > p { max-width: 390px; margin-top: 10px; font-size: 15px; }
+.heroEditorial .heroEyebrow { margin-bottom: 10px; }
+.descobertaSecao { margin-top: 44px; padding-top: 30px; }
+.secaoRankings { margin-top: 43px; padding: 40px 0; gap: clamp(28px,5vw,70px); }
+.secaoRankings .shelfInfo { margin-bottom: 0; }
+.shelfInfo { margin-bottom: 20px; }
+.catalogoHero { padding: 25px 0 8px; }
+.catalogoResultados { padding-top: 28px; }
+.results { margin-top: 32px; }
+@media (max-width: 600px) { .heroEditorial { margin-bottom: 34px; } .secaoRankings { margin-top: 32px; padding: 28px 0; } }
+
+/* F09.5 — filtro compacto, acessível e sem títulos redundantes. */
+.visuallyHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.catalogoHero { padding: 23px 0 4px; }
+.catalogoHero h1 { margin-bottom: 9px; }
+.buscaLista { margin-top: 18px; }
+.results { margin-top: 19px; }
+.catalogoResultados { padding-top: 26px; }
+@media(max-width: 650px) { .catalogoHero { padding-top: 16px; } }
+
+/* F09.5 — hero direto e capas com mais presença. */
+.heroEditorial { padding: clamp(30px,3.7vw,48px); margin-bottom: 35px; }
+.heroEditorial .heroMain h1 { margin-bottom: 24px; }
+.heroMain .heroLinks { margin-top: 18px; }
+.heroEditorial .heroAside { background: #222126; }
+.descobertaSecao { margin-top: 38px; padding-top: 31px; }
+.secaoRankings { margin-top: 37px; padding: 37px 0; }
+@media(max-width: 650px) { .heroEditorial { padding: 26px 20px; } }
+
+
+/* F09.6 — tipografia e espaços compactos inspirados na hierarquia do AOTY. */
+.container { max-width: var(--lm-content); padding: 27px 22px 66px; }
+.heroEditorial { gap: 28px; grid-template-columns: minmax(0,1fr) minmax(300px,.88fr); padding: 27px 30px; margin-bottom: 20px; border-radius: 9px; }
+.heroEditorial .heroMain h1 { font-size: clamp(46px,5vw,62px); margin: 0 0 15px; }
+.heroAside { padding: 6px; border-radius: 8px; }
+.destaqueObra { grid-template-columns: minmax(115px,42%) minmax(0,1fr); gap: 14px; padding: 9px; }
+.destaqueCapa { border-radius: 5px; }
+.destaqueInfo h2 { font-size: clamp(20px,2vw,26px); margin: 7px 0; }
+.destaqueInfo span { letter-spacing: .1em; font-size: 9px; }
+.destaqueInfo p { font-size: 12px; margin: 0; }
+.heroMain .heroLinks { gap: 19px; margin-top: 16px; font-size: 12px; }
+.heroLinks a { padding-bottom: 3px; }
+.descobertaSecao { margin-top: 26px; padding-top: 22px; }
+.descobertaSecao h2 { font-size: clamp(24px,2.65vw,30px); }
+.shelfInfo { margin-bottom: 16px; }
+.secaoRankings { margin-top: 29px; padding: 26px 0; gap: 35px; grid-template-columns: minmax(0,.56fr) minmax(0,1.44fr); }
+.secaoRankings h2 { font-size: 30px; }
+.tituloDescoberta { margin-bottom: 14px; }
+.tituloDescoberta a { font-size: 12px; }
+.catalogoHero { padding: 15px 0 0; }
+.catalogoHero h1 { font-size: clamp(43px,5vw,58px); margin: 0 0 8px; }
+.catalogoHero a { font-size: 12px; }
+.buscaLista { max-width: 590px; margin-top: 13px; gap: 6px; }
+.buscaLista input { padding: 9px 11px; font-size: 13px; }
+.buscaLista button { padding: 9px 13px; font-size: 12px; }
+.filtroCatalogo { margin-top: 7px; gap: 10px; }
+.filtroCatalogo label { font-size: 12px; color: var(--lm-muted); }
+.filtroCatalogo select { padding: 7px 9px; font-size: 12px; }
+.results { margin-top: 10px; }
+.catalogoResultados { padding-top: 20px; }
+.searchPage { padding: 27px 30px; }
+.searchPage h1 { font-size: 46px; }
+@media(max-width:900px) {
+  .heroEditorial { grid-template-columns: 1fr; }
+  .heroAside { max-width: 540px; }
+}
+@media(max-width:680px) {
+  .container { padding: 21px 16px 56px; }
+  .heroEditorial { padding: 23px 19px; }
+  .heroEditorial .heroMain h1 { font-size: 46px; }
+  .descobertaSecao { margin-top: 24px; }
+  .catalogoHero h1 { font-size: 46px; }
+  .secaoRankings { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* F09.6 — avaliacoes só aparecem quando acrescentam informação nova. */
+.avaliacoesLista { list-style: none; padding: 0; margin: 0; }
+.avaliacoesLista li {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 0; border-top: 1px solid #444047;
+}
+.avaliacoesLista li:last-child { border-bottom: 1px solid #444047; }
+.avaliacoesLista div { min-width: 0; display: grid; gap: 3px; }
+.avaliacoesLista a { color: #f3eded; text-decoration: none; font: 700 17px/1.2 Georgia,serif; overflow-wrap: anywhere; }
+.avaliacoesLista a:hover { text-decoration: underline; }
+.avaliacoesLista span { color: #aca2aa; font-size: 11px; }
+.avaliacoesLista strong { font-size: 13px; color: #dec89a; white-space: nowrap; }
+
+.linkExternoCatalogo { display: inline-block; margin-top: 2px; }
+
+
+/* F09.8 — categorias da pesquisa: controles discretos, sem aparência padrão. */
+.buscaCategorias { gap: 8px; flex-wrap: wrap; }
+.buscaCategorias a { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border: 1px solid transparent; border-radius: 6px; text-decoration: none; }
+.buscaCategorias a:hover { background: var(--lm-panel-raised); color: var(--lm-text); }
+.buscaCategorias a[aria-current="page"] { color: var(--lm-text); background: var(--lm-panel-raised); border-color: #74616a; }
+
+/* F09.10 — abertura mais compacta, sem caixas aninhadas. */
+.hero.heroEditorial { background: transparent; border: 0; padding: 12px 0 16px; margin-bottom: 0; gap: 24px; }
+.heroEditorial .heroMain h1 { font-size: clamp(43px,5vw,58px); margin-bottom: 12px; }
+.heroEditorial .heroAside { background: transparent; border: 0; padding: 0; }
+.destaqueObra { grid-template-columns: 106px minmax(0,1fr); gap: 16px; padding: 0; }
+.heroLinks a, .catalogoHero a { border-bottom: 0; text-decoration: none; }
+.heroLinks a:hover, .heroLinks a:focus-visible, .catalogoHero a:hover, .catalogoHero a:focus-visible { text-decoration: underline; }
+.searchPage { background: transparent; border: 0; border-radius: 0; padding: 0; min-height: 0; }
+.searchPage h1 { font-size: clamp(43px,5vw,58px); margin-bottom: 16px; }
+.catalogoHero { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+@media(max-width:680px) { .hero.heroEditorial { padding: 8px 0 14px; gap: 18px; } .destaqueObra { grid-template-columns: 88px minmax(0,1fr); } }
+
+/* F09.11 — composição única para a abertura; sem destaque solto ou caixa dupla. */
+.hero.heroEditorial {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.05fr);
+  align-items: center;
+  gap: 28px;
+  padding: 24px 28px;
+  background: var(--lm-panel);
+  border: 1px solid var(--lm-line);
+  border-radius: 8px;
+  margin-bottom: 0;
+}
+.heroEditorial .heroAside { padding: 0 0 0 24px; border-left: 1px solid var(--lm-line); border-radius: 0; max-width: none; }
+.heroEditorial .heroMain h1 { margin: 0 0 16px; }
+.heroMain .heroLinks { margin-top: 0; }
+.destaqueObra { grid-template-columns: minmax(112px, 42%) minmax(0,1fr); gap: 18px; }
+.heroEditorial + .descobertaSecao { margin-top: 22px; border-top: 0; padding-top: 0; }
+.tituloDescoberta .shelfInfo { margin-bottom: 0; }
+@media(max-width: 760px) {
+  .hero.heroEditorial { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+  .heroEditorial .heroAside { border-left: 0; border-top: 1px solid var(--lm-line); padding: 18px 0 0; }
+  .destaqueObra { grid-template-columns: minmax(90px, 120px) minmax(0,1fr); }
+}
+
+/* F09.12 — refinamento final. */
+.listasHome { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; list-style: none; padding: 0; margin: 0; }
+.listasHome li { min-width: 0; }
+.listaHome { display: block; color: var(--lm-text); text-decoration: none; }
+.listaHome strong { font: 700 19px/1.2 var(--lm-serif); overflow-wrap: anywhere; }
+.listaHome:hover strong, .listaHome:focus-visible strong { text-decoration: underline; }
+.listasHome p { margin: 4px 0 0; color: var(--lm-muted); font-size: 12px; }
+.listasHome p a { color: inherit; text-decoration: none; }
+.listasHome p a:hover, .listasHome p a:focus-visible { text-decoration: underline; }
+.tituloDescoberta { align-items: baseline; }
+.tituloDescoberta h2 { margin-bottom: 0; }
+.tituloDescoberta a, .heroMain .heroLinks, .destaqueInfo p { font-size: 13px; }
+.searchPage .message { margin-top: 18px; font-size: 14px; line-height: 1.5; }
+.searchPage .results { margin-top: 18px; }
+@media(max-width:650px) { .listasHome { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:390px) { .listasHome { grid-template-columns: 1fr; } }
+
+/* F09.13 — one editorial canvas, not a stack of cards. */
+.editorialHome { display: flex; flex-direction: column; gap: 34px; }
+.editorialHome .hero.heroEditorial { margin: 0; padding: 20px 0 26px; background: transparent; border: 0; border-bottom: 1px solid var(--lm-line); border-radius: 0; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr); }
+.editorialHome .heroEditorial .heroAside { border: 0; padding: 0; }
+.editorialHome .destaqueObra { grid-template-columns: minmax(110px,40%) minmax(0,1fr); }
+.editorialHome .heroMain h1 { font-size: clamp(48px,5vw,64px); }
+.editorialHome .heroLinks { gap: 18px; }
+.editorialHome .descobertaSecao { margin: 0; padding: 0; border: 0; background: transparent; }
+.editorialHome .shelfInfo, .editorialHome .tituloDescoberta { margin: 0 0 14px; }
+.editorialHome .tituloDescoberta .shelfInfo { margin: 0; }
+.editorialHome .descobertaSecao h2 { font-size: clamp(25px,3vw,31px); line-height: 1.15; letter-spacing: -.025em; }
+.editorialHome .tituloDescoberta > a { font-size: 12px; text-decoration: none; }
+.editorialHome .tituloDescoberta > a:hover { text-decoration: underline; }
+.editorialHome .listasHome { gap: 16px; }
+@media(max-width:760px) { .editorialHome { gap: 28px; } .editorialHome .hero.heroEditorial { grid-template-columns: 1fr; gap: 18px; } .editorialHome .destaqueObra { grid-template-columns: 110px minmax(0,1fr); } }
+
+/* F09.14 — editorial composition, one canvas with a cover-led opening. */
+.editorialHome { gap:var(--lm-section); }
+.editorialHome .hero.heroEditorial { grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:32px; padding:8px 0 27px; border-bottom:1px solid var(--lm-line); }
+.editorialHome .heroEditorial .heroMain h1 { font-size:clamp(54px,6vw,78px); line-height:.94; letter-spacing:-.065em; margin:0 0 19px; }
+.discoverLink { color:var(--lm-muted); font-size:13px; text-decoration:none; }
+.discoverLink:hover { color:var(--lm-text); text-decoration:underline; }
+.editorialHome .destaqueObra { grid-template-columns:minmax(0,1fr) minmax(0,.85fr); gap:22px; padding:0; }
+.editorialHome .destaqueCapa { border-radius:var(--lm-cover-radius); box-shadow:none; }
+.editorialHome .destaqueInfo h2 { font:700 clamp(26px,3.3vw,45px)/1.02 var(--lm-serif); letter-spacing:-.045em; margin:8px 0; overflow-wrap:anywhere; }
+.editorialHome .destaqueInfo span { font-size:10px; color:var(--lm-accent); letter-spacing:.09em; }
+.editorialHome .destaqueInfo p { font-size:14px; color:var(--lm-muted); }
+.editorialHome .descobertaSecao h2 { font-size:28px; }
+.editorialHome .tituloDescoberta,.editorialHome .shelfInfo { margin:0 0 16px; }
+.editorialHome .tituloDescoberta .shelfInfo { margin:0; }
+.editorialColumns { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(0,1fr); align-items:start; gap:36px; }
+.editorialColumns > section { min-width:0; }
+.editorialColumns .listasHome { grid-template-columns:1fr; gap:0; }
+.editorialColumns .listasHome li { position:relative; padding:12px 0; border-bottom:1px solid var(--lm-line); }
+.editorialColumns .listasHome li:first-child { padding-top:0; }
+.editorialColumns .listaHome { display:grid; grid-template-columns:110px minmax(0,1fr); align-items:center; gap:14px; }
+.editorialColumns .listaHome > div { margin:0; }
+.editorialColumns .listaHome strong { font-size:19px; }
+.editorialColumns .listasHome p { margin:3px 0 0 124px; }
+.editorialHome .message { margin:10px 0; font-size:14px; }
+.searchPage .buscaCategorias { gap:20px; padding-bottom:0; }
+.searchPage .buscaCategorias a { border:0; border-radius:0; background:transparent; padding:8px 0; border-bottom:2px solid transparent; }
+.searchPage .buscaCategorias a[aria-current="page"] { background:transparent; border-bottom-color:var(--lm-accent); }
+.searchPage .results { margin-top:28px; }
+.searchPage .results h2 { font-size:25px; letter-spacing:-.025em; }
+@media(max-width:760px) { .editorialHome .hero.heroEditorial { grid-template-columns:1fr; gap:20px; } .editorialHome .destaqueObra { grid-template-columns:minmax(0,145px) minmax(0,1fr); gap:16px; } .editorialColumns { grid-template-columns:1fr; gap:var(--lm-section); } }
+
+.editorialColumns .listasHome li { display:grid; grid-template-columns:68px minmax(0,1fr); gap:14px; align-items:center; }
+.listaCover { display:block; text-decoration:none; }
+.listaMeta { min-width:0; }
+.listaTitle { color:var(--lm-text); font:700 19px/1.2 var(--lm-serif); text-decoration:none; overflow-wrap:anywhere; }
+.listaTitle:hover,.listaTitle:focus-visible { text-decoration:underline; }
+.editorialColumns .listasHome .listaMeta p { margin:5px 0 0; }
+
+/* F09.15 — approved magazine composition, real cover art only. */
+.magazineHome { display:grid; gap:26px; }
+.magazineHeader { display:flex; align-items:baseline; justify-content:space-between; gap:14px; }
+.magazineHeader h1 { font:700 clamp(40px,5vw,55px)/1 var(--lm-serif); letter-spacing:-.045em; margin:0; }
+.featureGrid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px; }
+.featureGrid[data-count="1"] { grid-template-columns:1fr; }
+.featureGrid[data-count="2"] { grid-template-columns:1.4fr 1fr; }
+.featureCard { position:relative; display:flex; align-items:end; min-height:186px; isolation:isolate; overflow:hidden; border-radius:var(--lm-card-radius); background:var(--lm-panel); color:#fff; text-decoration:none; }
+.featureArt { position:absolute; inset:0; display:grid; place-items:center; overflow:hidden; z-index:-2; color:var(--lm-muted); font-size:36px; }
+.featureArt img { object-fit:cover; }
+.featureCard::after { content:""; position:absolute; inset:0; background:linear-gradient(0deg,#101014ed 0%,#10101468 58%,#10101415 100%); z-index:-1; }
+.featureCopy { padding:18px; min-width:0; }
+.featureCopy h2 { font:700 clamp(20px,2.6vw,32px)/1.08 var(--lm-serif); letter-spacing:-.025em; margin:0 0 5px; overflow-wrap:anywhere; }
+.featureCopy p { margin:0; color:#eee; font-size:12px; }
+.featureCard:hover .featureCopy h2 { text-decoration:underline; }
+.magazineSection,.socialCards .descobertaSecao { margin:0; padding:0; border:0; }
+.magazineSection h2,.socialCards .descobertaSecao h2 { font:700 26px/1.15 var(--lm-serif); margin:0; }
+.magazineHome .tituloDescoberta { margin:0 0 12px; }
+.magazineHome .tituloDescoberta a { color:var(--lm-muted); text-decoration:none; font-size:12px; }
+.magazineHome .tituloDescoberta a:hover { color:var(--lm-text); text-decoration:underline; }
+.magazineHome .message { font-size:14px; margin:10px 0; }
+.socialCards { gap:20px; }
+.socialCards .listasHome { gap:8px; }
+.socialCards .listasHome li,.socialCards .listasHome li:first-child { border:1px solid var(--lm-line); border-radius:var(--lm-card-radius); background:var(--lm-panel); padding:12px; }
+@media(max-width:760px) { .featureGrid { grid-template-columns:1fr 1fr; } .featureGrid[data-count="3"] .featureCard:first-child { grid-column:1/-1; } .featureCard { min-height:150px; } .socialCards { grid-template-columns:1fr; } }
+@media(max-width:420px) { .featureGrid,.featureGrid[data-count="2"] { grid-template-columns:1fr; } .featureCard { min-height:165px; } }
+
+.magazineHeader .discoverLink,.magazineHome .tituloDescoberta > a { display:inline-grid; place-items:center; width:34px; height:34px; border-radius:5px; color:var(--lm-muted); }
+.magazineHeader .discoverLink:hover,.magazineHome .tituloDescoberta > a:hover { background:var(--lm-panel); color:var(--lm-text); }
+.buscaLista button { display:grid; place-items:center; }
+/* Maintain compact social cards with enough breathing room between cover and metadata. */
+.socialCards .listasHome { gap:10px; }
+.socialCards .listasHome li,.socialCards .listasHome li:first-child { padding:14px; gap:15px; }
+.listaMeta p { line-height:1.5; }

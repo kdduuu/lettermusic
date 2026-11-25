@@ -1,3 +1,4 @@
+import { UiIcon } from "@/components/ui-icon";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Paginacao, ResultadosMusicais } from "@/components/exploracao-musical";
@@ -17,7 +18,7 @@ type Parametros = Promise<{
 }>;
 
 const CATEGORIAS: Categoria[] = ["albuns", "artistas", "faixas"];
-const TITULOS = { albuns: "Álbuns", artistas: "Artistas", faixas: "Faixas" };
+const TITULOS = { albuns: "Albums", artistas: "Artists", faixas: "Tracks" };
 
 async function Conteudo({ searchParams }: { searchParams: Parametros }) {
   const params = await searchParams;
@@ -43,38 +44,38 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
   return (
     <>
       <form action="/buscar" className={styles.buscaLista} role="search">
-        <label htmlFor="busca-exploracao">Pesquisar música</label>
+        <label htmlFor="busca-exploracao" className={styles.visuallyHidden}>Search music</label>
         {listaId ? <input type="hidden" name="lista" value={listaId} /> : null}
         {categoria !== "todos" ? <input type="hidden" name="categoria" value={categoria} /> : null}
         <div>
-          <input id="busca-exploracao" name="termo" type="search" defaultValue={termo} required minLength={2} maxLength={100} placeholder="Álbum, artista ou faixa..." />
-          <button type="submit">Buscar</button>
+          <input id="busca-exploracao" name="termo" type="search" defaultValue={termo} required minLength={2} maxLength={100} placeholder="Album, artist or track…" />
+          <button type="submit" title="Search" aria-label="Search"><UiIcon name="search" size={18}/></button>
         </div>
       </form>
 
       {permitida ? (
-        <p className={styles.message}>Adicionando à lista <Link href={`/listas/${permitida.id}`}>{permitida.titulo}</Link>.</p>
+        <p className={styles.message}>Adding to <Link href={`/listas/${permitida.id}`}>{permitida.titulo}</Link>.</p>
       ) : listaId ? (
-        <p className={styles.message} role="alert">Você não possui permissão para editar esta lista.</p>
+        <p className={styles.message} role="alert">You cannot edit this list.</p>
       ) : null}
 
       {termo.length >= 2 && termo.length <= 100 ? (
         <>
           {!listaId ? (
-            <nav className={styles.buscaCategorias} aria-label="Categorias de busca">
+            <nav className={styles.buscaCategorias} aria-label="Search categories">
               {(["todos", ...CATEGORIAS] as const).map((tipo) => (
                 <Link key={tipo} prefetch={false} href={endereco(tipo)} aria-current={categoria === tipo ? "page" : undefined}>
-                  {tipo === "todos" ? "Todos" : TITULOS[tipo]}
+                  {tipo === "todos" ? "All" : TITULOS[tipo]}
                 </Link>
               ))}
             </nav>
           ) : null}
 
-          <Suspense fallback={<p className={styles.message}>Buscando música...</p>} key={`${termo}-${categoria}-${pagina}-${artistaId ?? ""}`}>
+          <Suspense fallback={<p className={styles.message}>Searching…</p>} key={`${termo}-${categoria}-${pagina}-${artistaId ?? ""}`}>
             <Resultados termo={termo} categoria={categoria} pagina={pagina} listaId={permitida?.id} listaContexto={listaId ?? undefined} artistaId={artistaId} />
           </Suspense>
         </>
-      ) : <p className={styles.message}>Informe entre 2 e 100 caracteres para pesquisar.</p>}
+      ) : null}
     </>
   );
 }
@@ -177,9 +178,9 @@ async function SecaoResultado({
     : endereco;
 
   const tituloSecao = destaque
-    ? "Outros artistas"
+    ? "Other artists"
     : artista && tipo !== "artistas"
-      ? `${TITULOS[tipo]} de ${artista.titulo}`
+      ? `${TITULOS[tipo]} by ${artista.titulo}`
       : TITULOS[tipo];
 
   return (
@@ -188,8 +189,8 @@ async function SecaoResultado({
         <>
           <h2>
             {normalizar(primeiro.titulo) === normalizar(termo)
-              ? "Artista em destaque"
-              : "Artista sugerido"}
+              ? "Top match"
+              : "Suggested artist"}
           </h2>
           <ResultadosMusicais itens={[primeiro]} categoria="artistas" />
         </>
@@ -202,7 +203,7 @@ async function SecaoResultado({
           {geral && resultado.ok &&
             (resultado.dados.tem_proxima || Boolean(vinculo)) ? (
               <Link prefetch={false} href={enderecoContextual}>
-                Ver todos
+                View all
               </Link>
             ) : null}
         </div>
@@ -210,9 +211,9 @@ async function SecaoResultado({
 
       {!geral && vinculo ? (
         <p className={styles.notaExploracao}>
-          Resultados do artista selecionado.{" "}
+          Results for selected artist.{" "}
           <Link prefetch={false} href={endereco}>
-            Ver busca geral
+            Search all artists
           </Link>
         </p>
       ) : null}
@@ -229,13 +230,13 @@ async function SecaoResultado({
 
           {!geral && tipo === "albuns" && itens.length === 0 ? (
             <p className={styles.message}>
-              Não encontrou o álbum?{" "}
+              Missing an album?{" "}
               <Link
                 href="https://musicbrainz.org/release/add"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Adicionar lançamento ao MusicBrainz
+                Add release to MusicBrainz
               </Link>
               .
             </p>
@@ -243,9 +244,7 @@ async function SecaoResultado({
 
           {!geral ? (
             <>
-              <p className={styles.notaExploracao}>
-                Até 60 resultados relevantes. Refine a pesquisa para encontrar outros.
-              </p>
+
               <Paginacao
                 pagina={pagina}
                 temProxima={resultado.dados.tem_proxima}
@@ -273,14 +272,13 @@ async function AvisoSemResultados({
 
   return resultados.every(r => r.ok && r.dados.resultados.length === 0)
     ? <p className={styles.message}>
-        Nenhum resultado encontrado. Tente outro termo.{" "}
-        Se for um lançamento ausente do catálogo, você pode{" "}
+        No results found.{" "}
         <Link
           href="https://musicbrainz.org/release/add"
           target="_blank"
           rel="noopener noreferrer"
         >
-          adicioná-lo ao MusicBrainz
+          Add release to MusicBrainz
         </Link>.
       </p>
     : null;
@@ -354,7 +352,7 @@ function Resultados({
         return (
           <Suspense key={tipo} fallback={
             <p className={styles.message}>
-              Buscando {TITULOS[tipo].toLowerCase()}...
+              Searching {TITULOS[tipo].toLowerCase()}…
             </p>
           }>
             <SecaoResultado
@@ -385,9 +383,8 @@ export default function BuscarPage({ searchParams }: { searchParams: Parametros 
   return (
     <main className={styles.container}>
       <section className={styles.searchPage}>
-        <span className={styles.accent} aria-hidden="true" />
-        <h1>Buscar música</h1>
-        <Suspense fallback={<p className={styles.message}>Carregando pesquisa...</p>}>
+        <h1>Search</h1>
+        <Suspense fallback={<p className={styles.message}>Loading search…</p>}>
           <Conteudo searchParams={searchParams} />
         </Suspense>
       </section>

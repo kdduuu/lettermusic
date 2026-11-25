@@ -57,11 +57,11 @@ function comunidadeValida(v: unknown): v is Comunidade {
 export async function consultarComunidade(): Promise<Resultado> {
   try {
     const resposta = await requisitarBackend("/social/comunidade");
-    if (!resposta.ok) return { ok: false, mensagem: "Não foi possível carregar a comunidade agora." };
+    if (!resposta.ok) return { ok: false, mensagem: "Unable to load community." };
     const dados: unknown = await resposta.json();
-    if (!comunidadeValida(dados)) return { ok: false, mensagem: "Resposta inesperada da API da comunidade." };
+    if (!comunidadeValida(dados)) return { ok: false, mensagem: "Unexpected community response." };
     return { ok: true, dados };
   } catch {
-    return { ok: false, mensagem: "Não foi possível conectar à API da comunidade." };
+    return { ok: false, mensagem: "Unable to connect to the community service." };
   }
 }

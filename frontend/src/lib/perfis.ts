@@ -82,7 +82,7 @@ function perfilValido(valor: unknown): valor is PerfilSocial {
 
 export async function consultarPerfilPublico(username: string): Promise<ResultadoPerfil> {
   if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
-    return { ok: false, status: 404, mensagem: "Perfil não encontrado." };
+    return { ok: false, status: 404, mensagem: "Profile not found." };
   }
 
   try {
@@ -94,21 +94,21 @@ export async function consultarPerfilPublico(username: string): Promise<Resultad
         ok: false,
         status: resposta.status,
         mensagem: resposta.status === 404
-          ? "Perfil não encontrado."
-          : "Não foi possível consultar este perfil agora.",
+          ? "Profile not found."
+          : "Unable to load profile.",
       };
     }
 
     const dados: unknown = await resposta.json();
     if (!perfilValido(dados)) {
-      return { ok: false, status: 502, mensagem: "Resposta inesperada da API de perfis." };
+      return { ok: false, status: 502, mensagem: "Unexpected profile response." };
     }
     return { ok: true, perfil: dados };
   } catch {
     return {
       ok: false,
       status: 503,
-      mensagem: "API indisponível. Verifique se o FastAPI está ligado.",
+      mensagem: "Service unavailable. Try again later.",
     };
   }
 }

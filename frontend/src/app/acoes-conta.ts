@@ -16,11 +16,11 @@ export async function atualizarNome(
   ).trim();
 
   if (nome_exibicao.length < 2 || nome_exibicao.length > 80) {
-    return { sucesso: false, mensagem: "Informe um nome de 2 a 80 caracteres." };
+    return { sucesso: false, mensagem: "Enter a name of 2 to 80 characters." };
   }
 
   const token = await obterTokenSessao();
-  if (!token) return { sucesso: false, mensagem: "Entre novamente na sua conta." };
+  if (!token) return { sucesso: false, mensagem: "Sign in again." };
 
   try {
     const resposta = await requisitarBackend("/auth/conta", {
@@ -33,15 +33,15 @@ export async function atualizarNome(
       return {
         sucesso: false,
         mensagem: resposta.status === 401
-          ? "Sua sessão expirou."
-          : "Não foi possível atualizar seu nome.",
+          ? "Session expired."
+          : "Unable to update your name.",
       };
     }
 
     revalidatePath("/", "layout");
-    return { sucesso: true, mensagem: "Nome atualizado com sucesso!" };
+    return { sucesso: true, mensagem: "Name updated." };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
@@ -54,19 +54,19 @@ export async function atualizarSenha(
   const confirmacao = String(formulario.get("confirmacao") ?? "");
 
   if (!senha_atual || senha_nova.length < 12 || senha_nova.length > 128) {
-    return { sucesso: false, mensagem: "A nova senha deve ter de 12 a 128 caracteres." };
+    return { sucesso: false, mensagem: "The new password must have 12 to 128 characters." };
   }
 
   if (senha_nova !== confirmacao) {
-    return { sucesso: false, mensagem: "As novas senhas não coincidem." };
+    return { sucesso: false, mensagem: "The new passwords do not match." };
   }
 
   if (senha_atual === senha_nova) {
-    return { sucesso: false, mensagem: "Escolha uma senha diferente da atual." };
+    return { sucesso: false, mensagem: "Choose a different password." };
   }
 
   const token = await obterTokenSessao();
-  if (!token) return { sucesso: false, mensagem: "Entre novamente na sua conta." };
+  if (!token) return { sucesso: false, mensagem: "Sign in again." };
 
   let sucesso = false;
 
@@ -81,16 +81,16 @@ export async function atualizarSenha(
       return {
         sucesso: false,
         mensagem: resposta.status === 400
-          ? "Senha atual incorreta."
+          ? "Incorrect current password."
           : resposta.status === 401
-            ? "Sua sessão expirou."
-            : "Não foi possível alterar a senha.",
+            ? "Session expired."
+            : "Unable to change password.",
       };
     }
 
     sucesso = true;
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 
   if (sucesso) {
@@ -100,7 +100,7 @@ export async function atualizarSenha(
     redirect("/entrar");
   }
 
-  return { sucesso: false, mensagem: "Não foi possível alterar a senha." };
+  return { sucesso: false, mensagem: "Unable to change password." };
 }
 
 export async function excluirConta(
@@ -115,10 +115,10 @@ export async function excluirConta(
     formulario.get("confirmacao_exclusao") ?? ""
   ).trim();
 
-  if (!senha_atual || confirmacao !== "EXCLUIR") {
+  if (!senha_atual || confirmacao !== "DELETE") {
     return {
       sucesso: false,
-      mensagem: "Informe sua senha e digite EXCLUIR.",
+      mensagem: "Enter your password and type DELETE.",
     };
   }
 
@@ -127,7 +127,7 @@ export async function excluirConta(
   if (!token) {
     return {
       sucesso: false,
-      mensagem: "Entre novamente para excluir sua conta.",
+      mensagem: "Sign in again to delete your account.",
     };
   }
 
@@ -142,16 +142,16 @@ export async function excluirConta(
       return {
         sucesso: false,
         mensagem: resposta.status === 400
-          ? "Senha atual incorreta."
+          ? "Incorrect current password."
           : resposta.status === 401
-            ? "Sua sessão expirou. Entre novamente."
-            : "Não foi possível excluir sua conta.",
+            ? "Session expired. Sign in again."
+            : "Unable to delete account.",
       };
     }
   } catch {
     return {
       sucesso: false,
-      mensagem: "Falha de conexão. Tente novamente.",
+      mensagem: "Connection failed. Try again.",
     };
   }
 

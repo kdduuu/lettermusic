@@ -12,7 +12,7 @@
 .atividade p { margin: 0 0 8px; line-height: 1.55; overflow-wrap: anywhere; }
 .meta { color: #c6c6c6; font-size: 13px; margin: 5px 0 0; overflow-wrap: anywhere; }
 .resumo { white-space: pre-wrap; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.nota { color: #e9d3a3; }
+.nota { color: var(--lm-rating); }
 .linkSecundario { font-size: 13px; }
 .lateral { min-width: 0; }
 .lateral section + section { border-top: 1px solid #484848; padding-top: 24px; }
@@ -22,3 +22,160 @@
 .capa { width: 54px; aspect-ratio: 1; position: relative; overflow: hidden; border-radius: 4px; display: grid; place-items: center; background: #303030; color: #c6c6c6; }
 .capa img { object-fit: cover; }
 @media (max-width: 760px) { .container { padding: 38px 16px 60px; } .layout { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
+
+/* F09 - atividades musicais com capas reais, sem efeitos coloridos no fundo. */
+.container { max-width: 1260px; padding: 45px 28px 112px; }
+.cabecalho { padding: 44px clamp(25px,4vw,50px); margin-bottom: 52px; border: 1px solid #3c3941; border-radius: 14px; background: #26252a; }
+.cabecalho h1 { font: 700 clamp(56px,7vw,88px)/1 var(--lm-serif); letter-spacing: -.05em; }
+.cabecalho p { font-size: 16px; color: #bab0b7; max-width: 620px; }
+.layout { grid-template-columns: minmax(0,1.52fr) minmax(290px,.82fr); gap: clamp(35px,5vw,80px); }
+.layout h2 { font: 700 32px var(--lm-serif); margin-bottom: 21px; }
+.atividade { grid-template-columns: 45px minmax(0,1fr); gap: 18px; padding: 28px 0; border-color: #413d44; }
+.avatar { width: 45px; background: #38343c; border-color: #645b64; font: 700 22px var(--lm-serif); }
+.meta { color: #b1a8b0; }
+.atividade .meta:first-child { margin-bottom: 13px; }
+.atividade .meta a { text-decoration: none; font-weight: 700; }
+.atividadeMusical { display: grid; grid-template-columns: 110px minmax(0,1fr); gap: 20px; align-items: start; }
+.atividadeMusical > a { display: block; }
+.capaFeed { width: 110px; aspect-ratio: 1; display: grid; place-items: center; position: relative; overflow: hidden; border-radius: 7px; background: #353239; color: #aea5af; font-size: 30px; }
+.capaFeed img { object-fit: cover; }
+.atividadeMusical h3, .listaAtividade h3 { font: 700 24px/1.2 var(--lm-serif); margin: 0 0 7px; overflow-wrap: anywhere; }
+.atividadeMusical h3 a, .listaAtividade h3 a { text-decoration: none; }
+.acaoTexto { color: #e58190; font-size: 12px; font-weight: 700; }
+.atividadeMusical .resumo { color: #d8d0d6; line-height: 1.65; margin-top: 12px; }
+.listaAtividade { display: flex; align-items: center; gap: 18px; padding: 14px 0; }
+.listaAtividade > span { width: 70px; height: 70px; flex: 0 0 70px; display: grid; place-items: center; border-radius: 9px; background: #39353d; font: 34px var(--lm-serif); color: #e3d7dc; }
+.lateral { border-left: 1px solid #3d3942; padding-left: clamp(22px,3vw,38px); }
+.lateral h2 { font-size: 27px; }
+.membros li, .obras li { padding: 18px 0; border-color: #3e3b42; }
+.obra { grid-template-columns: 65px minmax(0,1fr); }
+.capa { width: 65px; border-radius: 6px; }
+.linkSecundario { color: #ef8996 !important; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .lateral { border-left: 0; border-top: 1px solid #3d3942; padding: 30px 0 0; } }
+@media (max-width: 760px) { .container { padding: 25px 17px 70px; } .cabecalho { padding: 30px 24px; margin-bottom: 35px; } .cabecalho h1 { font-size: 56px; } .atividadeMusical { grid-template-columns: 85px minmax(0,1fr); gap: 13px; } .capaFeed { width: 85px; } .atividadeMusical h3 { font-size: 20px; } }
+
+/* F09.3 - comunidade tem abertura própria, não uma cópia dos cards das outras páginas. */
+.cabecalho {
+  display: flex; justify-content: space-between; align-items: end;
+  gap: 36px; padding: 23px 0 35px; background: transparent;
+  border: 0; border-radius: 0; border-bottom: 1px solid #48434a;
+  margin-bottom: 48px;
+}
+.cabecalho h1 { font-size: clamp(52px,7vw,76px); }
+.cabecalho > p { margin: 0 0 6px; max-width: 345px; color: #b8adb5; }
+.etiqueta { margin: 0 0 15px; color: #ea909e; font-weight: 700; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+@media (max-width: 760px) { .cabecalho { flex-direction: column; align-items: start; gap: 12px; padding: 18px 0 30px; margin-bottom: 34px; } .cabecalho h1 { font-size: 51px; } }
+
+/* F09.4: um feed social compacto e legivel. */
+.cabecalho { margin-bottom: 27px; padding-bottom: 24px; }
+.atividade { padding: 22px 0; }
+.atividadeMusical { grid-template-columns: 83px minmax(0, 1fr); gap: 16px; }
+.capaFeed { width: 83px; }
+.atividadeMusical h3 { font-size: 21px; }
+.atividade .meta:first-child { margin-bottom: 8px; }
+.lateral h2 { font-size: 23px; }
+@media (max-width: 760px) { .atividadeMusical { grid-template-columns: 72px minmax(0, 1fr); } .capaFeed { width: 72px; } }
+
+/* F09.5 — feed mais social; informação lateral disponível durante a leitura. */
+.layout { grid-template-columns: minmax(0,1.4fr) minmax(300px,.85fr); gap: clamp(28px,5vw,62px); }
+.lateral { align-self: start; position: sticky; top: 22px; }
+.listaAtividade { gap: 17px; padding: 8px 0; }
+.listaAtividade > :first-child { flex-shrink: 0; }
+.atividade { padding: 22px 0 24px; }
+.atividadeMusical h3, .listaAtividade h3 { font-size: 22px; }
+.atividade .meta { font-size: 13px; }
+.membro { display: flex; align-items: center; gap: 13px; }
+.avatarMembro {
+  display: grid; place-items: center; width: 42px; height: 42px; flex: 0 0 42px;
+  background: #353239; border: 1px solid #59535c; border-radius: 50%;
+  font: 700 20px Georgia,serif; color: #f0e9eb;
+}
+.membro > div { min-width: 0; }
+.membro .meta { margin-top: 4px; }
+.obra { grid-template-columns: 72px minmax(0,1fr); gap: 14px; }
+.capa { width: 72px; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .lateral { position: static; top: auto; }
+}
+
+
+/* F09.6 — página social densa, pessoas e capas acima de textos de apoio. */
+.container { max-width: var(--lm-content); padding: 25px 22px 70px; }
+.cabecalho { padding: 7px 0 19px; margin-bottom: 21px; }
+.cabecalho h1 { font-size: clamp(42px,5vw,58px); }
+.layout { grid-template-columns: minmax(0,1.46fr) minmax(265px,.84fr); gap: 32px; }
+.layout h2 { font-size: 23px; margin-bottom: 13px; }
+.atividade { grid-template-columns: 36px minmax(0,1fr); gap: 12px; padding: 16px 0; }
+.avatar { width: 36px; font-size: 17px; }
+.atividadeMusical { grid-template-columns: 70px minmax(0,1fr); gap: 13px; }
+.capaFeed { width: 70px; border-radius: 5px; }
+.atividadeMusical h3,.listaAtividade h3 { font-size: 19px; margin-bottom: 4px; }
+.atividade .meta { font-size: 11px; margin-bottom: 4px; }
+.acaoTexto { font-size: 10px; }
+.atividadeMusical .resumo { font-size: 12px; margin-top: 7px; }
+.listaAtividade { gap: 11px; padding: 6px 0; }
+.lateral { padding-left: 25px; }
+.lateral h2 { font-size: 21px; }
+.membros li,.obras li { padding: 11px 0; }
+.avatarMembro { width: 36px; height: 36px; flex-basis: 36px; font-size: 17px; }
+.obra { grid-template-columns: 52px minmax(0,1fr); gap: 9px; }
+.capa { width: 52px; }
+@media(max-width:900px) { .layout { grid-template-columns: 1fr; } .lateral { position: static; padding: 23px 0 0; border-left:0; border-top: 1px solid var(--lm-line); } }
+@media(max-width:650px) { .container { padding: 20px 16px 58px; } .cabecalho h1 { font-size: 45px; } }
+
+
+/* F09.6 — lateral informativa acompanha o conteúdo, sem prender em telas estreitas. */
+@media(min-width:901px) { .lateral { top: 15px; } }
+
+
+/* F09.7 — relatos escritos são visualmente diferentes de uma nota rápida. */
+.atividadeMusical .resumo {
+  border-left: 2px solid #756872;
+  padding-left: 11px;
+  margin-top: 10px;
+  color: #eee5e9;
+  font-size: 13px;
+  line-height: 1.58;
+}
+
+/* F09.10 — links discretos e feed mais compacto. */
+.layout a { text-decoration: none; }
+.layout a:hover, .layout a:focus-visible { text-decoration: underline; }
+.atividade { padding: 13px 0; }
+.listaAtividade { padding: 7px 0; }
+
+/* F09.12 — refinamento final. */
+.atividade .meta { font-size: 12px; color: var(--lm-muted); }
+.acaoTexto { font-size: 12px; }
+.atividadeMusical h3, .listaAtividade h3, .lateral a { overflow-wrap: anywhere; }
+.atividadeMusical .resumo { overflow-wrap: anywhere; }
+
+
+/* F09.14 — editorial rhythm. */
+.cabecalho { padding:8px 0 18px; margin-bottom:24px; border-color:var(--lm-line); }
+.layout { gap:36px; }
+.layout h2 { font-size:25px; letter-spacing:-.025em; }
+.lateral { border-left:0; padding-left:0; }
+.lateral h2 { font-size:23px; }
+.atividadeMusical .resumo { border-left:0; padding-left:0; margin-top:8px; color:var(--lm-text); }
+.capaFeed,.capa { border-radius:var(--lm-cover-radius); }
+@media(max-width:900px) { .layout { grid-template-columns:1fr; gap:var(--lm-section); } .lateral { padding-top:20px; border-top:1px solid var(--lm-line); } }
+
+.atividade { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:17px 0; margin:0; }
+.membros li { background:var(--lm-panel); border:1px solid var(--lm-line); padding:10px; border-radius:6px; margin-bottom:8px; }
+.obras li { background:transparent; border:0; padding:9px 0; margin-bottom:4px; }
+.cabecalho { border-bottom:0; }
+
+/* A continuous social feed: equal alignment for ratings, reviews and lists. */
+.atividade:first-child { padding-top:8px; }
+.atividade:last-child { border-bottom:0; }
+.atividade > article { min-width:0; }
+.atividadeMusical,.listaAtividade { display:grid; grid-template-columns:70px minmax(0,1fr); align-items:start; gap:13px; padding:0; }
+.atividadeMusical > div,.listaAtividade > div { min-width:0; }
+.listaAtividade > :first-child { width:70px; height:70px; min-width:0; }
+.atividade .meta:first-child { margin-bottom:8px; }
+.atividadeMusical p,.listaAtividade p { margin-bottom:4px; }
+.atividadeMusical .resumo { margin:7px 0 0; }
+.atividadeMusical .nota { margin:5px 0 0; }
+@media(max-width:560px) { .atividade { gap:10px; padding:15px 0; } .atividadeMusical,.listaAtividade { grid-template-columns:62px minmax(0,1fr); gap:11px; } .atividadeMusical .capaFeed,.listaAtividade > :first-child { width:62px; height:62px; } }

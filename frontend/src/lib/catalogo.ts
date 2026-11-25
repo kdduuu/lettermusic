@@ -69,14 +69,14 @@ export async function pesquisarAlbuns(termo: string): Promise<ResultadoBusca> {
         ok: false,
         mensagem:
           resposta.status === 502
-            ? "O catálogo musical está temporariamente indisponível."
-            : "Não foi possível consultar o catálogo agora.",
+            ? "Music catalog temporarily unavailable."
+            : "Unable to load catalog.",
       };
     }
 
     const dados: unknown = await resposta.json();
     if (!objeto(dados) || !Array.isArray(dados.resultados)) {
-      return { ok: false, mensagem: "Resposta inesperada do catálogo." };
+      return { ok: false, mensagem: "Unexpected catalog response." };
     }
 
     const obras = dados.resultados.filter(objeto).map(converterObra);
@@ -84,7 +84,7 @@ export async function pesquisarAlbuns(termo: string): Promise<ResultadoBusca> {
   } catch {
     return {
       ok: false,
-      mensagem: "Não foi possível conectar ao catálogo. Verifique se a API está ligada.",
+      mensagem: "Unable to connect to the catalog. Try again later.",
     };
   }
 }
@@ -93,7 +93,7 @@ export async function detalharAlbum(idMusicBrainz: string): Promise<ResultadoDet
   // O servidor também valida o formato, evitando consultas desnecessárias.
   const idValido = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   if (!idValido.test(idMusicBrainz)) {
-    return { ok: false, status: 422, mensagem: "Identificador do álbum inválido." };
+    return { ok: false, status: 422, mensagem: "Invalid album ID." };
   }
 
   try {
@@ -108,17 +108,17 @@ export async function detalharAlbum(idMusicBrainz: string): Promise<ResultadoDet
         status: resposta.status,
         mensagem:
           resposta.status === 404
-            ? "Álbum não encontrado."
+            ? "Album not found."
             : resposta.status === 502
-              ? "O MusicBrainz está temporariamente indisponível."
-              : "Não foi possível consultar os detalhes do álbum.",
+              ? "MusicBrainz temporarily unavailable."
+              : "Unable to load album details.",
       };
     }
 
     const dados: unknown = await resposta.json();
     if (!objeto(dados) || typeof dados.id_musicbrainz !== "string" ||
         typeof dados.titulo !== "string" || !dados.titulo.trim()) {
-      return { ok: false, status: 502, mensagem: "Dados inesperados do catálogo." };
+      return { ok: false, status: 502, mensagem: "Unexpected catalog data." };
     }
 
     return { ok: true, obra: converterObra(dados) };
@@ -126,7 +126,7 @@ export async function detalharAlbum(idMusicBrainz: string): Promise<ResultadoDet
     return {
       ok: false,
       status: 503,
-      mensagem: "Não foi possível conectar ao catálogo. Verifique se a API está ligada.",
+      mensagem: "Unable to connect to the catalog. Try again later.",
     };
   }
 }

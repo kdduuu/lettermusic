@@ -16,13 +16,13 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Lettermusic",
   description:
-    "Uma plataforma social para descobrir, registrar, avaliar e compartilhar música.",
+    "A social platform to discover, log, rate and share music.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="pt-BR"
+      lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body>

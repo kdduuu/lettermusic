@@ -19,12 +19,12 @@ async function ConteudoReviews({ searchParams }: { searchParams: Parametros }) {
   const { dados } = resultado;
   return (
     <>
-      <CardsReviews reviews={dados.resultados} />
-      <nav className={styles.paginacao} aria-label="Páginas de reviews">
-        {pagina > 1 ? <Link href={`/reviews?pagina=${pagina - 1}`}>Anterior</Link> : null}
-        <span>Página {pagina}</span>
-        {dados.tem_proxima && pagina < 10000 ? <Link href={`/reviews?pagina=${pagina + 1}`}>Próxima</Link> : null}
-      </nav>
+      <CardsReviews reviews={dados.resultados} apresentacao="editorial" />
+      {(pagina > 1 || dados.tem_proxima) ? <nav className={styles.paginacao} aria-label="Review pages">
+        {pagina > 1 ? <Link href={`/reviews?pagina=${pagina - 1}`}>Previous</Link> : null}
+        <span>Page {pagina}</span>
+        {dados.tem_proxima && pagina < 10000 ? <Link href={`/reviews?pagina=${pagina + 1}`}>Next</Link> : null}
+      </nav> : null}
     </>
   );
 }
@@ -32,11 +32,13 @@ async function ConteudoReviews({ searchParams }: { searchParams: Parametros }) {
 export default function ReviewsPage({ searchParams }: { searchParams: Parametros }) {
   return (
     <main className={styles.container}>
-      <header>
-        <h1>Reviews</h1>
-        <p>Descubra o que a comunidade está ouvindo e compartilhando.</p>
+      <header className={styles.cabecalhoEditorial}>
+        <div>
+          <h1>Reviews</h1>
+        </div>
+        
       </header>
-      <Suspense fallback={<p className={styles.mensagem}>Carregando reviews...</p>}>
+      <Suspense fallback={<p className={styles.mensagem}>Loading reviews…</p>}>
         <ConteudoReviews searchParams={searchParams} />
       </Suspense>
     </main>

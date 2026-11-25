@@ -24,3 +24,288 @@
   .capaReview { width: 64px; }
   .review h3 { font-size: 19px; }
 }
+/* F09 - capas e atividade são os elementos dominantes. */
+.grade { gap: clamp(14px, 2vw, 25px); }
+.album { gap: 8px; }
+.album strong { font: 700 19px/1.23 var(--lm-serif); letter-spacing: -.015em; }
+.grade p { font-size: 13px; color: #b3aab1; margin: 4px 0 0; }
+.capaDestaque { border-radius: 7px; background: #353239; box-shadow: 0 0 0 1px #ffffff0b; transition: transform .2s ease; }
+.album:hover .capaDestaque { transform: translateY(-3px); }
+.reviews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 36px; }
+.review { grid-template-columns: 90px minmax(0, 1fr); gap: 18px; padding: 28px 0; border-color: var(--lm-line); }
+.capaReview { width: 90px; border-radius: 7px; }
+.review h3 { font-size: 23px; }
+.artista, .meta { color: #aba3ab; }
+.texto, .resumo { color: #d7cfd3; }
+@media (max-width: 740px) { .reviews { grid-template-columns: 1fr; } }
+@media (max-width: 650px) {
+  .grade { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .album strong { font-size: 17px; }
+  .capaReview { width: 70px; }
+  .review { grid-template-columns: 70px minmax(0,1fr); }
+}
+@media (prefers-reduced-motion: reduce) { .capaDestaque { transition: none; } .album:hover .capaDestaque { transform: none; } }
+
+/* F09.3 — reviews como textos editoriais, com capa e leitura em destaque. */
+.reviewsPagina { grid-template-columns: minmax(0,1fr); max-width: 1060px; gap: 0; }
+.reviewsPagina .review {
+  grid-template-columns: 145px minmax(0,1fr);
+  align-items: start; gap: 31px; padding: 32px 0; border-color: #423e46;
+}
+.reviewsPagina .capaReview { width: 145px; border-radius: 8px; }
+.reviewsPagina .review h3 { font: 700 32px/1.13 Georgia,serif; margin: 1px 0 6px; letter-spacing: -.035em; }
+.reviewsPagina .artista { font-size: 15px; color: #c7bac1; }
+.reviewsPagina .meta { margin-top: 15px; font-size: 12px; line-height: 1.6; }
+.reviewsPagina .texto { color: #e6dde0; font-size: 16px; line-height: 1.75; margin-top: 20px; max-width: 700px; }
+.reviewsPagina .review:first-child { grid-template-columns: 205px minmax(0,1fr); padding: 40px 0; }
+.reviewsPagina .review:first-child .capaReview { width: 205px; }
+.reviewsPagina .review:first-child h3 { font-size: clamp(32px, 4vw, 47px); }
+.verAlbum { display: inline-block; font-size: 12px; color: #ef8996 !important; text-decoration: none !important; margin-top: 18px; border-bottom: 1px solid #ac727e; padding-bottom: 6px; }
+.verAlbum:hover { border-bottom-color: #f4bac3; }
+@media (max-width: 720px) {
+  .reviewsPagina .review, .reviewsPagina .review:first-child { grid-template-columns: 112px minmax(0,1fr); gap: 18px; padding: 27px 0; }
+  .reviewsPagina .capaReview, .reviewsPagina .review:first-child .capaReview { width: 112px; }
+  .reviewsPagina .review h3, .reviewsPagina .review:first-child h3 { font-size: 25px; }
+  .reviewsPagina .texto { font-size: 14px; }
+}
+@media (max-width: 440px) {
+  .reviewsPagina .review, .reviewsPagina .review:first-child { grid-template-columns: 84px minmax(0,1fr); gap: 12px; }
+  .reviewsPagina .capaReview, .reviewsPagina .review:first-child .capaReview { width: 84px; }
+  .reviewsPagina .review h3, .reviewsPagina .review:first-child h3 { font-size: 20px; }
+}
+
+/* F09.3 — ranking textual para evitar a segunda grade de capas repetidas. */
+.rankingAvaliacoes { list-style: none; padding: 0; margin: 0; }
+.rankingAvaliacoes li { display: flex; align-items: center; gap: 19px; padding: 18px 0; border-bottom: 1px solid #403d44; }
+.rankingAvaliacoes li:first-child { border-top: 1px solid #403d44; }
+.posicaoRanking { font: 700 25px Georgia,serif; color: #807984; min-width: 33px; }
+.albumRanking { min-width: 0; flex: 1; }
+.albumRanking a { color: #f2ecec; text-decoration: none; font: 700 21px/1.2 Georgia,serif; overflow-wrap: anywhere; }
+.albumRanking a:hover { text-decoration: underline; }
+.albumRanking p { color: #aba2a9; font-size: 12px; margin: 5px 0 0; }
+.notaRanking { font: 700 16px Georgia,serif; color: var(--lm-rating); white-space: nowrap; }
+
+/* F09.4 — sem numeração competitiva e com metadados discretos. */
+.rankingAvaliacoes li { padding: 15px 0; }
+.albumRanking a { font-size: 20px; }
+.notaRanking { color: var(--lm-rating); }
+.review .meta { color: #aaa0a8; font-size: 12px; }
+
+/* F09.5 — a vitrine se ajusta ao número real de álbuns. */
+.grade[data-count="1"] { grid-template-columns: minmax(0,290px); }
+.grade[data-count="2"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: 710px; }
+.grade[data-count="3"] { grid-template-columns: repeat(3,minmax(0,1fr)); max-width: 1050px; }
+@media (max-width: 650px) {
+  .grade[data-count="1"] { grid-template-columns: minmax(0,1fr); max-width: 280px; }
+  .grade[data-count="2"], .grade[data-count="3"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; }
+}
+
+/* F09.5 — regras no módulo do próprio componente, sem seletor CSS isolado. */
+.reviewsPagina { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; gap: 0 38px; }
+.reviewsPagina .review,
+.reviewsPagina .review:first-child {
+  grid-template-columns: 120px minmax(0,1fr);
+  gap: 18px; align-items: start; padding: 30px 0;
+  border-bottom: 1px solid #46414a;
+}
+.reviewsPagina .capaReview,
+.reviewsPagina .review:first-child .capaReview { width: 120px; border-radius: 7px; }
+.reviewsPagina .review h3,
+.reviewsPagina .review:first-child h3 {
+  font: 700 26px/1.13 Georgia,serif;
+  letter-spacing: -.025em;
+}
+.reviewsPagina .artista { font-size: 13px; }
+.reviewsPagina .meta { font-size: 12px; line-height: 1.5; margin: 10px 0 0; }
+.reviewsPagina .texto { font-size: 15px; line-height: 1.6; margin: 12px 0 0; }
+@media(max-width: 900px) {
+  .reviewsPagina { grid-template-columns: 1fr; }
+  .reviewsPagina .review,
+  .reviewsPagina .review:first-child { grid-template-columns: 128px minmax(0,1fr); gap: 22px; }
+  .reviewsPagina .capaReview,
+  .reviewsPagina .review:first-child .capaReview { width: 128px; }
+}
+@media(max-width: 460px) {
+  .reviewsPagina .review,
+  .reviewsPagina .review:first-child { grid-template-columns: 95px minmax(0,1fr); gap: 14px; }
+  .reviewsPagina .capaReview,
+  .reviewsPagina .review:first-child .capaReview { width: 95px; }
+  .reviewsPagina .review h3,
+  .reviewsPagina .review:first-child h3 { font-size: 21px; }
+  .reviewsPagina .texto { font-size: 14px; }
+}
+
+
+/* F09.6 — capas menores, notas compactas e reviews em ritmo editorial. */
+.grade { gap: 17px; }
+.grade[data-count="1"] { grid-template-columns: minmax(0,230px); }
+.grade[data-count="2"] { grid-template-columns: repeat(2,minmax(0,235px)); max-width: 490px; }
+.grade[data-count="3"] { grid-template-columns: repeat(3,minmax(0,235px)); max-width: 740px; }
+.grade[data-count="4"] { grid-template-columns: repeat(4,minmax(0,1fr)); max-width: 1000px; }
+.album { gap: 5px; }
+.album strong { font: 700 16px/1.24 var(--lm-serif); }
+.grade p { font-size: 12px; margin: 3px 0 0; }
+.capaDestaque { border-radius: 5px; }
+.reviews { gap: 0 26px; }
+.review { grid-template-columns: 82px minmax(0,1fr); padding: 17px 0 19px; gap: 13px; }
+.capaReview { width: 82px; border-radius: 5px; }
+.review h3 { font-size: 18px; line-height: 1.2; }
+.artista,.meta { font-size: 11px; margin: 4px 0; }
+.texto,.resumo { font-size: 13px; line-height: 1.5; margin-top: 8px; }
+.reviewsPagina { gap: 0 28px; }
+.reviewsPagina .review, .reviewsPagina .review:first-child {
+  grid-template-columns: 104px minmax(0,1fr); gap: 16px; padding: 23px 0;
+}
+.reviewsPagina .capaReview, .reviewsPagina .review:first-child .capaReview { width: 104px; }
+.reviewsPagina .review h3, .reviewsPagina .review:first-child h3 { font-size: 22px; line-height: 1.14; }
+.reviewsPagina .artista { font-size: 12px; }
+.reviewsPagina .meta { font-size: 11px; margin-top: 7px; }
+.reviewsPagina .texto { font-size: 13px; line-height: 1.6; margin-top: 9px; }
+.rankingAvaliacoes li { padding: 11px 0; gap: 10px; }
+.albumRanking a { font-size: 16px; }
+.albumRanking p { font-size: 11px; margin: 2px 0 0; }
+.notaRanking { font-size: 14px; }
+@media(max-width:900px) { .reviewsPagina { grid-template-columns: 1fr; } }
+@media(max-width:650px) {
+  .grade[data-count="2"],.grade[data-count="3"],.grade[data-count="4"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; }
+  .grade { gap: 15px; }
+  .review { grid-template-columns: 72px minmax(0,1fr); }
+  .capaReview { width: 72px; }
+  .reviewsPagina .review, .reviewsPagina .review:first-child { grid-template-columns: 86px minmax(0,1fr); gap: 12px; }
+  .reviewsPagina .capaReview,.reviewsPagina .review:first-child .capaReview { width: 86px; }
+  .reviewsPagina .review h3,.reviewsPagina .review:first-child h3 { font-size: 20px; }
+}
+
+/* F09.6 — score verdadeiro e organização editorial inspirada no AOTY. */
+.dadosScore { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; margin-top: 6px; min-height: 18px; }
+.dadosScore span { color: #a69ea6; font-size: 11px; }
+.scoreAlbum { font: 700 12px/1.2 Arial,sans-serif; color: var(--lm-rating); }
+.reviewConteudo { min-width: 0; }
+.reviewTituloLinha { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.reviewTituloLinha h3 { min-width: 0; }
+.reviewNota {
+  flex-shrink: 0; display: inline-flex; padding: 4px 7px;
+  font: 700 12px/1.1 Arial,sans-serif; color: var(--lm-rating);
+  background: #343036; border: 1px solid #4c464c; border-radius: 4px;
+}
+@media(max-width:520px) { .reviewNota { font-size: 11px; padding: 4px 5px; } }
+
+
+/* F09.7 — presença editorial para reviews, sem cartões decorativos. */
+.grade[data-count="1"] { grid-template-columns: minmax(0, 260px); }
+.grade[data-count="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 550px; }
+.grade[data-count="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 835px; }
+.album strong { font-size: 17px; }
+.reviewsPagina { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0 28px; }
+.reviewsPagina .review,
+.reviewsPagina .review:first-child {
+  grid-template-columns: 124px minmax(0,1fr);
+  gap: 17px;
+  padding: 26px 0 30px;
+  align-items: start;
+}
+.reviewsPagina .capaReview,
+.reviewsPagina .review:first-child .capaReview { width: 124px; }
+.reviewsPagina .review h3,
+.reviewsPagina .review:first-child h3 { font-size: 24px; line-height: 1.17; }
+.reviewsPagina .artista { font-size: 12px; margin: 6px 0; }
+.reviewsPagina .meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 12px;
+  margin: 11px 0 0;
+}
+.autorMarca {
+  display: inline-grid; place-items: center;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1px solid #615b63;
+  background: #37343b;
+  color: #f3ecee;
+  font: 700 12px/1 Georgia,serif;
+  margin-right: 2px;
+}
+.reviewsPagina .meta a { color: #eee5e8; font-weight: 700; }
+.reviewsPagina .texto { font-size: 14px; line-height: 1.62; margin-top: 13px; color: #e8dfe2; }
+@media(max-width: 900px) {
+  .reviewsPagina { grid-template-columns: 1fr; }
+  .reviewsPagina .review,
+  .reviewsPagina .review:first-child { grid-template-columns: 124px minmax(0,1fr); }
+}
+@media(max-width: 650px) {
+  .grade[data-count="2"], .grade[data-count="3"] { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; }
+  .reviewsPagina .review,
+  .reviewsPagina .review:first-child { grid-template-columns: 91px minmax(0,1fr); gap: 13px; padding: 22px 0; }
+  .reviewsPagina .capaReview,
+  .reviewsPagina .review:first-child .capaReview { width: 91px; }
+  .reviewsPagina .review h3,
+  .reviewsPagina .review:first-child h3 { font-size: 21px; }
+  .reviewsPagina .texto { font-size: 13px; }
+}
+
+/* F09.10 — escala consistente, independente do número de registros. */
+.grade, .grade[data-count] { grid-template-columns: repeat(5,minmax(0,1fr)); max-width: none; gap: 15px; }
+@media(max-width:1070px) { .grade, .grade[data-count] { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+@media(max-width:780px) { .grade, .grade[data-count] { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width:560px) { .grade, .grade[data-count] { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; } }
+
+/* F09.11 — a vitrine da home tem presença maior que a grade de catálogo. */
+.grade, .grade[data-count] { grid-template-columns: repeat(4,minmax(0,1fr)); }
+@media(max-width:780px) { .grade, .grade[data-count] { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width:560px) { .grade, .grade[data-count] { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+
+/* F09.12 — refinamento final. */
+.dadosScore span { font-size: 12px; color: var(--lm-muted); }
+.reviewConteudo h3, .album strong { overflow-wrap: anywhere; }
+.reviewConteudo .meta { font-size: 12px; line-height: 1.45; }
+.reviewConteudo .artista { font-size: 13px; }
+.reviewConteudo .texto, .reviewConteudo .resumo { overflow-wrap: anywhere; }
+@media(max-width:450px) { .reviewTituloLinha { flex-wrap: wrap; gap: 5px; } }
+
+/* F09.14 — reviews as a reading surface rather than identical cards. */
+.grade { gap:var(--lm-gutter); }
+.capaDestaque,.capaReview { border-radius:var(--lm-cover-radius); box-shadow:none; }
+.album { gap:8px; }
+.album strong { font-size:17px; line-height:1.22; }
+.dadosScore { min-height:0; margin-top:4px; gap:9px; }
+.scoreAlbum,.reviewNota { color:var(--lm-rating); }
+.reviewNota { background:transparent; border:0; padding:3px 0; }
+.reviewsHome { grid-template-columns:1fr; gap:0; }
+.reviewsHome .review { grid-template-columns:76px minmax(0,1fr); padding:13px 0; gap:14px; }
+.reviewsHome .review:first-child { padding-top:0; }
+.reviewsHome .capaReview { width:76px; }
+.reviewsHome .review h3 { font-size:20px; }
+.reviewsHome .resumo { margin-top:6px; line-height:1.55; }
+.reviewsPagina .review:first-child { grid-column:1/-1; grid-template-columns:minmax(120px,170px) minmax(0,1fr); gap:25px; }
+.reviewsPagina .review:first-child .capaReview { width:100%; }
+.reviewsPagina .review:first-child h3 { font-size:clamp(25px,3vw,37px); letter-spacing:-.035em; }
+.reviewsPagina .review:first-child .texto { max-width:76ch; font-size:15px; }
+.reviewsPagina .texto { line-height:1.65; }
+@media(max-width:650px) { .reviewsPagina .review:first-child { grid-template-columns:85px minmax(0,1fr); gap:14px; } }
+
+/* Uniform review entries: no arbitrary first-item ranking or outer card. */
+.reviews,.reviewsPagina { gap:12px; align-items:stretch; max-width:none; }
+.reviews .review,.reviewsPagina .review:first-child { grid-column:auto; grid-template-columns:90px minmax(0,1fr); gap:14px; padding:16px 0; background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; align-items:start; }
+.reviews .review .capaReview,.reviewsPagina .review:first-child .capaReview { width:90px; }
+.reviews .review h3,.reviewsPagina .review:first-child h3 { font-size:21px; line-height:1.15; margin:0; }
+.reviewsPagina .review:first-child .texto,.reviewsPagina .texto { font-size:14px; max-width:none; }
+.reviewTituloLinha { justify-content:flex-start; flex-wrap:wrap; align-items:baseline; gap:6px 12px; }
+.reviewNota { font-size:12px; }
+.reviewsHome { grid-template-columns:1fr; gap:8px; }
+.reviewsHome .review,.reviewsHome .review:first-child { grid-template-columns:68px minmax(0,1fr); padding:12px 0; }
+.reviewsHome .review .capaReview { width:68px; }
+.reviewsHome .review h3 { font-size:18px; }
+.grade,.grade[data-count] { grid-template-columns:repeat(4,minmax(0,1fr)); }
+.grade > li { min-width:0; }
+@media(max-width:780px) { .grade,.grade[data-count] { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:560px) { .grade,.grade[data-count] { grid-template-columns:repeat(2,minmax(0,1fr)); } .reviews .review,.reviewsPagina .review:first-child { grid-template-columns:65px minmax(0,1fr); padding:12px 0; } .reviews .review .capaReview,.reviewsPagina .review:first-child .capaReview { width:65px; } }
+
+/* F09.16 — album art and reviews breathe without outer frames. */
+.grade,.grade[data-count] { gap:16px; }
+.grade > li { padding:0; background:transparent; border:0; }
+.grade .capaDestaque { box-shadow:none; }
+
+.reviews,.reviewsPagina { column-gap:32px; }
+.reviewsHome { gap:6px; }

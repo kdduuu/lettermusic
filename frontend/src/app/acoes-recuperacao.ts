@@ -9,9 +9,9 @@ import type { EstadoAcao } from "@/lib/estado-acoes";
 const TOKEN_VALIDO = /^[A-Za-z0-9_-]{43}$/;
 
 function erroSolicitacao(status: number): string {
-  if (status === 429) return "Muitas solicitações. Aguarde 15 minutos.";
-  if (status === 503) return "O envio de e-mails ainda não está disponível.";
-  return "Não foi possível enviar agora. Tente novamente.";
+  if (status === 429) return "Too many requests. Wait 15 minutes.";
+  if (status === 503) return "Email delivery is unavailable.";
+  return "Unable to send. Try again.";
 }
 
 export async function solicitarRecuperacao(
@@ -21,7 +21,7 @@ export async function solicitarRecuperacao(
   const email = String(formulario.get("email") ?? "").trim();
 
   if (!email.includes("@") || email.length > 254) {
-    return { sucesso: false, mensagem: "Informe um e-mail válido." };
+    return { sucesso: false, mensagem: "Enter a valid email address." };
   }
 
   try {
@@ -36,10 +36,10 @@ export async function solicitarRecuperacao(
 
     return {
       sucesso: true,
-      mensagem: "Se existir uma conta com esse e-mail, você receberá as instruções.",
+      mensagem: "If an account exists for this email, you will receive instructions.",
     };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
@@ -50,7 +50,7 @@ export async function solicitarConfirmacao(
   const email = String(formulario.get("email") ?? "").trim();
 
   if (!email.includes("@") || email.length > 254) {
-    return { sucesso: false, mensagem: "Informe um e-mail válido." };
+    return { sucesso: false, mensagem: "Enter a valid email address." };
   }
 
   try {
@@ -65,10 +65,10 @@ export async function solicitarConfirmacao(
 
     return {
       sucesso: true,
-      mensagem: "Se o e-mail estiver pendente de confirmação, enviaremos um novo link.",
+      mensagem: "If your email is unconfirmed, we will send a new link.",
     };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
@@ -81,15 +81,15 @@ export async function redefinirSenha(
   const confirmacao = String(formulario.get("confirmacao") ?? "");
 
   if (!TOKEN_VALIDO.test(token)) {
-    return { sucesso: false, mensagem: "Link de recuperação inválido." };
+    return { sucesso: false, mensagem: "Invalid reset link." };
   }
 
   if (senha_nova.length < 12 || senha_nova.length > 128) {
-    return { sucesso: false, mensagem: "Use uma senha de 12 a 128 caracteres." };
+    return { sucesso: false, mensagem: "Use a password of 12 to 128 characters." };
   }
 
   if (senha_nova !== confirmacao) {
-    return { sucesso: false, mensagem: "As senhas não coincidem." };
+    return { sucesso: false, mensagem: "Passwords do not match." };
   }
 
   try {
@@ -102,10 +102,10 @@ export async function redefinirSenha(
       return {
         sucesso: false,
         mensagem: resposta.status === 400
-          ? "Link inválido, expirado ou já utilizado."
+          ? "Invalid, expired or already used link."
           : resposta.status === 422
-            ? "Verifique a nova senha."
-            : "Não foi possível redefinir sua senha.",
+            ? "Check your new password."
+            : "Unable to reset password.",
       };
     }
 
@@ -115,10 +115,10 @@ export async function redefinirSenha(
 
     return {
       sucesso: true,
-      mensagem: "Senha redefinida! Entre novamente com sua nova senha.",
+      mensagem: "Password reset. Sign in with your new password.",
     };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
@@ -129,7 +129,7 @@ export async function confirmarEmail(
   const token = String(formulario.get("token") ?? "");
 
   if (!TOKEN_VALIDO.test(token)) {
-    return { sucesso: false, mensagem: "Link de confirmação inválido." };
+    return { sucesso: false, mensagem: "Invalid confirmation link." };
   }
 
   try {
@@ -142,8 +142,8 @@ export async function confirmarEmail(
       return {
         sucesso: false,
         mensagem: resposta.status === 400
-          ? "Link inválido, expirado ou já utilizado."
-          : "Não foi possível confirmar seu e-mail.",
+          ? "Invalid, expired or already used link."
+          : "Unable to confirm email.",
       };
     }
 
@@ -151,9 +151,9 @@ export async function confirmarEmail(
 
     return {
       sucesso: true,
-      mensagem: "E-mail confirmado com sucesso!",
+      mensagem: "Email confirmed.",
     };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão. Tente novamente." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }

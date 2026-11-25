@@ -88,18 +88,18 @@ async function consultar<T>(
     if (!resposta.ok) return {
       ok: false,
       mensagem: resposta.status === 404
-        ? "Registro não encontrado."
-        : "Consulta temporariamente indisponível.",
+        ? "Record not found."
+        : "Search temporarily unavailable.",
     };
 
     const dados: unknown = await resposta.json();
     if (!validar(dados)) return {
-      ok: false, mensagem: "Resposta inesperada do catálogo.",
+      ok: false, mensagem: "Unexpected catalog response.",
     };
 
     return { ok: true, dados };
   } catch {
-    return { ok: false, mensagem: "Não foi possível conectar ao catálogo." };
+    return { ok: false, mensagem: "Unable to connect to the catalog." };
   }
 }
 

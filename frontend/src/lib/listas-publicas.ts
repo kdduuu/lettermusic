@@ -60,7 +60,7 @@ export async function obterListasPublicas(
     if (!resposta.ok) {
       return {
         ok: false,
-        mensagem: "Não foi possível consultar as listas públicas.",
+        mensagem: "Unable to load public lists.",
       };
     }
 
@@ -69,7 +69,7 @@ export async function obterListasPublicas(
     if (!paginaValida(dados)) {
       return {
         ok: false,
-        mensagem: "A API retornou dados inesperados.",
+        mensagem: "Unexpected service response.",
       };
     }
 
@@ -77,7 +77,7 @@ export async function obterListasPublicas(
   } catch {
     return {
       ok: false,
-      mensagem: "O catálogo de listas está temporariamente indisponível.",
+      mensagem: "Lists temporarily unavailable.",
     };
   }
 }

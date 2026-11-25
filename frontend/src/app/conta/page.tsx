@@ -57,9 +57,9 @@ async function ConteudoConta() {
   if (!conta) {
     return (
       <main className={styles.container}>
-        <h1>Minha conta</h1>
+        <h1>Account</h1>
         <p role="alert">
-          Não foi possível carregar sua conta agora.
+          Unable to load your account.
         </p>
       </main>
     );
@@ -67,17 +67,15 @@ async function ConteudoConta() {
 
   return (
     <main className={styles.container}>
-      <h1>Minha conta</h1>
-      <p className={styles.introducao}>
-        Dados pessoais e segurança do seu perfil.
-      </p>
+      <h1>Account</h1>
+
 
       <section>
-        <h2>Dados pessoais</h2>
-        <p>Usuário: <strong>@{conta.username}</strong></p>
-        <p>E-mail: <strong>{conta.email}</strong></p>
+        <h2>Personal details</h2>
+        <p>Username: <strong>@{conta.username}</strong></p>
+        <p>Email: <strong>{conta.email}</strong></p>
         <p>
-          Status: {conta.email_confirmado ? "Confirmado" : "Pendente de confirmação"}
+          Status: {conta.email_confirmado ? "Confirmed" : "Unconfirmed"}
         </p>
         {!conta.email_confirmado && (
           <FormularioReenviar emailInicial={conta.email} />
@@ -86,19 +84,19 @@ async function ConteudoConta() {
       </section>
 
       <section style={{ marginTop: 48 }}>
-        <h2>Segurança</h2>
+        <h2>Security</h2>
         <p className={styles.introducao}>
-          Ao alterar a senha, suas sessões serão encerradas.
-          Entre novamente com a nova senha.
+          Changing your password will sign you out of all sessions.
+          Sign in again with your new password.
         </p>
         <FormularioSenha />
       </section>
 
       <section style={{ marginTop: 48 }}>
-        <h2>Excluir conta</h2>
+        <h2>Delete account</h2>
         <p className={styles.introducao}>
-          Esta ação é permanente. Seu perfil, listas, avaliações,
-          reviews e registros pessoais serão excluídos.
+          This is permanent. Your profile, lists, ratings,
+          reviews and personal activity will be deleted.
         </p>
         <FormularioExcluirConta />
       </section>
@@ -112,9 +110,9 @@ export default function ContaPage() {
     <Suspense
       fallback={
         <main className={styles.container}>
-          <h1>Minha conta</h1>
+          <h1>Account</h1>
           <p className={styles.introducao}>
-            Carregando informações da conta...
+            Loading account…
           </p>
         </main>
       }

@@ -6,3 +6,70 @@
 .paginacao a { color: #f5f5f5; border: 1px solid #636363; border-radius: 5px; padding: 8px 12px; text-decoration: none; }
 .paginacao a:hover, .paginacao a:focus-visible { text-decoration: underline; }
 @media (max-width: 650px) { .container { padding: 38px 16px 60px; } }
+
+/* F09 - editorial de reviews. */
+.container { max-width: 1260px; padding: 45px 28px 110px; }
+.container header { padding: 45px clamp(26px,4vw,52px); margin-bottom: 30px; border: 1px solid #3c3941; border-radius: 14px; background: #26252a; }
+.container h1 { font: 700 clamp(58px,7vw,92px)/.98 var(--lm-serif); letter-spacing: -.055em; margin-bottom: 17px; }
+.container header p { color: #bbb1b8; max-width: 560px; font-size: 17px; }
+.container > ul { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 45px; }
+.container > ul > li { padding: 30px 0; }
+.paginacao { margin-top: 38px; border-top: 1px solid var(--lm-line); }
+.paginacao a { border-color: #57515b; }
+@media (max-width: 800px) { .container > ul { grid-template-columns: 1fr; } }
+@media (max-width: 650px) { .container { padding: 25px 17px 70px; } .container header { padding: 28px 22px; } .container h1 { font-size: 55px; } }
+
+/* F09.3 — reduz a repetição de retângulos enormes e valoriza o conteúdo. */
+.container header.cabecalhoEditorial {
+  display: flex; justify-content: space-between; align-items: end;
+  flex-wrap: wrap; gap: 25px; padding: 28px 0 31px;
+  border: 0; border-bottom: 1px solid #49434c; border-radius: 0;
+  background: transparent; margin-bottom: 4px;
+}
+.cabecalhoEditorial h1 { font-size: clamp(58px, 7vw, 80px); margin: 0; }
+.cabecalhoEditorial .etiqueta {
+  margin: 0 0 16px; color: #e994a2; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .15em; font-size: 11px;
+}
+.cabecalhoEditorial > p { max-width: 335px; color: #bbb0b8; font-size: 15px; line-height: 1.6; margin: 0 0 5px; }
+@media (max-width: 650px) {
+  .container header.cabecalhoEditorial { padding-top: 15px; }
+  .cabecalhoEditorial h1 { font-size: 55px; }
+}
+
+/* F09.4 — leitura vertical; a regra anterior em .container > ul forçava 2 colunas. */
+.container > ul { grid-template-columns: minmax(0, 1fr); gap: 0; max-width: 950px; }
+.container header.cabecalhoEditorial { padding-bottom: 20px; margin-bottom: 0; }
+.cabecalhoEditorial .etiqueta { margin-bottom: 9px; }
+.container > ul > li { padding: 25px 0; }
+
+
+/* F09.5 — os itens devem preencher a largura de maneira equilibrada. */
+.container > ul { max-width: none; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 38px; }
+.container > ul > li { padding: 26px 0 30px; }
+.container header.cabecalhoEditorial { padding-top: 16px; padding-bottom: 18px; }
+@media(max-width: 900px) { .container > ul { grid-template-columns: 1fr; } }
+
+
+/* F09.6 — duas colunas equilibradas, sem hero gigante. */
+.container { max-width: var(--lm-content); padding: 25px 22px 65px; }
+.container header.cabecalhoEditorial { padding: 10px 0 16px; margin-bottom: 0; }
+.cabecalhoEditorial h1 { font-size: clamp(42px,5vw,58px); }
+.cabecalhoEditorial .etiqueta { margin: 0 0 7px; font-size: 9px; }
+.container > ul { gap: 0 28px; }
+.container > ul > li { padding: 20px 0; }
+.paginacao { margin-top: 17px; padding: 17px 0; font-size: 12px; }
+@media(max-width:900px) { .container > ul { grid-template-columns: 1fr; } }
+@media(max-width:650px) { .container { padding: 22px 16px 58px; } }
+
+
+/* F09.14 — editorial rhythm. */
+.container header.cabecalhoEditorial { padding:8px 0 18px; margin-bottom:8px; border-color:var(--lm-line); }
+.container > ul { gap:0 34px; align-items:start; }
+.container > ul > li { padding:22px 0; }
+.container > ul > li:first-child { padding:24px 0 28px; }
+@media(max-width:650px) { .container > ul > li:first-child { padding:18px 0; } }
+
+.container > ul { gap:12px 34px; align-items:start; }
+.container > ul > li,.container > ul > li:first-child { padding:16px 0; }
+.container header.cabecalhoEditorial { border:0; padding:8px 0 14px; }

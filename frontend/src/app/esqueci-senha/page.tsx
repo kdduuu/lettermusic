@@ -4,9 +4,9 @@ import styles from "../autenticacao.module.css";
 export default function EsqueciSenhaPage() {
   return (
     <main className={styles.container}>
-      <h1>Recuperar senha</h1>
+      <h1>Reset password</h1>
       <p className={styles.introducao}>
-        Informe seu e-mail para receber um link de recuperação.
+        Enter your email address to receive a reset link.
       </p>
       <FormularioEsqueci />
     </main>

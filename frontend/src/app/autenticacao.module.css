@@ -48,3 +48,46 @@
 .alternativa a { color: #f2f2f2; }
 
 .sucesso { color: #d9d9d9; margin: 0; font-size: 14px; }
+
+/* F09 - autenticação e configurações com mesma identidade grafite. */
+.container {
+  max-width: 600px; margin: 55px auto 110px;
+  padding: clamp(28px,5vw,54px); border: 1px solid #3e3b42;
+  border-radius: 15px; background: #26252a;
+}
+.container h1 { font-size: clamp(43px,6vw,68px); letter-spacing: -.05em; }
+.container h2 { font: 700 28px var(--lm-serif); padding-bottom: 14px; border-bottom: 1px solid #423e45; }
+.introducao { color: #bcb2b9; line-height: 1.7; }
+.form { gap: 13px; }
+.form input { background: #2e2b32; color: #f4edef; border-color: #57515b; }
+.form input:focus-visible { border-color: #eb8a97; }
+.form button { background: #eae3e6; color: #1b191c; }
+.form button:hover { background: #fff; }
+.alternativa a { color: #f4edf0; }
+@media (max-width: 650px) { .container { margin: 22px 17px 60px; padding: 25px 20px; } }
+
+
+/* F09.6 — formulários na mesma escala do restante do produto. */
+.container { max-width: 485px; margin: 35px auto 65px; padding: 28px 32px; border-radius: 9px; }
+.container h1 { font-size: clamp(36px,4vw,48px); }
+.container h2 { font-size: 22px; }
+.form { gap: 10px; }
+.form label { font-size: 12px; }
+.form input { padding: 10px 11px; font-size: 13px; margin-bottom: 4px; border-radius: 5px; }
+.form button { padding: 10px 13px; font-size: 13px; margin-top: 8px; border-radius: 5px; }
+.alternativa { font-size: 12px; }
+@media(max-width:650px) { .container { margin: 21px 16px 60px; padding: 22px 19px; } }
+
+/* F09.12 — refinamento final. */
+.form label,.form input,.form button,.alternativa { font-size: 14px; }
+.form input,.form button { min-height: 40px; }
+.container h1,.container p { overflow-wrap: anywhere; }
+.alternativa { color: var(--lm-muted); }
+
+
+/* F09.14 — editorial rhythm. */
+.container { border:0; border-radius:0; background:transparent; padding:24px 22px; }
+.container h1 { margin-bottom:22px; }
+.form input,.form button { border-radius:4px; }
+.container h2 { border-color:var(--lm-line); }
+@media(max-width:650px) { .container { padding:20px 8px; } }

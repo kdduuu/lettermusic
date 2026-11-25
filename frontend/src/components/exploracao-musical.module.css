@@ -12,10 +12,109 @@
 .faixas { max-width: 860px; margin-top: 44px; border-top: 1px solid #484848; padding-top: 24px; }
 .faixas h2 { font: 600 25px Georgia, serif; }
 .faixas ul { padding: 0; list-style: none; }
-.faixas li { display: grid; grid-template-columns: 42px minmax(0, 1fr) 56px; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid #393939; }
-.faixas li span { color: #c6c6c6; font-size: 13px; }
+.faixas > ul > li { display: grid; grid-template-columns: 42px minmax(0, 1fr) 56px; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid #393939; }
+.faixas > ul > li span { color: #c6c6c6; font-size: 13px; }
 .mensagem { color: #c6c6c6; line-height: 1.65; }
 @media (max-width: 600px) {
   .capa, .icone { width: 62px; height: 62px; flex-basis: 62px; }
   .info h3 { font-size: 18px; }
 }
+
+/* F09 - catálogo consistente com capa e tipografia editorial. */
+.resultados { max-width: none; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 30px; }
+.resultados > li { border-color: #3e3c42; gap: 18px; padding: 22px 0; }
+.capa, .icone { width: 105px; height: 105px; flex-basis: 105px; border-radius: 7px; background: #333138; }
+.info h3 { font: 700 23px/1.15 var(--lm-serif); }
+.info p { color: #afa6ad; }
+.faixas { max-width: none; margin-top: 0; border-color: var(--lm-line); padding-top: 25px; }
+.faixas h2 { font: 700 31px var(--lm-serif); margin: 0 0 20px; }
+.faixas > ul > li { grid-template-columns: 34px minmax(0, 1fr) 55px; border-color: var(--lm-line); padding: 15px 0; gap: 10px; }
+.faixas > ul > li strong { font-size: 14px; font-weight: 500; }
+@media (max-width: 860px) { .resultados { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  .capa, .icone { width: 70px; height: 70px; flex-basis: 70px; }
+  .info h3 { font-size: 19px; }
+}
+
+
+/* F09.3 — o catálogo é uma coleção de capas, não uma tabela de miniaturas. */
+.galeria { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 40px 21px; }
+.albumGaleria { min-width: 0; }
+.linkCapaGaleria { display: block; color: inherit; text-decoration: none; }
+.capaGaleria {
+  width: 100%; aspect-ratio: 1; display: grid; position: relative;
+  overflow: hidden; border-radius: 8px; place-items: center;
+  background: #39363c; color: #b4aab1; font-size: 45px;
+  box-shadow: 0 0 0 1px #ffffff12;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.capaGaleria img { object-fit: cover; }
+.linkCapaGaleria:hover .capaGaleria, .linkCapaGaleria:focus-visible .capaGaleria { transform: translateY(-4px); box-shadow: 0 15px 27px #00000055; }
+.dadosGaleria { min-width: 0; margin-top: 14px; }
+.dadosGaleria h3 { margin: 0 0 5px; font: 700 21px/1.22 Georgia,serif; overflow-wrap: anywhere; }
+.dadosGaleria h3 a { color: #f4eeef; text-decoration: none; }
+.dadosGaleria h3 a:hover { text-decoration: underline; }
+.dadosGaleria p { margin: 0 0 6px; color: #c1b7be; font-size: 13px; overflow-wrap: anywhere; }
+.dadosGaleria span { color: #9f969f; font-size: 12px; }
+@media (max-width: 1020px) { .galeria { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media (max-width: 650px) { .galeria { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 27px 13px; } .dadosGaleria h3 { font-size: 17px; } .dadosGaleria p { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .capaGaleria { transition: none; } .linkCapaGaleria:hover .capaGaleria { transform: none; } }
+
+/* F09.4 — tracklist em linhas interativas; o card fica em um dialog nativo. */
+.faixas { border-top: 0; padding-top: 0; }
+.faixas h2 { margin: 0 0 12px; font: 700 31px/1.2 Georgia,serif; }
+
+
+/* F09.6 — cinco capas por linha em desktop, como um catálogo musical. */
+.galeria { grid-template-columns: repeat(5,minmax(0,1fr)); gap: 27px 15px; }
+.capaGaleria { border-radius: 5px; }
+.dadosGaleria { margin-top: 7px; }
+.dadosGaleria h3 { font-size: 16px; margin-bottom: 2px; }
+.dadosGaleria p { font-size: 12px; margin: 0 0 3px; }
+.dadosGaleria span { font-size: 11px; }
+.resultados { gap: 3px 22px; }
+.resultados > li { padding: 14px 0; }
+.capa,.icone { width: 80px; height: 80px; flex-basis: 80px; }
+.info h3 { font-size: 18px; }
+.info p { font-size: 12px; }
+.faixas h2 { font-size: 25px; }
+@media(max-width:1070px) { .galeria { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+@media(max-width:780px) { .galeria { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width:560px) {
+  .galeria { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 23px 12px; }
+  .dadosGaleria h3 { font-size: 16px; }
+}
+
+/* F09.6 — nota real do público junto ao lançamento, sem quadro de crítico. */
+.dadosLinha { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; justify-content: space-between; }
+.dadosLinha span { font-size: 11px; color: #a79ea6; }
+.notaGaleria { font: 700 12px/1.2 Arial,sans-serif; color: var(--lm-rating); white-space: nowrap; }
+
+/* F09.10 — títulos alinhados e links com estados consistentes. */
+.dadosGaleria h3 { min-height: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+.info a { text-decoration: none; }
+.info a:hover, .info a:focus-visible { text-decoration: underline; }
+
+/* F09.12 — refinamento final. */
+.dadosGaleria p, .dadosGaleria span, .dadosLinha span, .info p { font-size: 13px; color: var(--lm-muted); }
+.dadosLinha { gap: 3px 8px; }
+.dadosGaleria h3 { line-height: 1.25; }
+.dadosGaleria h3 a { display: block; }
+.info { min-width: 0; overflow-wrap: anywhere; }
+@media(max-width:560px) { .dadosGaleria p, .dadosGaleria span, .dadosLinha span { font-size: 12px; } }
+
+
+/* F09.14 — editorial rhythm. */
+.capaGaleria,.capa,.icone { border-radius:var(--lm-cover-radius); box-shadow:none; }
+.galeria { column-gap:var(--lm-gutter); }
+.dadosGaleria h3 { font-size:16px; }
+.dadosGaleria p,.dadosLinha span { color:var(--lm-muted); }
+.notaGaleria { color:var(--lm-rating); }
+.linkCapaGaleria:hover .capaGaleria,.linkCapaGaleria:focus-visible .capaGaleria { transform:none; box-shadow:none; }
+.linkCapaGaleria:hover { opacity:.88; }
+
+.resultados > li { background:transparent; border:0; padding:10px 0; margin:0; }
+.albumGaleria { background:transparent; border:0; padding:0; }
+.dadosGaleria { margin:8px 0 0; }
+.resultados { row-gap:10px; }
+.galeria { row-gap:26px; }

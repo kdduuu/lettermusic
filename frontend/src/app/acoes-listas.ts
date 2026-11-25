@@ -9,12 +9,12 @@ import { obterTokenSessao } from "@/lib/sessao";
 import type { EstadoAcao } from "@/lib/estado-acoes";
 
 function erroStatus(status: number): string {
-  if (status === 401) return "Sua sessão expirou. Faça login novamente.";
-  if (status === 403 || status === 404) return "Lista ou item indisponível para esta conta.";
-  if (status === 409) return "Este álbum já está nesta lista.";
-  if (status === 422) return "Dados inválidos. Confira o formulário.";
-  if (status === 502) return "O catálogo musical está temporariamente indisponível.";
-  return "Não foi possível concluir a operação.";
+  if (status === 401) return "Session expired. Sign in again.";
+  if (status === 403 || status === 404) return "List or item unavailable for this account.";
+  if (status === 409) return "This album is already in the list.";
+  if (status === 422) return "Invalid details. Check the form.";
+  if (status === 502) return "Music catalog temporarily unavailable.";
+  return "Unable to complete the action.";
 }
 
 async function tokenAutenticado(): Promise<string | null> {
@@ -28,7 +28,7 @@ function dadosLista(form: FormData):
   const descricao = String(form.get("descricao") ?? "").trim();
   const publica = form.get("publica") === "on";
   if (!titulo || titulo.length > 120 || descricao.length > 500) {
-    return { ok: false, mensagem: "Título obrigatório (até 120 caracteres); descrição até 500." };
+    return { ok: false, mensagem: "Title required (up to 120 characters); description up to 500." };
   }
   return { ok: true, titulo, descricao: descricao || null, publica };
 }
@@ -37,7 +37,7 @@ export async function criarLista(_anterior: EstadoAcao, form: FormData): Promise
   const dados = dadosLista(form);
   if (!dados.ok) return { sucesso: false, mensagem: dados.mensagem };
   const token = await tokenAutenticado();
-  if (!token) return { sucesso: false, mensagem: "Entre na sua conta para criar uma lista." };
+  if (!token) return { sucesso: false, mensagem: "Sign in to create a list." };
   let idCriado: number;
   try {
     const resposta = await requisitarBackend("/listas", {
@@ -49,11 +49,11 @@ export async function criarLista(_anterior: EstadoAcao, form: FormData): Promise
     const criado: unknown = await resposta.json();
     if (!criado || typeof criado !== "object" || !("id" in criado) ||
       typeof criado.id !== "number" || !Number.isSafeInteger(criado.id)) {
-      return { sucesso: false, mensagem: "Lista criada, mas a API retornou um ID inesperado. Abra Minhas listas." };
+      return { sucesso: false, mensagem: "List created, but the service returned an unexpected ID. Open My lists." };
     }
     idCriado = criado.id;
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão com a API." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
   revalidatePath("/listas");
   redirect(`/listas/${idCriado}`);
@@ -62,9 +62,9 @@ export async function criarLista(_anterior: EstadoAcao, form: FormData): Promise
 export async function editarLista(_anterior: EstadoAcao, form: FormData): Promise<EstadoAcao> {
   const id = idPositivo(form.get("lista_id"));
   const dados = dadosLista(form);
-  if (!id || !dados.ok) return { sucesso: false, mensagem: "Dados da lista inválidos." };
+  if (!id || !dados.ok) return { sucesso: false, mensagem: "Invalid list details." };
   const token = await tokenAutenticado();
-  if (!token) return { sucesso: false, mensagem: "Faça login novamente." };
+  if (!token) return { sucesso: false, mensagem: "Sign in again." };
   try {
     const resposta = await requisitarBackend(`/listas/${id}`, {
       method: "PUT",
@@ -74,17 +74,17 @@ export async function editarLista(_anterior: EstadoAcao, form: FormData): Promis
     if (!resposta.ok) return { sucesso: false, mensagem: erroStatus(resposta.status) };
     revalidatePath("/listas");
     revalidatePath(`/listas/${id}`);
-    return { sucesso: true, mensagem: "Lista atualizada." };
+    return { sucesso: true, mensagem: "List updated." };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão com a API." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
 export async function excluirLista(_anterior: EstadoAcao, form: FormData): Promise<EstadoAcao> {
   const id = idPositivo(form.get("lista_id"));
-  if (!id) return { sucesso: false, mensagem: "Lista inválida." };
+  if (!id) return { sucesso: false, mensagem: "Invalid list." };
   const token = await tokenAutenticado();
-  if (!token) return { sucesso: false, mensagem: "Faça login novamente." };
+  if (!token) return { sucesso: false, mensagem: "Sign in again." };
   try {
     const resposta = await requisitarBackend(`/listas/${id}`, {
       method: "DELETE",
@@ -92,7 +92,7 @@ export async function excluirLista(_anterior: EstadoAcao, form: FormData): Promi
     });
     if (!resposta.ok) return { sucesso: false, mensagem: erroStatus(resposta.status) };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão com a API." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
   revalidatePath("/listas");
   redirect("/listas");
@@ -102,10 +102,10 @@ export async function adicionarAlbumLista(_anterior: EstadoAcao, form: FormData)
   const id = idPositivo(form.get("lista_id"));
   const mbid = String(form.get("id_musicbrainz") ?? "").toLowerCase();
   if (!id || !MBID_VALIDO.test(mbid)) {
-    return { sucesso: false, mensagem: "Escolha uma lista e um álbum válidos." };
+    return { sucesso: false, mensagem: "Choose a valid list and album." };
   }
   const token = await tokenAutenticado();
-  if (!token) return { sucesso: false, mensagem: "Faça login para adicionar álbuns." };
+  if (!token) return { sucesso: false, mensagem: "Sign in to add albums." };
   try {
     const resposta = await requisitarBackend(`/listas/${id}/itens`, {
       method: "POST",
@@ -115,18 +115,18 @@ export async function adicionarAlbumLista(_anterior: EstadoAcao, form: FormData)
     if (!resposta.ok) return { sucesso: false, mensagem: erroStatus(resposta.status) };
     revalidatePath(`/listas/${id}`);
     revalidatePath("/listas");
-    return { sucesso: true, mensagem: "Álbum adicionado à lista!" };
+    return { sucesso: true, mensagem: "Album added to list." };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão com a API." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
 export async function removerAlbumLista(_anterior: EstadoAcao, form: FormData): Promise<EstadoAcao> {
   const id = idPositivo(form.get("lista_id"));
   const obra = idPositivo(form.get("obra_id"));
-  if (!id || !obra) return { sucesso: false, mensagem: "Álbum inválido." };
+  if (!id || !obra) return { sucesso: false, mensagem: "Invalid album." };
   const token = await tokenAutenticado();
-  if (!token) return { sucesso: false, mensagem: "Faça login novamente." };
+  if (!token) return { sucesso: false, mensagem: "Sign in again." };
   try {
     const resposta = await requisitarBackend(`/listas/${id}/itens/${obra}`, {
       method: "DELETE",
@@ -135,9 +135,9 @@ export async function removerAlbumLista(_anterior: EstadoAcao, form: FormData): 
     if (!resposta.ok) return { sucesso: false, mensagem: erroStatus(resposta.status) };
     revalidatePath(`/listas/${id}`);
     revalidatePath("/listas");
-    return { sucesso: true, mensagem: "Álbum removido da lista." };
+    return { sucesso: true, mensagem: "Album removed from list." };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão com a API." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
 
@@ -145,9 +145,9 @@ export async function moverAlbumLista(_anterior: EstadoAcao, form: FormData): Pr
   const id = idPositivo(form.get("lista_id"));
   const obra = idPositivo(form.get("obra_id"));
   const novaPosicao = idPositivo(form.get("nova_posicao"));
-  if (!id || !obra || !novaPosicao) return { sucesso: false, mensagem: "Posição inválida." };
+  if (!id || !obra || !novaPosicao) return { sucesso: false, mensagem: "Invalid position." };
   const token = await tokenAutenticado();
-  if (!token) return { sucesso: false, mensagem: "Faça login novamente." };
+  if (!token) return { sucesso: false, mensagem: "Sign in again." };
   try {
     const resposta = await requisitarBackend(`/listas/${id}/itens/${obra}`, {
       method: "PATCH",
@@ -156,8 +156,8 @@ export async function moverAlbumLista(_anterior: EstadoAcao, form: FormData): Pr
     });
     if (!resposta.ok) return { sucesso: false, mensagem: erroStatus(resposta.status) };
     revalidatePath(`/listas/${id}`);
-    return { sucesso: true, mensagem: "Ordem atualizada." };
+    return { sucesso: true, mensagem: "Order updated." };
   } catch {
-    return { sucesso: false, mensagem: "Falha de conexão com a API." };
+    return { sucesso: false, mensagem: "Connection failed. Try again." };
   }
 }
