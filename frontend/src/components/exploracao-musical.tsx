@@ -133,10 +133,11 @@ export function Paginacao({
 }
 
 export async function FaixasDoAlbum({
-  id, artista,
+  id, artista, album,
 }: {
   id: string;
   artista: string;
+  album: string;
 }) {
   const [resultado, capa] = await Promise.all([faixasAlbum(id), obterCapaAlbum(id)]);
   return (
@@ -147,7 +148,7 @@ export async function FaixasDoAlbum({
       ) : !resultado.dados.faixas.length ? (
         <p className={styles.mensagem}>Faixas indisponíveis nesta edição.</p>
       ) : (
-        <FaixasInterativas faixas={resultado.dados.faixas} capa={capa} artista={artista} />
+        <FaixasInterativas faixas={resultado.dados.faixas} capa={capa} artista={artista} album={album} />
       )}
     </section>
   );

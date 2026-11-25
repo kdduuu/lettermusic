@@ -25,8 +25,8 @@ function AcaoAlbum({ id, tipo, ativo, rotulo }: {
       <input type="hidden" name="id_musicbrainz" value={id} />
       <input type="hidden" name="tipo" value={tipo} />
       <input type="hidden" name="operacao" value={ativo ? "remover" : "adicionar"} />
-      <button disabled={pendente} type="submit">
-        {pendente ? "Salvando..." : ativo ? `✓ ${rotulo} · Remover` : rotulo}
+      <button disabled={pendente} type="submit" aria-pressed={tipo === "ouvida" ? undefined : ativo} title={ativo ? `Remover: ${rotulo}` : undefined}>
+        {pendente ? "Salvando..." : ativo ? `✓ ${rotulo}` : rotulo}
       </button>
       {estado.mensagem && (
         <p className={estado.sucesso ? styles.sucesso : styles.erro} role="status">

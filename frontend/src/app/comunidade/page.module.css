@@ -144,3 +144,9 @@
 .layout a:hover, .layout a:focus-visible { text-decoration: underline; }
 .atividade { padding: 13px 0; }
 .listaAtividade { padding: 7px 0; }
+
+/* F09.12 — refinamento final. */
+.atividade .meta { font-size: 12px; color: var(--lm-muted); }
+.acaoTexto { font-size: 12px; }
+.atividadeMusical h3, .listaAtividade h3, .lateral a { overflow-wrap: anywhere; }
+.atividadeMusical .resumo { overflow-wrap: anywhere; }

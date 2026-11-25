@@ -28,3 +28,9 @@
 .grupo { gap: 8px; }
 .acao button,.escuta button { font-size: 12px; padding: 9px 12px; border-radius: 5px; }
 .escuta { margin-top: 12px; }
+
+/* F09.12 — refinamento final. */
+.acao button[aria-pressed="true"] { color: var(--lm-accent); border-color: var(--lm-accent); background: var(--lm-panel); }
+.acao button,.escuta button,.confirmado { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; }
+.acao { min-width: 0; }
+.contador { font-size: 12px; }

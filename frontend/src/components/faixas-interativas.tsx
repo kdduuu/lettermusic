@@ -18,11 +18,12 @@ function duracao(ms: number | null) {
 }
 
 export function FaixasInterativas({
-  faixas, artista, capa,
+  faixas, artista, capa, album,
 }: {
   faixas: FaixaAlbum[];
   artista: string;
   capa: string | null;
+  album: string;
 }) {
   const dialogo = useRef<HTMLDialogElement>(null);
   const [selecionada, setSelecionada] = useState<FaixaAlbum | null>(null);
@@ -48,7 +49,7 @@ export function FaixasInterativas({
             >
               <span className={styles.numero}>{faixa.disco > 1 ? faixa.disco + "." : ""}{faixa.numero}</span>
               <span className={styles.titulo}>{faixa.titulo}</span>
-              {duracao(faixa.duracao_ms) ? <time className={styles.duracao}>{duracao(faixa.duracao_ms)}</time> : null}
+              <span className={styles.duracao}>{duracao(faixa.duracao_ms) ?? "—"}</span>
               <span className={styles.seta} aria-hidden="true">↗</span>
             </button>
           </li>
@@ -67,15 +68,12 @@ export function FaixasInterativas({
           <button type="button" className={styles.fechar} onClick={fechar} aria-label="Fechar">×</button>
           {selecionada ? (
             <>
-              <CapaAlbum url={capa} titulo={selecionada.titulo} className={styles.capa} />
+              <CapaAlbum url={capa} titulo={album} className={styles.capa} />
               <div className={styles.info}>
-                <span className={styles.numeroModal}>{String(selecionada.numero).padStart(2, "0")}</span>
+                <span className={styles.numeroModal}>{selecionada.disco > 1 ? `${selecionada.disco}.` : ""}{String(selecionada.numero).padStart(2, "0")}</span>
                 <h3 id="titulo-faixa-modal">{selecionada.titulo}</h3>
                 <p className={styles.artista}>{artista}</p>
-                {duracao(selecionada.duracao_ms) ? (
-                  <p className={styles.tempo}>{duracao(selecionada.duracao_ms)}</p>
-                ) : null}
-                <span className={styles.filete} aria-hidden="true" />
+                <p className={styles.tempo}>{album}{duracao(selecionada.duracao_ms) ? ` · ${duracao(selecionada.duracao_ms)}` : ""}</p>
               </div>
             </>
           ) : <span id="titulo-faixa-modal" className={styles.oculto}>Faixa</span>}

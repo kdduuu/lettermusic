@@ -307,3 +307,9 @@
 @media(max-width:1070px) { .gradeCapas, .gradeCapas[data-count] { grid-template-columns: repeat(4,minmax(0,1fr)); } }
 @media(max-width:780px) { .gradeCapas, .gradeCapas[data-count] { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @media(max-width:560px) { .gradeCapas, .gradeCapas[data-count] { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; } }
+
+/* F09.12 — refinamento final. */
+.artistaAlbum { font-size: 13px; color: var(--lm-muted); }
+.reviewTexto { font-size: 14px; overflow-wrap: anywhere; }
+.informacoes, .listaTexto, .conteudoReview { min-width: 0; overflow-wrap: anywhere; }
+@media(max-width:420px) { .identidade { flex-wrap: wrap; } .estatisticas { flex-wrap: wrap; } }

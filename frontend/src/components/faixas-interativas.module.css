@@ -70,3 +70,14 @@
 .numero { font-size: 13px; }
 .duracao { font-size: 11px; }
 @media(max-width:520px) { .linha { padding: 13px 5px; } .titulo { font-size: 14px; } }
+
+/* F09.12 — refinamento final. */
+.numero { grid-column: 1; }
+.titulo { grid-column: 2; }
+.duracao { grid-column: 3; font-size: 12px; }
+.seta { grid-column: 4; }
+.card { gap: 26px; padding: 42px 34px 36px; }
+.tempo { margin-top: 12px; font-size: 14px; overflow-wrap: anywhere; }
+.fechar { min-width: 40px; min-height: 40px; }
+@media(max-width:600px) { .card { gap: 18px; padding: 46px 20px 26px; } }
+@media(hover:none) { .seta { opacity: .7; } }

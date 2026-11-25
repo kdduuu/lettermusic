@@ -138,7 +138,7 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
       <div className={styles.corpoAlbum}>
         <div className={styles.colunaFaixas}>
           <Suspense fallback={<p className={styles.message}>Carregando faixas...</p>}>
-            <FaixasDoAlbum id={id} artista={obra.artista ?? "Artista não informado"} />
+            <FaixasDoAlbum id={id} artista={obra.artista ?? "Artista não informado"} album={obra.titulo ?? "Álbum"} />
           </Suspense>
         </div>
         <aside className={styles.colunaSocial}>
@@ -154,7 +154,7 @@ async function ConteudoAlbum({ params }: { params: ParametrosAlbum }) {
 export default function AlbumPage({ params }: { params: ParametrosAlbum }) {
   return (
     <main className={styles.container}>
-      <Link href="/" className={styles.back}>Início</Link>
+      <Link href="/albuns" className={styles.back}>← Álbuns</Link>
       <Suspense fallback={<p className={styles.message}>Carregando álbum...</p>}>
         <ConteudoAlbum params={params} />
       </Suspense>
