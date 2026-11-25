@@ -150,3 +150,14 @@
 .acaoTexto { font-size: 12px; }
 .atividadeMusical h3, .listaAtividade h3, .lateral a { overflow-wrap: anywhere; }
 .atividadeMusical .resumo { overflow-wrap: anywhere; }
+
+
+/* F09.14 — editorial rhythm. */
+.cabecalho { padding:8px 0 18px; margin-bottom:24px; border-color:var(--lm-line); }
+.layout { gap:36px; }
+.layout h2 { font-size:25px; letter-spacing:-.025em; }
+.lateral { border-left:0; padding-left:0; }
+.lateral h2 { font-size:23px; }
+.atividadeMusical .resumo { border-left:0; padding-left:0; margin-top:8px; color:var(--lm-text); }
+.capaFeed,.capa { border-radius:var(--lm-cover-radius); }
+@media(max-width:900px) { .layout { grid-template-columns:1fr; gap:var(--lm-section); } .lateral { padding-top:20px; border-top:1px solid var(--lm-line); } }

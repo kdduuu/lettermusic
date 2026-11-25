@@ -83,3 +83,11 @@
 .form input,.form button { min-height: 40px; }
 .container h1,.container p { overflow-wrap: anywhere; }
 .alternativa { color: var(--lm-muted); }
+
+
+/* F09.14 — editorial rhythm. */
+.container { border:0; border-radius:0; background:transparent; padding:24px 22px; }
+.container h1 { margin-bottom:22px; }
+.form input,.form button { border-radius:4px; }
+.container h2 { border-color:var(--lm-line); }
+@media(max-width:650px) { .container { padding:20px 8px; } }

@@ -114,3 +114,17 @@
 @media(max-width:1070px) { .collection { grid-template-columns:repeat(4,minmax(0,1fr)); } }
 @media(max-width:780px) { .collection { grid-template-columns:repeat(3,minmax(0,1fr)); } .diary { grid-template-columns:1fr; } }
 @media(max-width:560px) { .collection { grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px 12px; } .libraryTabs { gap:4px 15px; } .libraryTabs a { font-size:13px; } }
+
+
+/* F09.14 — editorial rhythm. */
+.libraryHeader { padding:8px 0 18px; }
+.libraryTabs { gap:10px 25px; }
+.libraryTabs a { font-size:14px; }
+.libraryContent { padding:24px 0; }
+.collection { gap:25px var(--lm-gutter); }
+.collection .capaVitrine,.diary .capaVitrine { border-radius:var(--lm-cover-radius); }
+.collectionInfo strong { font:700 16px/1.25 var(--lm-serif); }
+.collectionInfo span { color:var(--lm-muted); }
+.diary li { border-color:var(--lm-line); }
+.diary .reviewTexto { font-size:14px; line-height:1.65; white-space:pre-wrap; }
+@media(max-width:560px) { .libraryTabs { gap:4px 16px; } }

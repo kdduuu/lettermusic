@@ -102,3 +102,13 @@
 .dadosGaleria h3 a { display: block; }
 .info { min-width: 0; overflow-wrap: anywhere; }
 @media(max-width:560px) { .dadosGaleria p, .dadosGaleria span, .dadosLinha span { font-size: 12px; } }
+
+
+/* F09.14 — editorial rhythm. */
+.capaGaleria,.capa,.icone { border-radius:var(--lm-cover-radius); box-shadow:none; }
+.galeria { column-gap:var(--lm-gutter); }
+.dadosGaleria h3 { font-size:16px; }
+.dadosGaleria p,.dadosLinha span { color:var(--lm-muted); }
+.notaGaleria { color:var(--lm-gold); }
+.linkCapaGaleria:hover .capaGaleria,.linkCapaGaleria:focus-visible .capaGaleria { transform:none; box-shadow:none; }
+.linkCapaGaleria:hover { opacity:.88; }

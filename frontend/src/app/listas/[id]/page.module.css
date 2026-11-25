@@ -253,3 +253,18 @@
 .detalheAlbum p { font-size: 13px; }
 .descricao, .detalheAlbum h3 { overflow-wrap: anywhere; }
 @media(max-width:650px) { .hero > :first-child { max-width: 220px; } }
+
+
+/* F09.14 — editorial rhythm. */
+.container { background:var(--lm-bg); color:var(--lm-text); }
+.hero { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:8px 0 25px; grid-template-columns:minmax(170px,230px) minmax(0,1fr); gap:32px; }
+.traco { display:none; }
+.info h1 { font-size:clamp(42px,5vw,65px); }
+.etiqueta { color:var(--lm-muted); letter-spacing:.08em; }
+.descricao { font-size:15px; }
+.edicao { grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; gap:20px; border-color:var(--lm-line); }
+.edicao summary { font-weight:500; }
+.conteudo { padding-top:var(--lm-section); }
+.capaAlbum { border-radius:var(--lm-cover-radius); }
+.numero { border-radius:2px; }
+@media(max-width:700px) { .hero { grid-template-columns:1fr; gap:18px; } .edicao { grid-template-columns:1fr; } .buscarLinha input { min-width:0; } }

@@ -61,3 +61,11 @@
 .paginacao { margin-top: 17px; padding: 17px 0; font-size: 12px; }
 @media(max-width:900px) { .container > ul { grid-template-columns: 1fr; } }
 @media(max-width:650px) { .container { padding: 22px 16px 58px; } }
+
+
+/* F09.14 — editorial rhythm. */
+.container header.cabecalhoEditorial { padding:8px 0 18px; margin-bottom:8px; border-color:var(--lm-line); }
+.container > ul { gap:0 34px; align-items:start; }
+.container > ul > li { padding:22px 0; }
+.container > ul > li:first-child { padding:24px 0 28px; }
+@media(max-width:650px) { .container > ul > li:first-child { padding:18px 0; } }

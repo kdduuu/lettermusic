@@ -97,3 +97,19 @@
 .reviewLista li { padding: 12px 0; }
 @media(max-width:950px) { .corpoAlbum { grid-template-columns: 1fr; } .colunaSocial { padding: 22px 0 0; border-left: 0; border-top: 1px solid var(--lm-line); } }
 @media(max-width:650px) { .container { padding: 20px 16px 58px; } .album { grid-template-columns: 1fr; padding: 18px; gap: 20px; } .cover { max-width: 275px; } }
+
+
+/* F09.14 — editorial rhythm. */
+.album { border:0; border-radius:0; background:transparent; padding:6px 0 23px; border-bottom:1px solid var(--lm-line); }
+.cover { border-radius:var(--lm-cover-radius); box-shadow:none; }
+.accent { display:none; }
+.info h1 { font-size:clamp(43px,5.3vw,66px); }
+.artist { font-size:21px; }
+.meta { font-size:13px; color:var(--lm-muted); }
+.corpoAlbum { margin-top:24px; gap:36px; }
+.colunaSocial { border-left:0; padding-left:0; }
+.social h2 { font-size:23px; }
+.resumo strong { color:var(--lm-gold); font-size:34px; font-variant-numeric:tabular-nums; }
+.interacoes,.listasDoAlbum,.resumo,.reviewLista li { border-color:var(--lm-line); }
+@media(max-width:950px) { .corpoAlbum { grid-template-columns:1fr; gap:var(--lm-section); } .colunaSocial { padding-top:20px; border-top:1px solid var(--lm-line); } }
+@media(max-width:650px) { .album { grid-template-columns:1fr; gap:20px; padding:6px 0 20px; } }

@@ -16,3 +16,10 @@
 /* F09.12 — refinamento final. */
 .identidade p { font-size: 14px; line-height: 1.5; }
 @media(max-width:360px) { .artistaHero { flex-wrap: wrap; } }
+
+
+/* F09.14 — editorial rhythm. */
+.artistaHero { background:transparent; border:0; border-radius:0; padding:8px 0 23px; }
+.discografia { margin-top:0; padding-top:var(--lm-section); border-color:var(--lm-line); }
+.discografia h2 { font-size:28px; }
+@media(max-width:560px) { .artistaHero { padding:8px 0 18px; } }

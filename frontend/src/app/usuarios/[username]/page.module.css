@@ -313,3 +313,17 @@
 .reviewTexto { font-size: 14px; overflow-wrap: anywhere; }
 .informacoes, .listaTexto, .conteudoReview { min-width: 0; overflow-wrap: anywhere; }
 @media(max-width:420px) { .identidade { flex-wrap: wrap; } .estatisticas { flex-wrap: wrap; } }
+
+
+/* F09.14 — editorial rhythm. */
+.container { background:var(--lm-bg); color:var(--lm-text); }
+.perfilHero { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:12px 0 26px; }
+.avatar { background:#343238; border:1px solid #666168; width:145px; height:145px; font-size:78px; }
+.estatisticas { border-top:0; padding-top:10px; gap:28px; }
+.discografia { border-bottom:0; padding:var(--lm-section) 0 0; }
+.corpoEditorial { padding-top:var(--lm-section); gap:36px; }
+.tituloSecao { margin-bottom:16px; }
+.tituloSecao h2 { font-size:28px; }
+.capa { border-radius:var(--lm-cover-radius); }
+.feed li,.listaColecoes li { border-color:var(--lm-line); }
+@media(max-width:650px) { .avatar { width:96px;height:96px;font-size:52px; } .perfilHero { padding:8px 0 20px; } .corpoEditorial { grid-template-columns:1fr; gap:var(--lm-section); } }
