@@ -106,7 +106,7 @@
 .collectionInfo { min-width:0; overflow-wrap:anywhere; }
 .collectionInfo strong { font-size:16px; }
 .collectionInfo span { font-size:13px; }
-.collection .detalhe { display:block; margin:5px 0 0; color:#dec89a; font-size:13px; }
+.collection .detalhe { display:block; margin:5px 0 0; color:var(--lm-rating); font-size:13px; }
 .diary { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:28px; }
 .diary li { padding:16px 0; border-bottom:1px solid var(--lm-line); }
 .diary .albumVitrine { display:grid; grid-template-columns:72px minmax(0,1fr); align-items:center; gap:13px; }
@@ -129,6 +129,8 @@
 .diary .reviewTexto { font-size:14px; line-height:1.65; white-space:pre-wrap; }
 @media(max-width:560px) { .libraryTabs { gap:4px 16px; } }
 
-.collection > li,.diary > li { background:var(--lm-panel); border:1px solid var(--lm-line); padding:8px; border-radius:7px; }
+.collection > li { background:transparent; border:0; padding:0; }
+.diary[data-category="reviews"] > li { background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:7px; padding:12px; }
 .diary { gap:12px; }
-.diary > li { padding:12px; }
+.diary[data-category="escutas"] > li { background:transparent; border:0; padding:8px 0; }
+.collectionInfo { padding-top:7px; }

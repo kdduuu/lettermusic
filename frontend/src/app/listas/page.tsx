@@ -47,8 +47,8 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
               <li key={lista.id}>
                 <Link className={styles.cartao} href={`/listas/${lista.id}`}>
                   <VitrineLista listaId={lista.id} titulo={lista.titulo} />
-                  <span className={styles.visibilidade}>{lista.publica ? "Public" : "Private"}</span>
                   <h3>{lista.titulo}</h3>
+                  <span className={styles.visibilidade}>{lista.publica ? "Public" : "Private"}</span>
                   
                 </Link>
               </li>

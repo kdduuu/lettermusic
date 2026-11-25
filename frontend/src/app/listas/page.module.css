@@ -117,4 +117,12 @@
 
 .nova > summary { display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; list-style:none; border:1px solid var(--lm-line); border-radius:5px; background:var(--lm-panel); cursor:pointer; }
 .nova > summary::-webkit-details-marker { display:none; }
-.cartao { display:block; background:var(--lm-panel); border:1px solid var(--lm-line); padding:9px; border-radius:7px; }
+/* F09.16 — one coherent collection card including author metadata. */
+.grade { gap:24px; align-items:stretch; }
+.grade > li { min-width:0; display:flex; flex-direction:column; background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:8px; padding:14px; }
+.grade > li:focus-within,.grade > li:hover { border-color:#69616a; }
+.cartao { display:flex; flex-direction:column; flex:1; background:transparent; border:0; padding:0; min-height:0; box-shadow:none; }
+.cartao h3 { margin:8px 0 6px; font-size:22px; line-height:1.2; }
+.cartao .visibilidade { display:block; font-size:12px; color:var(--lm-muted); margin:0 0 4px; }
+.autorPublico { margin:0; padding:5px 0 2px; line-height:1.4; color:var(--lm-muted); }
+@media(max-width:600px) { .grade { gap:12px; } .grade > li { padding:10px; } .cartao h3 { font-size:18px; } }

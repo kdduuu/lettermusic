@@ -91,7 +91,7 @@ async function Collection({ registros, tipo }: { registros: Registro[]; tipo: Ca
   const capas = new Map(await Promise.all(ids.map(async id => [id, await obterCapaAlbum(id)] as const)));
   const textual = tipo === "reviews" || tipo === "escutas";
   return (
-    <ul className={textual ? styles.diary : styles.collection}>
+    <ul className={textual ? styles.diary : styles.collection} data-category={tipo}>
       {registros.map(registro => (
         <li key={registro.id}>
           <AlbumLink registro={registro}>

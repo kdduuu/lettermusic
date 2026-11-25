@@ -372,3 +372,7 @@
 .magazineHeader .discoverLink,.magazineHome .tituloDescoberta > a { display:inline-grid; place-items:center; width:34px; height:34px; border-radius:5px; color:var(--lm-muted); }
 .magazineHeader .discoverLink:hover,.magazineHome .tituloDescoberta > a:hover { background:var(--lm-panel); color:var(--lm-text); }
 .buscaLista button { display:grid; place-items:center; }
+/* Maintain compact social cards with enough breathing room between cover and metadata. */
+.socialCards .listasHome { gap:10px; }
+.socialCards .listasHome li,.socialCards .listasHome li:first-child { padding:14px; gap:15px; }
+.listaMeta p { line-height:1.5; }

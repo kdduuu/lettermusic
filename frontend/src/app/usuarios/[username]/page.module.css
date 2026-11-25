@@ -329,4 +329,4 @@
 @media(max-width:650px) { .avatar { width:96px;height:96px;font-size:52px; } .perfilHero { padding:8px 0 20px; } .corpoEditorial { grid-template-columns:1fr; gap:var(--lm-section); } }
 
 .feed .itemReview,.listaColecoes li,.feed li:last-child,.listaColecoes li:last-child { border:1px solid var(--lm-line); border-radius:7px; background:var(--lm-panel); padding:12px; margin-bottom:9px; }
-.itemCapa { background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:6px; padding:7px; }
+.itemCapa { background:transparent; border:0; padding:0; }

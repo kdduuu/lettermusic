@@ -56,11 +56,11 @@ async function Conteudo({
                   href={`/listas/${lista.id}`}
                 >
                   <VitrineLista listaId={lista.id} titulo={lista.titulo} />
+                  <h3>{lista.titulo}</h3>
                   <span className={styles.visibilidade}>
                     {lista.total_itens} {lista.total_itens === 1
                       ? "album" : "albums"}
                   </span>
-                  <h3>{lista.titulo}</h3>
                   
                 </Link>
                 <p className={styles.autorPublico}>

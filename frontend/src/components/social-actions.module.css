@@ -13,13 +13,13 @@
 .count,.hint { color:var(--lm-muted); font-size:12px; }
 .ratingArea { margin-top:13px; padding-top:14px; border-top:1px solid var(--lm-line); }
 .ratingHeading { display:flex; align-items:center; justify-content:space-between; color:var(--lm-muted); font-size:12px; }
-.ratingHeading strong { color:var(--lm-gold); font-size:15px; }
+.ratingHeading strong { color:var(--lm-rating); font-size:15px; }
 .stars { display:flex; gap:4px; justify-content:center; margin:9px 0 12px; }
 .starPair { display:inline-flex; }
 .starPair button { display:block; width:17px; height:38px; overflow:hidden; border:0; background:transparent; padding:0; color:#706d73; cursor:pointer; text-align:left; }
 .starPair button span { display:block; width:34px; font:34px/38px Arial,sans-serif; text-align:center; pointer-events:none; }
 .halfRight span { transform:translateX(-17px); }
-.starPair button[data-filled="true"],.starPair button:hover { color:var(--lm-gold); }
+.starPair button[data-filled="true"],.starPair button:hover { color:var(--lm-rating); }
 .starPair button:disabled { opacity:.55; cursor:progress; }
 .starPair button:focus-visible { outline-offset:0; }
 .disclosure { border-top:1px solid var(--lm-line); }

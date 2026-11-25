@@ -119,7 +119,7 @@ input, select, textarea { max-width: 100%; }
 }
 
 /* Editorial system: a shared rhythm and restrained, warm-neutral paper tones. */
-:root { --lm-bg:#1b1b1e; --lm-panel:#25252a; --lm-panel-raised:#2d2d32; --lm-line:#3b3b40; --lm-text:#f3efea; --lm-muted:#b9b4b6; --lm-accent:#efa0ad; --lm-gold:#dbc69d; --lm-gutter:15px; --lm-section:34px; --lm-cover-radius:4px; }
+:root { --lm-bg:#1b1b1e; --lm-panel:#25252a; --lm-panel-raised:#2d2d32; --lm-line:#3b3b40; --lm-text:#f3efea; --lm-muted:#b9b4b6; --lm-accent:#efa0ad; --lm-rating:var(--lm-accent); --lm-gold:var(--lm-rating); --lm-gutter:15px; --lm-section:34px; --lm-cover-radius:4px; }
 body { background:var(--lm-bg); }
 a { text-underline-offset:3px; }
 @media(max-width:650px) { :root { --lm-gutter:12px; --lm-section:26px; } }

@@ -12,7 +12,7 @@
 .atividade p { margin: 0 0 8px; line-height: 1.55; overflow-wrap: anywhere; }
 .meta { color: #c6c6c6; font-size: 13px; margin: 5px 0 0; overflow-wrap: anywhere; }
 .resumo { white-space: pre-wrap; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.nota { color: #e9d3a3; }
+.nota { color: var(--lm-rating); }
 .linkSecundario { font-size: 13px; }
 .lateral { min-width: 0; }
 .lateral section + section { border-top: 1px solid #484848; padding-top: 24px; }
@@ -163,5 +163,6 @@
 @media(max-width:900px) { .layout { grid-template-columns:1fr; gap:var(--lm-section); } .lateral { padding-top:20px; border-top:1px solid var(--lm-line); } }
 
 .atividade { background:var(--lm-panel); border:1px solid var(--lm-line); padding:14px; border-radius:7px; margin-bottom:10px; }
-.membros li,.obras li { background:var(--lm-panel); border:1px solid var(--lm-line); padding:10px; border-radius:6px; margin-bottom:8px; }
+.membros li { background:var(--lm-panel); border:1px solid var(--lm-line); padding:10px; border-radius:6px; margin-bottom:8px; }
+.obras li { background:transparent; border:0; padding:9px 0; margin-bottom:4px; }
 .cabecalho { border-bottom:0; }

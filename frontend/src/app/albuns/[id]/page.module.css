@@ -109,7 +109,7 @@
 .corpoAlbum { margin-top:24px; gap:36px; }
 .colunaSocial { border-left:0; padding-left:0; }
 .social h2 { font-size:23px; }
-.resumo strong { color:var(--lm-gold); font-size:34px; font-variant-numeric:tabular-nums; }
+.resumo strong { color:var(--lm-rating); font-size:34px; font-variant-numeric:tabular-nums; }
 .interacoes,.listasDoAlbum,.resumo,.reviewLista li { border-color:var(--lm-line); }
 @media(max-width:950px) { .corpoAlbum { grid-template-columns:1fr; gap:var(--lm-section); } .colunaSocial { padding-top:20px; border-top:1px solid var(--lm-line); } }
 @media(max-width:650px) { .album { grid-template-columns:1fr; gap:20px; padding:6px 0 20px; } }

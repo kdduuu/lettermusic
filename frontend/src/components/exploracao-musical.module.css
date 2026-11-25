@@ -88,7 +88,7 @@
 /* F09.6 — nota real do público junto ao lançamento, sem quadro de crítico. */
 .dadosLinha { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; justify-content: space-between; }
 .dadosLinha span { font-size: 11px; color: #a79ea6; }
-.notaGaleria { font: 700 12px/1.2 Arial,sans-serif; color: #e1cb9d; white-space: nowrap; }
+.notaGaleria { font: 700 12px/1.2 Arial,sans-serif; color: var(--lm-rating); white-space: nowrap; }
 
 /* F09.10 — títulos alinhados e links com estados consistentes. */
 .dadosGaleria h3 { min-height: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
@@ -109,10 +109,12 @@
 .galeria { column-gap:var(--lm-gutter); }
 .dadosGaleria h3 { font-size:16px; }
 .dadosGaleria p,.dadosLinha span { color:var(--lm-muted); }
-.notaGaleria { color:var(--lm-gold); }
+.notaGaleria { color:var(--lm-rating); }
 .linkCapaGaleria:hover .capaGaleria,.linkCapaGaleria:focus-visible .capaGaleria { transform:none; box-shadow:none; }
 .linkCapaGaleria:hover { opacity:.88; }
 
-.resultados > li { background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:6px; padding:12px; margin-bottom:6px; }
-.albumGaleria { background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:6px; padding:7px; }
-.dadosGaleria { margin:8px 2px 4px; }
+.resultados > li { background:transparent; border:0; padding:10px 0; margin:0; }
+.albumGaleria { background:transparent; border:0; padding:0; }
+.dadosGaleria { margin:8px 0 0; }
+.resultados { row-gap:10px; }
+.galeria { row-gap:26px; }
