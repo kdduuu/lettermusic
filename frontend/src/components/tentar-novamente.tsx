@@ -15,7 +15,7 @@ export function TentarNovamente() {
       disabled={pendente}
       onClick={() => iniciar(() => router.refresh())}
     >
-      {pendente ? "Tentando..." : "Tentar novamente"}
+      {pendente ? "Tentando..." : "Try again"}
     </button>
   );
 }

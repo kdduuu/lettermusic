@@ -41,7 +41,7 @@ async function GradeDeAlbuns({
             <Link className={styles.linkCapa} href={"/albuns/" + encodeURIComponent(item.id_musicbrainz)}>
               <CapaAlbum
                 url={urls.get(item.id_musicbrainz) ?? null}
-                titulo={item.titulo ?? "Álbum"}
+                titulo={item.titulo ?? "Album"}
                 className={styles.capaAlbum}
               />
             </Link>
@@ -50,11 +50,11 @@ async function GradeDeAlbuns({
             <h3>
               {item.id_musicbrainz ? (
                 <Link href={"/albuns/" + encodeURIComponent(item.id_musicbrainz)}>
-                  {item.titulo ?? "Álbum sem título"}
+                  {item.titulo ?? "Untitled album"}
                 </Link>
-              ) : <span>{item.titulo ?? "Álbum sem título"}</span>}
+              ) : <span>{item.titulo ?? "Untitled album"}</span>}
             </h3>
-            <p>{item.artista ?? "Artista não informado"}</p>
+            <p>{item.artista ?? "Unknown artist"}</p>
           </div>
           {dono ? (
             <div className={styles.acoesAlbum}>
@@ -91,8 +91,8 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
 
   return (
     <>
-      <nav className={styles.breadcrumb} aria-label="Navegação">
-        <Link href={dono ? "/listas" : "/listas/explorar"}>{dono ? "Minhas listas" : "Listas"}</Link>
+      <nav className={styles.breadcrumb} aria-label="Navigation">
+        <Link href={dono ? "/listas" : "/listas/explorar"}>{dono ? "My lists" : "Lists"}</Link>
         <span aria-hidden="true">/</span><span>{lista.titulo}</span>
       </nav>
 
@@ -100,7 +100,7 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
         <ColagemEditorialLista listaId={lista.id} titulo={lista.titulo} />
         <div className={styles.info}>
           <span className={styles.traco} aria-hidden="true" />
-          <p className={styles.etiqueta}>{lista.publica ? "Pública" : "Privada"}</p>
+          <p className={styles.etiqueta}>{lista.publica ? "Public" : "Private"}</p>
           <h1 id="titulo-lista">{lista.titulo}</h1>
           {lista.descricao ? <p className={styles.descricao}>{lista.descricao}</p> : null}
           
@@ -109,9 +109,9 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
       </section>
 
       {dono ? (
-        <section className={styles.edicao} aria-label="Gerenciar minha lista">
+        <section className={styles.edicao} aria-label="Manage list">
           <details>
-            <summary>Editar informações e privacidade</summary>
+            <summary>Edit details and privacy</summary>
             <div className={styles.editar}>
               <FormularioEditarLista key={lista.atualizada_em ?? lista.criada_em} lista={lista} />
               <FormularioExcluirLista id={lista.id} />
@@ -119,10 +119,10 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
           </details>
           <form action="/buscar" method="get" role="search" className={styles.buscar}>
             <input type="hidden" name="lista" value={lista.id} />
-            <label htmlFor="buscar-lista">Adicionar um álbum à coleção</label>
+            <label htmlFor="buscar-lista">Add an album</label>
             <div className={styles.buscarLinha}>
-              <input id="buscar-lista" name="termo" type="search" minLength={2} maxLength={100} required placeholder="Álbum ou artista" />
-              <button type="submit">Buscar</button>
+              <input id="buscar-lista" name="termo" type="search" minLength={2} maxLength={100} required placeholder="Album or artist" />
+              <button type="submit">Search</button>
             </div>
           </form>
         </section>
@@ -132,24 +132,24 @@ async function Conteudo({ params, searchParams }: { params: Parametros; searchPa
         <div className={styles.cabecalhoGrade}>
           <div>
             
-            <h2 id="albuns-lista">Álbuns</h2>
+            <h2 id="albuns-lista">Albums</h2>
           </div>
           
         </div>
         {itens.length ? (
-          <Suspense fallback={<p className={styles.vazio}>Carregando grade de álbuns...</p>}>
+          <Suspense fallback={<p className={styles.vazio}>Loading albums…</p>}>
             <GradeDeAlbuns
               itens={itens} dono={dono} listaId={lista.id}
               ultimaPosicao={ultimaPosicao} temProxima={temProxima} pagina={pagina}
             />
           </Suspense>
-        ) : <p className={styles.vazio}>Nenhum álbum nesta página.</p>}
+        ) : <p className={styles.vazio}>No albums on this page.</p>}
 
         {pagina > 1 || temProxima ? (
-          <nav className={styles.paginacao} aria-label="Páginas da lista">
-            {pagina > 1 ? <Link href={"/listas/" + lista.id + "?pagina=" + (pagina - 1)}>← Anterior</Link> : null}
-            <span>Página {pagina}</span>
-            {temProxima ? <Link href={"/listas/" + lista.id + "?pagina=" + (pagina + 1)}>Próxima →</Link> : null}
+          <nav className={styles.paginacao} aria-label="List pages">
+            {pagina > 1 ? <Link href={"/listas/" + lista.id + "?pagina=" + (pagina - 1)}>← Previous</Link> : null}
+            <span>Page {pagina}</span>
+            {temProxima ? <Link href={"/listas/" + lista.id + "?pagina=" + (pagina + 1)}>Next →</Link> : null}
           </nav>
         ) : null}
       </section>
@@ -161,7 +161,7 @@ export default function ListaDetalhePage({ params, searchParams }: { params: Par
   return (
     <main className={styles.container}>
       <div className={styles.interior}>
-        <Suspense fallback={<p className={styles.vazio}>Carregando lista musical...</p>}>
+        <Suspense fallback={<p className={styles.vazio}>Loading list…</p>}>
           <Conteudo params={params} searchParams={searchParams} />
         </Suspense>
       </div>

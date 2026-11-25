@@ -28,11 +28,11 @@ async function Conteudo({
       <div className={styles.cabecalho}>
         <div>
           
-          <h1>Explorar listas</h1>
+          <h1>Lists</h1>
           
         </div>
         <Link href="/listas" className={styles.linkPerfil}>
-          Minhas listas
+          My lists
         </Link>
       </div>
 
@@ -44,8 +44,8 @@ async function Conteudo({
         ) : resultado.dados.resultados.length === 0 ? (
           <p className={styles.vazio}>
             {pagina > 1
-              ? "Não há mais listas nesta página."
-              : "Nenhuma lista pública disponível ainda."}
+              ? "No more lists."
+              : "No public lists yet."}
           </p>
         ) : (
           <ul className={styles.grade}>
@@ -58,13 +58,13 @@ async function Conteudo({
                   <VitrineLista listaId={lista.id} titulo={lista.titulo} />
                   <span className={styles.visibilidade}>
                     {lista.total_itens} {lista.total_itens === 1
-                      ? "álbum" : "álbuns"}
+                      ? "album" : "albums"}
                   </span>
                   <h3>{lista.titulo}</h3>
                   
                 </Link>
                 <p className={styles.autorPublico}>
-                  Por{" "}
+                  By{" "}
                   <Link href={`/usuarios/${encodeURIComponent(lista.username)}`}>
                     {lista.nome_exibicao}
                   </Link>
@@ -78,14 +78,14 @@ async function Conteudo({
           (pagina > 1 || resultado.dados.tem_proxima) ? (
           <nav
             className={styles.paginacao}
-            aria-label="Páginas de listas públicas"
+            aria-label="Public list pages"
           >
             {pagina > 1 ? (
               <Link href={`/listas/explorar?pagina=${pagina - 1}`}>
                 Anterior
               </Link>
             ) : null}
-            <span>Página {pagina}</span>
+            <span>Page {pagina}</span>
             {resultado.dados.tem_proxima ? (
               <Link href={`/listas/explorar?pagina=${pagina + 1}`}>
                 Próxima
@@ -107,7 +107,7 @@ export default function ExplorarListasPage({
     <main className={styles.container}>
       <Suspense
         fallback={
-          <p className={styles.vazio}>Carregando listas públicas...</p>
+          <p className={styles.vazio}>Loading lists…</p>
         }
       >
         <Conteudo searchParams={searchParams} />

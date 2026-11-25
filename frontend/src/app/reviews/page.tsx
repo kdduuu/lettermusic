@@ -20,10 +20,10 @@ async function ConteudoReviews({ searchParams }: { searchParams: Parametros }) {
   return (
     <>
       <CardsReviews reviews={dados.resultados} apresentacao="editorial" />
-      {(pagina > 1 || dados.tem_proxima) ? <nav className={styles.paginacao} aria-label="Páginas de reviews">
-        {pagina > 1 ? <Link href={`/reviews?pagina=${pagina - 1}`}>Anterior</Link> : null}
-        <span>Página {pagina}</span>
-        {dados.tem_proxima && pagina < 10000 ? <Link href={`/reviews?pagina=${pagina + 1}`}>Próxima</Link> : null}
+      {(pagina > 1 || dados.tem_proxima) ? <nav className={styles.paginacao} aria-label="Review pages">
+        {pagina > 1 ? <Link href={`/reviews?pagina=${pagina - 1}`}>Previous</Link> : null}
+        <span>Page {pagina}</span>
+        {dados.tem_proxima && pagina < 10000 ? <Link href={`/reviews?pagina=${pagina + 1}`}>Next</Link> : null}
       </nav> : null}
     </>
   );
@@ -38,7 +38,7 @@ export default function ReviewsPage({ searchParams }: { searchParams: Parametros
         </div>
         
       </header>
-      <Suspense fallback={<p className={styles.mensagem}>Carregando reviews...</p>}>
+      <Suspense fallback={<p className={styles.mensagem}>Loading reviews…</p>}>
         <ConteudoReviews searchParams={searchParams} />
       </Suspense>
     </main>

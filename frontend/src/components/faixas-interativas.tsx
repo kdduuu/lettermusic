@@ -44,7 +44,7 @@ export function FaixasInterativas({
             <button
               type="button"
               onClick={() => abrir(faixa)}
-              aria-label={"Ver faixa " + faixa.titulo}
+              aria-label={"Open track " + faixa.titulo}
               className={styles.linha}
             >
               <span className={styles.numero}>{faixa.disco > 1 ? faixa.disco + "." : ""}{faixa.numero}</span>
@@ -65,7 +65,7 @@ export function FaixasInterativas({
         aria-labelledby="titulo-faixa-modal"
       >
         <div className={styles.card}>
-          <button type="button" className={styles.fechar} onClick={fechar} aria-label="Fechar">×</button>
+          <button type="button" className={styles.fechar} onClick={fechar} aria-label="Close">×</button>
           {selecionada ? (
             <>
               <CapaAlbum url={capa} titulo={album} className={styles.capa} />
@@ -76,7 +76,7 @@ export function FaixasInterativas({
                 <p className={styles.tempo}>{album}{duracao(selecionada.duracao_ms) ? ` · ${duracao(selecionada.duracao_ms)}` : ""}</p>
               </div>
             </>
-          ) : <span id="titulo-faixa-modal" className={styles.oculto}>Faixa</span>}
+          ) : <span id="titulo-faixa-modal" className={styles.oculto}>Track</span>}
         </div>
       </dialog>
     </>
