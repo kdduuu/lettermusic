@@ -15,7 +15,7 @@ function formatarNota(nota: number) {
 
 function formatarData(data: string) {
   const partes = /^(\d{4})-(\d{2})-(\d{2})/.exec(data);
-  return partes ? `${partes[3]}/${partes[2]}/${partes[1]}` : "";
+  return partes ? `${partes[1]}-${partes[2]}-${partes[3]}` : "";
 }
 
 export async function DestaquesMusicais({ tipo }: { tipo: TipoDestaque }) {

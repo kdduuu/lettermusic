@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { requisitarBackend } from "@/lib/backend";
 import { CapaAlbum } from "@/components/capa-album";
 import { obterCapaAlbum } from "@/lib/catalogo";
+import { TentarNovamente } from "@/components/tentar-novamente";
+import { MBID_VALIDO } from "@/lib/estado-album";
 import { obterTokenSessao, obterUsuarioAutenticado } from "@/lib/sessao";
 import styles from "./page.module.css";
 
@@ -85,7 +87,7 @@ function AlbumLink({ registro, children }: { registro: Registro; children: React
 }
 
 async function Collection({ registros, tipo }: { registros: Registro[]; tipo: Categoria["tipo"] }) {
-  const ids = [...new Set(registros.flatMap(r => r.id_musicbrainz ? [r.id_musicbrainz] : []))];
+  const ids = [...new Set(registros.flatMap(r => r.id_musicbrainz && MBID_VALIDO.test(r.id_musicbrainz) ? [r.id_musicbrainz] : []))];
   const capas = new Map(await Promise.all(ids.map(async id => [id, await obterCapaAlbum(id)] as const)));
   const textual = tipo === "reviews" || tipo === "escutas";
   return (
@@ -132,7 +134,7 @@ async function ConteudoBiblioteca({ searchParams }: { searchParams: Parametros }
         ))}
       </nav>
       <section className={styles.libraryContent} aria-label={categoria.titulo}>
-        {itens === null ? <p role="alert" className={styles.mensagem}>Unable to load your collection. Please try again.</p>
+        {itens === null ? <p role="alert" className={styles.mensagem}>Unable to load your collection. <TentarNovamente /></p>
           : !itens.length ? <p className={styles.mensagem}>Nothing here yet.</p>
           : <Suspense fallback={<p className={styles.mensagem}>Loading covers…</p>}>
               <Collection registros={itens} tipo={categoria.tipo} />

@@ -82,13 +82,13 @@ async function Conteudo({
           >
             {pagina > 1 ? (
               <Link href={`/listas/explorar?pagina=${pagina - 1}`}>
-                Anterior
+                Previous
               </Link>
             ) : null}
             <span>Page {pagina}</span>
             {resultado.dados.tem_proxima ? (
               <Link href={`/listas/explorar?pagina=${pagina + 1}`}>
-                Próxima
+                Next
               </Link>
             ) : null}
           </nav>

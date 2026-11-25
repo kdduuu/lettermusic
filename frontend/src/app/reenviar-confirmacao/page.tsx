@@ -7,7 +7,7 @@ export default function ReenviarConfirmacaoPage() {
     <main className={styles.container}>
       <h1>Confirm email</h1>
       <p className={styles.introducao}>
-        Didn't receive the email? Request another link.
+        Missing your email? Request another link.
       </p>
       <FormularioReenviar />
       <p className={styles.alternativa}>

@@ -1,12 +1,13 @@
 # Lettermusic
 
+[English README](README.en.md)
+
 Rede social de música para descobrir álbuns, registrar escutas,
 avaliar, escrever reviews e compartilhar listas. Inspirada em
 diários culturais como o Letterboxd. **Não é streaming.**
 
 **Status:** aplicação funcional em desenvolvimento local.
-F08.6 em fechamento; refinamento visual (F09) e publicação
-(F10) ainda pendentes. Não considerada pronta para produção.
+F09 em consolidação editorial; validação funcional e publicação ainda pendentes. Não considerada pronta para produção. A interface V1 adota inglês; os contratos da API e a documentação técnica permanecem em português.
 
 ## Tecnologias
 

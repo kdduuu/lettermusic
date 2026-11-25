@@ -15,7 +15,7 @@ function anoCadastro(data: string): string {
 }
 function dataResumida(data: string): string {
   const partes = /^(\d{4})-(\d{2})-(\d{2})/.exec(data);
-  return partes ? partes[3] + "/" + partes[2] + "/" + partes[1] : "";
+  return partes ? partes[1] + "-" + partes[2] + "-" + partes[3] : "";
 }
 
 async function CapasRecentes({ albuns }: { albuns: AlbumRecente[] }) {
@@ -117,7 +117,7 @@ async function ConteudoPerfil({ params }: { params: ParametrosPerfil }) {
             </div>
           </div>
           {perfil.reviews_recentes.length ? (
-            <Suspense fallback={<p className={styles.vazio}>Carregando reviews...</p>}>
+            <Suspense fallback={<p className={styles.vazio}>Loading reviews…</p>}>
               <ReviewsPerfil reviews={perfil.reviews_recentes} />
             </Suspense>
           ) : <p className={styles.vazio}>No reviews yet.</p>}

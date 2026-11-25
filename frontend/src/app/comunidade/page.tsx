@@ -8,7 +8,7 @@ import styles from "./page.module.css";
 
 function formatarData(data: string) {
   const partes = /^(\d{4})-(\d{2})-(\d{2})/.exec(data);
-  return partes ? `${partes[3]}/${partes[2]}/${partes[1]}` : "";
+  return partes ? `${partes[1]}-${partes[2]}-${partes[3]}` : "";
 }
 function plural(n: number, singular: string, pluralTexto: string) { return `${n} ${n === 1 ? singular : pluralTexto}`; }
 function perfil(username: string) {

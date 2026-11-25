@@ -22,7 +22,7 @@ export function FormularioAvaliacao({ id, estado }: { id: string; estado: Estado
           <select id={`nota-${id}`} name="nota" defaultValue={estado.nota?.toString() ?? ""} required>
             <option value="" disabled>Choose a rating</option>
             {NOTAS.map((nota) => (
-              <option key={nota} value={nota}>{nota.toLocaleString("pt-BR")} ★</option>
+              <option key={nota} value={nota}>{nota.toLocaleString("en-US")} ★</option>
             ))}
           </select>
           <button disabled={salvandoNota} type="submit">
