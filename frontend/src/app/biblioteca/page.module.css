@@ -132,5 +132,19 @@
 .collection > li { background:transparent; border:0; padding:0; }
 .diary[data-category="reviews"] > li { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:12px 0; }
 .diary { gap:12px; }
-.diary[data-category="escutas"] > li { background:transparent; border:0; padding:8px 0; }
 .collectionInfo { padding-top:7px; }
+
+/* Listening diary — one chronological entry per play, grouped by local date. */
+.history { max-width:840px; display:grid; gap:30px; }
+.historyDay { display:grid; grid-template-columns:190px minmax(0,1fr); gap:24px; align-items:start; border-bottom:1px solid var(--lm-line); padding-bottom:20px; }
+.historyDay:last-child { border-bottom:0; padding-bottom:0; }
+.historyDay h2 { font:700 20px/1.35 var(--lm-serif); color:var(--lm-text); margin:10px 0 0; }
+.historyEntries { list-style:none; margin:0; padding:0; display:grid; gap:14px; min-width:0; }
+.historyEntries li { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:16px; min-width:0; }
+.historyEntries .albumVitrine { display:grid; grid-template-columns:62px minmax(0,1fr); align-items:center; gap:13px; }
+.historyEntries .capaVitrine { border-radius:var(--lm-cover-radius); }
+.historyEntries .collectionInfo { padding:0; }
+.historyEntries .collectionInfo strong { display:block; margin:0; }
+.historyEntries .collectionInfo span { margin-top:3px; }
+.historyTime { font-size:12px; color:var(--lm-muted); font-variant-numeric:tabular-nums; white-space:nowrap; }
+@media(max-width:650px) { .history { gap:23px; } .historyDay { grid-template-columns:1fr; gap:14px; padding-bottom:20px; } .historyDay h2 { margin:0; font-size:18px; } .historyEntries .albumVitrine { grid-template-columns:54px minmax(0,1fr); gap:10px; } .historyEntries li { gap:10px; } }

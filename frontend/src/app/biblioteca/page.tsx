@@ -68,14 +68,6 @@ function Complemento({ registro, tipo }: { registro: Registro; tipo: Categoria["
   if (tipo === "reviews" && typeof registro.texto === "string") {
     return <p className={styles.reviewTexto}>{registro.texto}</p>;
   }
-  if (tipo === "escutas" && typeof registro.ouvida_em === "string") {
-    const data = new Date(registro.ouvida_em);
-    return !Number.isNaN(data.getTime()) ? (
-      <span className={styles.detalhe}>
-        {new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "America/Sao_Paulo" }).format(data)}
-      </span>
-    ) : null;
-  }
   return null;
 }
 
@@ -86,10 +78,63 @@ function AlbumLink({ registro, children }: { registro: Registro; children: React
     : <div className={styles.albumVitrine}>{children}</div>;
 }
 
+const historyDate = new Intl.DateTimeFormat("en-US", {
+  year: "numeric", month: "long", day: "numeric", weekday: "long", timeZone: "America/Sao_Paulo",
+});
+const historyDayKey = new Intl.DateTimeFormat("en-CA", {
+  year: "numeric", month: "2-digit", day: "2-digit", timeZone: "America/Sao_Paulo",
+});
+const historyTime = new Intl.DateTimeFormat("en-GB", {
+  hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: "America/Sao_Paulo",
+});
+
+function listeningDate(registro: Registro): Date | null {
+  if (typeof registro.ouvida_em !== "string") return null;
+  const date = new Date(registro.ouvida_em);
+  return Number.isFinite(date.getTime()) ? date : null;
+}
+
+function History({ registros, capas }: { registros: Registro[]; capas: Map<string, string | null> }) {
+  // The API already orders events by listening timestamp and ID, descending.
+  // Group only this page; never merge or remove repeated listens.
+  const days = new Map<string, { label: string; records: Registro[] }>();
+  for (const registro of registros) {
+    const date = listeningDate(registro);
+    const parts = date ? historyDayKey.formatToParts(date) : [];
+    const key = date ? ["year", "month", "day"].map(type => parts.find(part => part.type === type)?.value ?? "").join("-") : "unknown";
+    const group = days.get(key);
+    if (group) group.records.push(registro);
+    else days.set(key, { label: date ? historyDate.format(date) : "Unknown date", records: [registro] });
+  }
+  return <div className={styles.history}>
+    {[...days].map(([day, group]) => (
+      <section className={styles.historyDay} key={day} aria-labelledby={"history-"+day}>
+        <h2 id={"history-"+day}>{day === "unknown" ? group.label : <time dateTime={day}>{group.label}</time>}</h2>
+        <ol className={styles.historyEntries}>
+          {group.records.map(registro => {
+            const date = listeningDate(registro);
+            return <li key={registro.id}>
+              <AlbumLink registro={registro}>
+                <CapaAlbum url={capas.get(registro.id_musicbrainz ?? "") ?? null} titulo={registro.titulo ?? "Album"} className={styles.capaVitrine}/>
+                <div className={styles.collectionInfo}>
+                  <strong>{registro.titulo ?? "Untitled album"}</strong>
+                  <span>{registro.artista ?? "Unknown artist"}</span>
+                </div>
+              </AlbumLink>
+              {date ? <time className={styles.historyTime} dateTime={date.toISOString()}>{historyTime.format(date)}</time> : null}
+            </li>;
+          })}
+        </ol>
+      </section>
+    ))}
+  </div>;
+}
+
 async function Collection({ registros, tipo }: { registros: Registro[]; tipo: Categoria["tipo"] }) {
   const ids = [...new Set(registros.flatMap(r => r.id_musicbrainz && MBID_VALIDO.test(r.id_musicbrainz) ? [r.id_musicbrainz] : []))];
   const capas = new Map(await Promise.all(ids.map(async id => [id, await obterCapaAlbum(id)] as const)));
-  const textual = tipo === "reviews" || tipo === "escutas";
+  if (tipo === "escutas") return <History registros={registros} capas={capas} />;
+  const textual = tipo === "reviews";
   return (
     <ul className={textual ? styles.diary : styles.collection} data-category={tipo}>
       {registros.map(registro => (

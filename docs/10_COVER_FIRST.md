@@ -4,3 +4,6 @@ User feedback after F09.15: album and artist art must breathe, without outer car
 
 ## Follow-up
 Remove outer review cards everywhere: Discover, Reviews, Community review activity, profile, album detail and Library reviews. Keep equal review hierarchy, subtle separators, red ratings and existing collection cards. Other Community activity and album interaction panel remain unchanged.
+
+## Final visual adjustments
+Unify every Recent activity item into an unboxed feed with equal alignment and subtle separators; preserve the right Community column. History becomes a date-grouped chronological diary (America/Sao_Paulo, same timezone as before), one row per listening event with the recorded local time. Keep API ordering, pagination, repeated plays and other Library tabs unchanged. A date may continue on the next page. No backend changes.

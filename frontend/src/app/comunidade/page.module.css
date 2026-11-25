@@ -162,9 +162,20 @@
 .capaFeed,.capa { border-radius:var(--lm-cover-radius); }
 @media(max-width:900px) { .layout { grid-template-columns:1fr; gap:var(--lm-section); } .lateral { padding-top:20px; border-top:1px solid var(--lm-line); } }
 
-.atividade { background:var(--lm-panel); border:1px solid var(--lm-line); padding:14px; border-radius:7px; margin-bottom:10px; }
+.atividade { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:17px 0; margin:0; }
 .membros li { background:var(--lm-panel); border:1px solid var(--lm-line); padding:10px; border-radius:6px; margin-bottom:8px; }
 .obras li { background:transparent; border:0; padding:9px 0; margin-bottom:4px; }
 .cabecalho { border-bottom:0; }
-/* Written reviews are editorial entries, not cards. Other activity is unchanged. */
-.atividade[data-activity="review"] { background:transparent; border:0; border-bottom:1px solid var(--lm-line); border-radius:0; padding:14px 0 18px; margin-bottom:10px; }
+
+/* A continuous social feed: equal alignment for ratings, reviews and lists. */
+.atividade:first-child { padding-top:8px; }
+.atividade:last-child { border-bottom:0; }
+.atividade > article { min-width:0; }
+.atividadeMusical,.listaAtividade { display:grid; grid-template-columns:70px minmax(0,1fr); align-items:start; gap:13px; padding:0; }
+.atividadeMusical > div,.listaAtividade > div { min-width:0; }
+.listaAtividade > :first-child { width:70px; height:70px; min-width:0; }
+.atividade .meta:first-child { margin-bottom:8px; }
+.atividadeMusical p,.listaAtividade p { margin-bottom:4px; }
+.atividadeMusical .resumo { margin:7px 0 0; }
+.atividadeMusical .nota { margin:5px 0 0; }
+@media(max-width:560px) { .atividade { gap:10px; padding:15px 0; } .atividadeMusical,.listaAtividade { grid-template-columns:62px minmax(0,1fr); gap:11px; } .atividadeMusical .capaFeed,.listaAtividade > :first-child { width:62px; height:62px; } }
