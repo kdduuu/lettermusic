@@ -161,3 +161,7 @@
 .atividadeMusical .resumo { border-left:0; padding-left:0; margin-top:8px; color:var(--lm-text); }
 .capaFeed,.capa { border-radius:var(--lm-cover-radius); }
 @media(max-width:900px) { .layout { grid-template-columns:1fr; gap:var(--lm-section); } .lateral { padding-top:20px; border-top:1px solid var(--lm-line); } }
+
+.atividade { background:var(--lm-panel); border:1px solid var(--lm-line); padding:14px; border-radius:7px; margin-bottom:10px; }
+.membros li,.obras li { background:var(--lm-panel); border:1px solid var(--lm-line); padding:10px; border-radius:6px; margin-bottom:8px; }
+.cabecalho { border-bottom:0; }

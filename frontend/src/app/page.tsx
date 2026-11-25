@@ -1,3 +1,4 @@
+import { UiIcon } from "@/components/ui-icon";
 import Link from "next/link";
 import { Suspense } from "react";
 import { CapaAlbum } from "@/components/capa-album";
@@ -34,7 +35,7 @@ async function ListasDaComunidade() {
     <section className={styles.descobertaSecao} aria-labelledby="listas-comunidade">
       <div className={styles.tituloDescoberta}>
         <h2 id="listas-comunidade">Lists</h2>
-        <Link href="/listas/explorar">View all</Link>
+        <Link href="/listas/explorar" aria-label="All lists" title="All lists"><UiIcon name="arrow-right"/></Link>
       </div>
       {resultado.dados.resultados.length ? <ul className={styles.listasHome}>
         {resultado.dados.resultados.slice(0, 3).map(lista => (
@@ -58,7 +59,7 @@ export default function Home() {
   return <main className={styles.container + " " + styles.magazineHome}>
     <header className={styles.magazineHeader}>
       <h1>Discover</h1>
-      <Link href="/albuns" className={styles.discoverLink}>Browse albums ↗</Link>
+      <Link href="/albuns" className={styles.discoverLink} aria-label="Browse albums" title="Browse albums"><UiIcon name="arrow-up-right"/></Link>
     </header>
     <section aria-label="Featured albums">
       <Suspense fallback={<p className={styles.message}>Loading albums…</p>}><DestaquesEditoriais /></Suspense>
@@ -69,7 +70,7 @@ export default function Home() {
     </section>
     <div className={styles.editorialColumns + " " + styles.socialCards}>
       <section className={styles.magazineSection} aria-labelledby="reviews-recentes">
-        <div className={styles.tituloDescoberta}><h2 id="reviews-recentes">Reviews</h2><Link href="/reviews">View all ↗</Link></div>
+        <div className={styles.tituloDescoberta}><h2 id="reviews-recentes">Reviews</h2><Link href="/reviews" aria-label="All reviews" title="All reviews"><UiIcon name="arrow-right"/></Link></div>
         <Suspense fallback={<p className={styles.message}>Loading reviews…</p>}><ReviewsRecentes /></Suspense>
       </section>
       <Suspense fallback={<p className={styles.message}>Loading lists…</p>}><ListasDaComunidade /></Suspense>

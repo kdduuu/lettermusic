@@ -128,3 +128,7 @@
 .diary li { border-color:var(--lm-line); }
 .diary .reviewTexto { font-size:14px; line-height:1.65; white-space:pre-wrap; }
 @media(max-width:560px) { .libraryTabs { gap:4px 16px; } }
+
+.collection > li,.diary > li { background:var(--lm-panel); border:1px solid var(--lm-line); padding:8px; border-radius:7px; }
+.diary { gap:12px; }
+.diary > li { padding:12px; }

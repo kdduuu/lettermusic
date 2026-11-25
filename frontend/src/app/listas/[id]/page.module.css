@@ -279,3 +279,7 @@
 .editPopover { position:relative; }
 .editPanel { position:absolute; top:46px; right:0; z-index:5; width:min(340px,calc(100vw - 40px)); padding:16px; border:1px solid var(--lm-line); border-radius:7px; background:var(--lm-panel); box-shadow:0 12px 32px #0008; }
 .acoesAlbum button svg { display:block; width:15px; height:15px; }
+.cardAlbum { background:var(--lm-panel); border:1px solid var(--lm-line); padding:7px; border-radius:6px; }
+.numero { top:14px; left:14px; }
+.detalheAlbum { padding:6px 3px 4px; }
+.acoesAlbum { padding:0 3px 4px; }

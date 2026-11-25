@@ -23,3 +23,12 @@
 .discografia { margin-top:0; padding-top:var(--lm-section); border-color:var(--lm-line); }
 .discografia h2 { font-size:28px; }
 @media(max-width:560px) { .artistaHero { padding:8px 0 18px; } }
+
+.releaseTabs { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 14px; }
+.releaseTabs a { display:inline-flex; align-items:center; min-height:36px; padding:6px 12px; border:1px solid var(--lm-line); border-radius:5px; color:var(--lm-muted); text-decoration:none; }
+.releaseTabs a[aria-current="page"] { color:var(--lm-text); background:var(--lm-panel-raised); border-color:var(--lm-accent); }
+.releaseTabs a:hover { color:var(--lm-text); }
+.sort { display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin:0 0 24px; color:var(--lm-muted); font-size:12px; }
+.sortButton { width:36px; height:36px; background:var(--lm-panel); color:var(--lm-text); border:1px solid var(--lm-line); border-radius:5px; cursor:pointer; font-size:20px; }
+.releaseGroup { margin:0 0 28px; }
+.releaseGroup > h3 { font:700 23px/1.2 var(--lm-serif); margin:0 0 13px; }

@@ -1,3 +1,4 @@
+import { UiIcon } from "@/components/ui-icon";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -31,7 +32,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
       </div>
 
       <details className={styles.nova}>
-        <summary>+ New list</summary>
+        <summary aria-label="New list" title="New list"><UiIcon name="plus"/></summary>
         <div className={styles.formulario}><FormularioCriarLista /></div>
       </details>
 

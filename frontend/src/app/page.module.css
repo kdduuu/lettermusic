@@ -368,3 +368,7 @@
 .socialCards .listasHome li,.socialCards .listasHome li:first-child { border:1px solid var(--lm-line); border-radius:var(--lm-card-radius); background:var(--lm-panel); padding:12px; }
 @media(max-width:760px) { .featureGrid { grid-template-columns:1fr 1fr; } .featureGrid[data-count="3"] .featureCard:first-child { grid-column:1/-1; } .featureCard { min-height:150px; } .socialCards { grid-template-columns:1fr; } }
 @media(max-width:420px) { .featureGrid,.featureGrid[data-count="2"] { grid-template-columns:1fr; } .featureCard { min-height:165px; } }
+
+.magazineHeader .discoverLink,.magazineHome .tituloDescoberta > a { display:inline-grid; place-items:center; width:34px; height:34px; border-radius:5px; color:var(--lm-muted); }
+.magazineHeader .discoverLink:hover,.magazineHome .tituloDescoberta > a:hover { background:var(--lm-panel); color:var(--lm-text); }
+.buscaLista button { display:grid; place-items:center; }

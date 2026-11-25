@@ -1,3 +1,4 @@
+import { UiIcon } from "@/components/ui-icon";
 import Link from "next/link";
 import { Suspense } from "react";
 import { sair } from "@/app/acoes";
@@ -31,7 +32,7 @@ export function SearchForm({ variant = "header" }: SearchFormProps) {
         required
         placeholder="Album, artist or track…"
       />
-      <button type="submit">Search</button>
+      <button type="submit" title="Search" aria-label="Search"><UiIcon name="search" size={17}/></button>
     </form>
   );
 }

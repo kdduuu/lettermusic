@@ -112,3 +112,7 @@
 .notaGaleria { color:var(--lm-gold); }
 .linkCapaGaleria:hover .capaGaleria,.linkCapaGaleria:focus-visible .capaGaleria { transform:none; box-shadow:none; }
 .linkCapaGaleria:hover { opacity:.88; }
+
+.resultados > li { background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:6px; padding:12px; margin-bottom:6px; }
+.albumGaleria { background:var(--lm-panel); border:1px solid var(--lm-line); border-radius:6px; padding:7px; }
+.dadosGaleria { margin:8px 2px 4px; }

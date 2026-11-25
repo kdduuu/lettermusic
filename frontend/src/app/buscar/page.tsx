@@ -1,3 +1,4 @@
+import { UiIcon } from "@/components/ui-icon";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Paginacao, ResultadosMusicais } from "@/components/exploracao-musical";
@@ -48,7 +49,7 @@ async function Conteudo({ searchParams }: { searchParams: Parametros }) {
         {categoria !== "todos" ? <input type="hidden" name="categoria" value={categoria} /> : null}
         <div>
           <input id="busca-exploracao" name="termo" type="search" defaultValue={termo} required minLength={2} maxLength={100} placeholder="Album, artist or track…" />
-          <button type="submit">Search</button>
+          <button type="submit" title="Search" aria-label="Search"><UiIcon name="search" size={18}/></button>
         </div>
       </form>
 
