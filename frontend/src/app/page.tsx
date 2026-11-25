@@ -9,33 +9,22 @@ import { VitrineLista } from "@/components/vitrine-lista";
 import { DestaquesMusicais, ReviewsRecentes } from "@/components/feed-musical";
 import styles from "./page.module.css";
 
-async function DestaqueReal() {
-  // Destaque um registro real que ainda não esteja na vitrine dos mais ouvidos.
-  // Se o catálogo tiver poucas obras, usamos a mais ouvida como alternativa.
-  const [ouvintes, catalogo] = await Promise.all([
-    consultarDestaques("mais-ouvidas"),
-    catalogoLocal("", "todos", 1),
+async function DestaquesEditoriais() {
+  const [populares, catalogo] = await Promise.all([
+    consultarDestaques("mais-ouvidas"), catalogoLocal("", "todos", 1),
   ]);
-  const idsEmDestaque = new Set(ouvintes.ok ? ouvintes.dados.map((obra) => obra.id_musicbrainz) : []);
-  const obra = (catalogo.ok
-    ? catalogo.dados.resultados.find((item) => !idsEmDestaque.has(item.id_musicbrainz))
-    : null) ?? (ouvintes.ok ? ouvintes.dados[0] : null);
-  if (!obra) {
-    return <p className={styles.destaqueVazio}>No featured album yet.</p>;
-  }
-  const capa = await obterCapaAlbum(obra.id_musicbrainz);
-  return (
-    <Link className={styles.destaqueObra} href={"/albuns/" + encodeURIComponent(obra.id_musicbrainz)}>
-      <CapaAlbum url={capa} titulo={obra.titulo} className={styles.destaqueCapa} />
-      <div className={styles.destaqueInfo}>
-        
-        <span>Featured</span>
-        <h2>{obra.titulo}</h2>
-        <p>{obra.artista ?? "Unknown artist"}</p>
-        
-      </div>
-    </Link>
-  );
+  const popularesIds = new Set(populares.ok ? populares.dados.map(o => o.id_musicbrainz) : []);
+  const obras = catalogo.ok ? catalogo.dados.resultados : [];
+  const candidatos = [...obras.filter(o => !popularesIds.has(o.id_musicbrainz)), ...obras, ...(populares.ok ? populares.dados : [])];
+  const selecionados = [...new Map(candidatos.map(o => [o.id_musicbrainz, o])).values()].slice(0, 3);
+  if (!selecionados.length) return <p className={styles.message}>{catalogo.ok ? "No albums yet." : catalogo.mensagem}</p>;
+  const capas = await Promise.all(selecionados.map(o => obterCapaAlbum(o.id_musicbrainz)));
+  return <div className={styles.featureGrid} data-count={selecionados.length}>
+    {selecionados.map((obra,i) => <Link className={styles.featureCard} key={obra.id_musicbrainz} href={"/albuns/" + encodeURIComponent(obra.id_musicbrainz)}>
+      <CapaAlbum url={capas[i]} titulo={obra.titulo} className={styles.featureArt} />
+      <div className={styles.featureCopy}><h2>{obra.titulo}</h2><p>{obra.artista ?? "Unknown artist"}</p></div>
+    </Link>)}
+  </div>;
 }
 
 async function ListasDaComunidade() {
@@ -64,46 +53,26 @@ async function ListasDaComunidade() {
   );
 }
 
+
 export default function Home() {
-  return (
-    <main className={`${styles.container} ${styles.editorialHome}`}>
-      <section className={styles.hero + " " + styles.heroEditorial} aria-labelledby="titulo-descobrir">
-        <div className={styles.heroMain}>
-          
-          <h1 id="titulo-descobrir">Discover</h1>
-          
-          <Link className={styles.discoverLink} href="/albuns">Browse albums <span aria-hidden="true">↗</span></Link>
-        </div>
-        <div className={styles.heroAside}>
-          <Suspense fallback={<p className={styles.destaqueVazio}>Loading album…</p>}>
-            <DestaqueReal />
-          </Suspense>
-        </div>
+  return <main className={styles.container + " " + styles.magazineHome}>
+    <header className={styles.magazineHeader}>
+      <h1>Discover</h1>
+      <Link href="/albuns" className={styles.discoverLink}>Browse albums ↗</Link>
+    </header>
+    <section aria-label="Featured albums">
+      <Suspense fallback={<p className={styles.message}>Loading albums…</p>}><DestaquesEditoriais /></Suspense>
+    </section>
+    <section className={styles.magazineSection} aria-labelledby="mais-ouvidas">
+      <div className={styles.tituloDescoberta}><h2 id="mais-ouvidas">Most played</h2></div>
+      <Suspense fallback={<p className={styles.message}>Loading albums…</p>}><DestaquesMusicais tipo="mais-ouvidas" /></Suspense>
+    </section>
+    <div className={styles.editorialColumns + " " + styles.socialCards}>
+      <section className={styles.magazineSection} aria-labelledby="reviews-recentes">
+        <div className={styles.tituloDescoberta}><h2 id="reviews-recentes">Reviews</h2><Link href="/reviews">View all ↗</Link></div>
+        <Suspense fallback={<p className={styles.message}>Loading reviews…</p>}><ReviewsRecentes /></Suspense>
       </section>
-      <section className={styles.descobertaSecao} aria-labelledby="mais-ouvidas">
-        <div className={styles.shelfInfo}>
-          <h2 id="mais-ouvidas">Most played</h2>
-          
-        </div>
-        <Suspense fallback={<p className={styles.message}>Loading albums…</p>}>
-          <DestaquesMusicais tipo="mais-ouvidas" />
-        </Suspense>
-      </section>
-      <div className={styles.editorialColumns}>
-      <section className={styles.descobertaSecao} aria-labelledby="reviews-recentes">
-        <div className={styles.tituloDescoberta}>
-          <div className={styles.shelfInfo}>
-            <h2 id="reviews-recentes">Reviews</h2>
-            
-          </div>
-          <Link href="/reviews">View all</Link>
-        </div>
-        <Suspense fallback={<p className={styles.message}>Loading reviews…</p>}>
-          <ReviewsRecentes />
-        </Suspense>
-      </section>
-      <Suspense fallback={null}><ListasDaComunidade /></Suspense>
-      </div>
-    </main>
-  );
+      <Suspense fallback={<p className={styles.message}>Loading lists…</p>}><ListasDaComunidade /></Suspense>
+    </div>
+  </main>;
 }

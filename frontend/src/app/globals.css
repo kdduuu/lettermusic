@@ -123,3 +123,5 @@ input, select, textarea { max-width: 100%; }
 body { background:var(--lm-bg); }
 a { text-underline-offset:3px; }
 @media(max-width:650px) { :root { --lm-gutter:12px; --lm-section:26px; } }
+
+:root { --lm-card-radius:7px; }
