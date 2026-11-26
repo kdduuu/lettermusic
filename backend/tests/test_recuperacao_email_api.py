@@ -304,3 +304,22 @@ def test_envio_indisponivel_sem_smtp(ambiente, monkeypatch):
 
     resposta = solicitar(cliente)
     assert resposta.status_code == 503
+
+
+def test_cadastro_obrigatorio_sem_smtp_nao_cria_conta(ambiente, monkeypatch):
+    from backend.app.models import Usuario
+
+    cliente, mensagens, motor = ambiente
+    monkeypatch.setenv("EMAIL_REQUIRE_VERIFICATION", "true")
+    monkeypatch.delenv("SMTP_HOST", raising=False)
+    quantidade = len(mensagens)
+    resposta = cliente.post("/usuarios", json={
+        "username": "sem_smtp",
+        "nome_exibicao": "Sem SMTP",
+        "email": "sem-smtp@example.com",
+        "senha": "SenhaOriginal#2026",
+    })
+    assert resposta.status_code == 503
+    assert len(mensagens) == quantidade
+    with Session(motor) as sessao:
+        assert sessao.scalar(select(Usuario).where(Usuario.username == "sem_smtp")) is None

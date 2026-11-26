@@ -310,3 +310,21 @@ class TokenConta(Base):
     criado_em: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=agora_utc,
     )
+
+
+class FavoritoPerfil(Base):
+    """Selecao publica e ordenada, independente da biblioteca privada."""
+
+    __tablename__ = "favoritos_perfil"
+    __table_args__ = (
+        UniqueConstraint("usuario_id", "obra_id", name="uq_favoritos_perfil_obra"),
+        CheckConstraint("posicao BETWEEN 1 AND 4", name="ck_favoritos_perfil_posicao"),
+    )
+
+    usuario_id: Mapped[int] = mapped_column(
+        ForeignKey("usuarios.id", ondelete="CASCADE"), primary_key=True,
+    )
+    posicao: Mapped[int] = mapped_column(Integer, primary_key=True)
+    obra_id: Mapped[int] = mapped_column(
+        ForeignKey("obras.id", ondelete="CASCADE")
+    )

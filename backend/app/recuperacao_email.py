@@ -16,7 +16,7 @@ from time import monotonic
 from urllib.parse import urlsplit
 
 from fastapi import HTTPException
-from sqlalchemy import update
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from backend.app.models import TokenConta, Usuario
@@ -149,12 +149,37 @@ def consumir_token(
     if not re.fullmatch(r"[A-Za-z0-9_-]{43}", segredo):
         return None
 
+    # Descobre o dono sem bloquear o token. Todas as operacoes que
+    # alteram conta e tokens devem bloquear primeiro Usuario, depois TokenConta.
+    dono = sessao.scalar(
+        select(TokenConta.usuario_id).where(
+            TokenConta.token_hash == digest(segredo),
+            TokenConta.finalidade == finalidade,
+            TokenConta.usado_em.is_(None),
+            TokenConta.expira_em > agora_utc(),
+        )
+    )
+    if dono is None:
+        sessao.rollback()
+        return None
+
+    usuario = sessao.scalar(
+        select(Usuario).where(Usuario.id == dono)
+        .with_for_update().execution_options(populate_existing=True)
+    )
+    if usuario is None:
+        sessao.rollback()
+        return None
+
+    # Revalida depois de obter o bloqueio: outro pedido pode ter
+    # consumido ou invalidado o token enquanto aguardavamos.
     instante = agora_utc()
 
     # UPDATE atomico: apenas a primeira requisicao consome o token.
     consulta = (
         update(TokenConta)
         .where(
+            TokenConta.usuario_id == dono,
             TokenConta.token_hash == digest(segredo),
             TokenConta.finalidade == finalidade,
             TokenConta.usado_em.is_(None),
@@ -170,7 +195,7 @@ def consumir_token(
         sessao.rollback()
         return None
 
-    return sessao.get(Usuario, usuario_id)
+    return usuario
 
 
 def redefinir_senha(sessao: Session, segredo: str, nova_senha: str):
@@ -232,21 +257,21 @@ def enviar_mensagem(destinatario, finalidade, segredo):
 
     if finalidade == "senha":
         endereco = f"{base}/redefinir-senha?token={segredo}"
-        titulo = "Lettermusic | Redefinir senha"
+        titulo = "Lettermusic | Reset your password"
         texto = (
-            "Recebemos uma solicitacao de recuperacao de senha.\n\n"
-            f"Abra o link: {endereco}\n\n"
-            "Este link expira em 30 minutos e pode ser usado uma vez.\n"
-            "Se voce nao solicitou, ignore esta mensagem."
+            "We received a request to reset your password.\n\n"
+            f"Reset your password: {endereco}\n\n"
+            "This link expires in 30 minutes and can only be used once.\n"
+            "If you did not request this, ignore this email."
         )
     else:
         endereco = f"{base}/confirmar-email?token={segredo}"
-        titulo = "Lettermusic | Confirmar e-mail"
+        titulo = "Lettermusic | Confirm your email"
         texto = (
-            "Confirme seu e-mail no Lettermusic.\n\n"
-            f"Abra o link: {endereco}\n\n"
-            "Este link expira em 24 horas e pode ser usado uma vez.\n"
-            "Se voce nao criou esta conta, ignore a mensagem."
+            "Confirm your email address for Lettermusic.\n\n"
+            f"Confirm your email: {endereco}\n\n"
+            "This link expires in 24 hours and can only be used once.\n"
+            "If you did not create this account, ignore this email."
         )
 
     mensagem = EmailMessage()

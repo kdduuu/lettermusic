@@ -18,3 +18,5 @@ Use compact calendar-like day number and abbreviated month/year in History; pres
 - Correct discography global ordering and verify release classifications across paginated catalog data.
 - Investigate the persistent Next.js development '1 Issue' before release; verify actual cause rather than hiding the indicator.
 - Exercise album interactions, half-star ratings, review editing/deletion, repeated listening, list ownership/privacy, account flows and email templates. Run backend and frontend checks, browser validation and deployment review.
+
+F09 visual approved; consolidated in main via PR #14. F10.2 implements the public selection on a dedicated branch, pending migration and validation.

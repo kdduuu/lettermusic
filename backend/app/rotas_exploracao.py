@@ -58,8 +58,12 @@ def discografia(
     pagina: int = Query(default=1, ge=1, le=1000),
     limite: int = Query(default=12, ge=1, le=24),
     tipo: ex.TipoDiscografia = "todos",
+    ordem: ex.OrdemDiscografia = "catalogo",
 ):
-    return consultar(ex.consultar_discografia, str(mbid), pagina, limite, tipo)
+    try:
+        return consultar(ex.consultar_discografia, str(mbid), pagina, limite, tipo, ordem)
+    except ex.DiscografiaExtensa:
+        raise HTTPException(422, "Discografia extensa para ordenacao por data.") from None
 
 
 @router.get("/albuns/{mbid}/faixas", response_model=ex.FaixasAlbum)

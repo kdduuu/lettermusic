@@ -8,7 +8,7 @@ import { NOME_COOKIE_SESSAO, obterTokenSessao } from "@/lib/sessao";
 import type { EstadoAcao } from "@/lib/estado-acoes";
 import { MBID_VALIDO, obterEstadoAlbum } from "@/lib/estado-album";
 
-async function autenticar(identificador: string, senha: string): Promise<EstadoAcao> {
+async function autenticar(identificador: string, senha: string): Promise<EstadoAcao & { verificacaoPendente?: boolean }> {
   try {
     const resposta = await requisitarBackend("/auth/login", {
       method: "POST",
@@ -18,6 +18,7 @@ async function autenticar(identificador: string, senha: string): Promise<EstadoA
     if (!resposta.ok) {
       return {
         sucesso: false,
+        verificacaoPendente: resposta.status === 403,
         mensagem: resposta.status === 429
           ? "Too many attempts. Wait one minute."
           : resposta.status === 401
@@ -92,7 +93,11 @@ export async function cadastrar(
     if (!resposta.ok) {
       return {
         sucesso: false,
-        mensagem: resposta.status === 409
+        mensagem: resposta.status === 503
+          ? "Sign-up temporarily unavailable. Try again later."
+          : resposta.status === 429
+            ? "Too many sign-up attempts. Try again in 15 minutes."
+            : resposta.status === 409
           ? "Username or email unavailable."
           : resposta.status === 422
             ? "Invalid details. Check the fields."
@@ -105,7 +110,9 @@ export async function cadastrar(
 
   const login = await autenticar(username, senha);
   if (!login.sucesso) {
-    return { sucesso: false, mensagem: "Account created. Sign in." };
+    return { sucesso: true, mensagem: login.verificacaoPendente
+      ? "Account created. Check your email to confirm your address before signing in."
+      : "Account created. Sign in to continue." };
   }
 
   revalidatePath("/", "layout");
