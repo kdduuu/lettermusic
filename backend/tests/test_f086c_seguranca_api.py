@@ -113,21 +113,38 @@ def test_cadastro_limita_tentativas_por_ip(
     )
 
     assert bloqueio.status_code == 429
-    assert bloqueio.headers["Retry-After"] == "900"
+    assert 1 <= int(bloqueio.headers["Retry-After"]) <= 900
 
 
-def test_limite_login_compartilhado_entre_ips():
+def test_limite_login_compartilhado_entre_ips(ambiente):
+    _, motor = ambiente
     for _ in range(limites_login.LIMITE_CONTA):
-        limites_login.registrar_falha(
-            "198.51.100.10", "usuario_alvo"
+        limites_login.verificar(
+            motor, "198.51.100.10", "usuario_alvo"
         )
 
     with pytest.raises(HTTPException) as erro:
         limites_login.verificar(
-            "198.51.100.11", "USUARIO_ALVO"
+            motor, "198.51.100.11", "USUARIO_ALVO"
         )
 
     assert erro.value.status_code == 429
+
+
+def test_cadastro_nao_confia_em_header_de_ip(ambiente, monkeypatch):
+    cliente, _ = ambiente
+    monkeypatch.setattr(limites_cadastro, "LIMITE_ORIGEM", 1)
+    for nome, ip, status in (
+        ("origem_um", "198.51.100.1", 201),
+        ("origem_dois", "198.51.100.2", 429),
+    ):
+        resposta = cliente.post("/usuarios", json={
+            "username": nome,
+            "nome_exibicao": nome,
+            "email": f"{nome}@example.com",
+            "senha": SENHA,
+        }, headers={"X-Forwarded-For": ip, "X-Real-IP": ip})
+        assert resposta.status_code == status
 
 
 def test_confirmacao_invalida_outros_links(ambiente):

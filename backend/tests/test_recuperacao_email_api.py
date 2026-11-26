@@ -26,7 +26,6 @@ def ambiente(monkeypatch):
     monkeypatch.setenv(
         "EMAIL_REQUIRE_VERIFICATION", "false"
     )
-    monkeypatch.setattr(rec, "_eventos", {})
 
     mensagens = []
 
@@ -217,7 +216,7 @@ def test_limite_de_solicitacoes(ambiente):
 
     bloqueada = solicitar(cliente)
     assert bloqueada.status_code == 429
-    assert bloqueada.headers["Retry-After"] == "900"
+    assert 1 <= int(bloqueada.headers["Retry-After"]) <= 900
 
 
 def test_verificacao_obrigatoria_quando_ativada(

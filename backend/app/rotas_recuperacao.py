@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from backend.app import recuperacao_email as rec
 from backend.app.database import obter_sessao
 from backend.app.models import Usuario
+from backend.app.limites_http import origem_requisicao
 from backend.app.schemas_recuperacao import (
     RedefinirSenha,
     SolicitarRecuperacao,
@@ -47,10 +48,10 @@ def solicitar_recuperacao(
 ):
     exigir_email_configurado()
 
-    ip = request.client.host if request.client else "desconhecido"
+    ip = origem_requisicao(request)
     email = str(dados.email).lower()
 
-    rec.limitar_solicitacao(ip, email)
+    rec.limitar_solicitacao(sessao.get_bind(), ip, email)
 
     usuario = sessao.scalar(
         select(Usuario).where(Usuario.email == email)
@@ -89,9 +90,9 @@ def solicitar_confirmacao(
 ):
     exigir_email_configurado()
 
-    ip = request.client.host if request.client else "desconhecido"
+    ip = origem_requisicao(request)
     email = str(dados.email).strip().lower()
-    rec.limitar_solicitacao(ip, email)
+    rec.limitar_solicitacao(sessao.get_bind(), ip, email)
 
     usuario = sessao.scalar(
         select(Usuario).where(Usuario.email == email)

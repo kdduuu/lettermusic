@@ -72,8 +72,5 @@ def impedir_smtp_real_em_testes(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def isolar_limitadores(monkeypatch):
-    from backend.app import limites_login, limites_cadastro
-
-    monkeypatch.setattr(limites_login, "_falhas", {})
-    monkeypatch.setattr(limites_cadastro, "_eventos", {})
+def segredo_limitador_teste(monkeypatch):
+    monkeypatch.setenv("RATE_LIMIT_SECRET", "segredo-exclusivo-dos-testes-do-limitador-2026")

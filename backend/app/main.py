@@ -9,11 +9,8 @@ from backend.app.rotas_recuperacao import router as router_recuperacao
 from backend.app import recuperacao_email as rec
 from backend.app.erros_validacao import configurar_erros_validacao
 from backend.app.limites_cadastro import verificar_cadastro
-from backend.app.limites_login import (
-    verificar,
-    registrar_falha,
-    registrar_sucesso,
-)
+from backend.app.limites_login import verificar
+from backend.app.limites_http import origem_requisicao
 from backend.app.rotas_feed import router as router_feed
 from backend.app.rotas_listas_publicas import router as router_listas_publicas
 from backend.app.rotas_exploracao import router as router_exploracao
@@ -217,8 +214,8 @@ def criar_usuario(
     request: Request,
     sessao: Session = Depends(obter_sessao),
 ):
-    ip = request.client.host if request.client else "desconhecido"
-    verificar_cadastro(ip, str(dados.email))
+    ip = origem_requisicao(request)
+    verificar_cadastro(sessao.get_bind(), ip, str(dados.email))
 
     # Nao cria contas impossiveis de confirmar por erro de configuracao.
     if rec.verificacao_obrigatoria() and not rec.email_configurado():
@@ -321,27 +318,21 @@ def fazer_login(
     request: Request,
     sessao: Session = Depends(obter_sessao),
 ):
-    ip = request.client.host if request.client else "desconhecido"
+    ip = origem_requisicao(request)
 
-    verificar(ip, dados.identificador)
+    verificar(sessao.get_bind(), ip, dados.identificador)
 
-    try:
-        usuario = autenticar_usuario(
-            sessao,
-            dados.identificador,
-            dados.senha,
-        )
-    except HTTPException:
-        registrar_falha(ip, dados.identificador)
-        raise
+    usuario = autenticar_usuario(
+        sessao,
+        dados.identificador,
+        dados.senha,
+    )
 
     if rec.verificacao_obrigatoria() and not usuario.email_confirmado:
         raise HTTPException(
             status_code=403,
             detail="Confirme seu e-mail antes de entrar.",
         )
-
-    registrar_sucesso(ip, dados.identificador)
 
     return {
         "access_token": criar_token(

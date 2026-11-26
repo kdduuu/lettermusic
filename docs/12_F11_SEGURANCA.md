@@ -14,3 +14,25 @@ integrar login, cadastro e recuperacao, definir segredo e origem confiavel
 Next.js/FastAPI, tratar indisponibilidade e programar limpeza antes do deploy.
 Janelas fixas admitem rajadas na transicao; nao equivalem a janelas deslizantes.
 Nenhum deploy. Validar migration e CI antes de integrar.
+
+## F11.2 — Integracao dos tres fluxos
+
+- Login: reserva antes da verificacao Argon2; 5 tentativas por identificador
+  e 40 por origem em 60 s. Conta tentativas bem-sucedidas tambem, sem reset
+  imediato, para evitar corridas. Username e email sao chaves distintas.
+- Cadastro: 12 por origem, 3 por email em 900 s.
+- Solicitacoes de recuperacao e confirmacao compartilham 15 por origem e
+  3 por email em 900 s. Resposta generica preservada.
+- 429 com Retry-After restante; falha de banco ou segredo insuficiente
+  resulta em 503, sem permitir tentativa desprotegida.
+- Origem: somente request.client, nunca X-Forwarded-For lido diretamente.
+  Next.js usa chamadas servidor-servidor; os usuarios compartilham o limite
+  de origem do Next ate configurar um ingresso confiavel. Antes de publicar,
+  definir arquitetura de proxy, restringir acesso direto a API e validar
+  spoofing e isolamento de IP real ponta a ponta. Nao confiar em todos os proxies.
+- RATE_LIMIT_SECRET opcional, fallback JWT_SECRET; chave dedicada na publicacao.
+- Limpeza: python -m backend.scripts.limpar_limites (simulacao);
+  --executar remove somente expirados. Agendar periodicamente na hospedagem
+  e configurar limites de ingresso para limitar crescimento sob abuso.
+- Confirmacao e redefinicao de tokens de alta entropia, mudanca/exclusao de
+  conta autenticada e demais rotas ficam fora deste incremento.
