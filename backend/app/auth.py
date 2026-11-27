@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.database import obter_sessao
 from backend.app.models import Usuario
+from backend.app.recuperacao_email import verificacao_obrigatoria
 from backend.app.usuarios import protetor_senhas
 
 
@@ -50,7 +51,7 @@ def autenticar_usuario(
         )
     )
 
-    # Verifica um hash fictício caso a conta não exista.
+    # Verifica um hash ficticio caso a conta nao exista.
     hash_senha = usuario.senha_hash if usuario else HASH_FICTICIO
     senha_correta = protetor_senhas.verify(senha, hash_senha)
 
@@ -82,25 +83,35 @@ def obter_usuario_atual(
             credenciais.credentials,
             obter_chave(),
             algorithms=["HS256"],
-            options={"require": ["sub", "exp"]}
+            options={"require": ["sub", "exp", "ver"]}
         )
-        usuario_id = int(dados["sub"])
-        if usuario_id <= 0:
+
+        sub = dados["sub"]
+        if (
+            not isinstance(sub, str)
+            or not sub.isascii()
+            or not sub.isdecimal()
+            or len(sub) > 10
+            or type(dados["exp"]) is not int
+            or type(dados["ver"]) is not int
+            or dados["ver"] < 0
+        ):
+            raise ValueError("Claims invalidas")
+
+        usuario_id = int(sub)
+        if not 1 <= usuario_id <= 2_147_483_647 or str(usuario_id) != sub:
             raise ValueError("Identificador de usuario invalido")
 
-    except (InvalidTokenError, KeyError, ValueError, TypeError):
+    except (InvalidTokenError, KeyError, ValueError, TypeError, OverflowError):
         raise erro_autenticacao() from None
 
     usuario = sessao.get(Usuario, usuario_id)
 
-    if usuario is None:
+    if usuario is None or dados["ver"] != usuario.sessao_versao:
         raise erro_autenticacao()
 
-    # Tokens anteriores a revogacao deixam de ser aceitos.
-    if (
-        type(dados.get("ver")) is not int
-        or dados["ver"] != usuario.sessao_versao
-    ):
-        raise erro_autenticacao()
+    # A politica atual tambem vale para sessoes emitidas anteriormente.
+    if verificacao_obrigatoria() and not usuario.email_confirmado:
+        raise HTTPException(403, "Confirme seu e-mail antes de entrar.")
 
     return usuario
