@@ -80,11 +80,13 @@ export async function atualizarSenha(
     if (!resposta.ok) {
       return {
         sucesso: false,
-        mensagem: resposta.status === 400
-          ? "Incorrect current password."
-          : resposta.status === 401
-            ? "Session expired."
-            : "Unable to change password.",
+        mensagem: resposta.status === 429
+          ? "Too many attempts. Try again in a few minutes."
+          : resposta.status === 400
+            ? "Incorrect current password."
+            : resposta.status === 401
+              ? "Session expired."
+              : "Unable to change password.",
       };
     }
 
@@ -141,11 +143,13 @@ export async function excluirConta(
     if (!resposta.ok) {
       return {
         sucesso: false,
-        mensagem: resposta.status === 400
-          ? "Incorrect current password."
-          : resposta.status === 401
-            ? "Session expired. Sign in again."
-            : "Unable to delete account.",
+        mensagem: resposta.status === 429
+          ? "Too many attempts. Try again in a few minutes."
+          : resposta.status === 400
+            ? "Incorrect current password."
+            : resposta.status === 401
+              ? "Session expired. Sign in again."
+              : "Unable to delete account.",
       };
     }
   } catch {

@@ -36,3 +36,18 @@ Nenhum deploy. Validar migration e CI antes de integrar.
   e configurar limites de ingresso para limitar crescimento sob abuso.
 - Confirmacao e redefinicao de tokens de alta entropia, mudanca/exclusao de
   conta autenticada e demais rotas ficam fora deste incremento.
+
+## F11.3 — Autenticacao e permissoes
+
+- Validacao rigorosa dos tokens JWT.
+- Politica de confirmacao de email aplicada
+  tambem nas sessoes existentes.
+- Rate limiting compartilhado entre alteracao
+  de senha e exclusao de conta.
+- Limite de 5 tentativas por usuario em 300 s.
+- Tratamento de HTTP 429 no frontend.
+- 268 testes aprovados, 8 ignorados localmente.
+- ESLint e TypeScript aprovados.
+- Nenhuma migration adicional.
+- Nenhum deploy realizado.
+

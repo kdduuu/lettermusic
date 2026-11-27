@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.auth import obter_usuario_atual
 from backend.app.database import obter_sessao
+from backend.app.limites_http import aplicar_limites
 from backend.app.models import Usuario, TokenConta
 from backend.app.schemas_conta import (
     ContaPrivada,
@@ -17,6 +18,21 @@ from backend.app.schemas_conta import (
 from backend.app.usuarios import protetor_senhas
 
 router = APIRouter(prefix="/auth", tags=["Conta e Seguranca"])
+
+LIMITE_OPERACOES_SENSIVEIS = 5
+JANELA_OPERACOES_SENSIVEIS = 300
+
+
+def limitar_operacao_sensivel(sessao: Session, usuario: Usuario):
+    """Compartilha o limite de confirmacao de senha entre as duas rotas."""
+    aplicar_limites(
+        sessao.get_bind(),
+        [(
+            "conta:senha-atual", str(usuario.id),
+            LIMITE_OPERACOES_SENSIVEIS, JANELA_OPERACOES_SENSIVEIS,
+        )],
+        "Muitas tentativas. Aguarde antes de tentar novamente.",
+    )
 
 
 @router.get("/conta", response_model=ContaPrivada)
@@ -45,6 +61,8 @@ def alterar_senha(
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
 ):
+    limitar_operacao_sensivel(sessao, usuario)
+
     if not protetor_senhas.verify(
         dados.senha_atual, usuario.senha_hash
     ):
@@ -100,6 +118,8 @@ def excluir_conta(
     usuario: Usuario = Depends(obter_usuario_atual),
     sessao: Session = Depends(obter_sessao),
 ):
+    limitar_operacao_sensivel(sessao, usuario)
+
     if not protetor_senhas.verify(
         dados.senha_atual, usuario.senha_hash
     ):
