@@ -16,7 +16,6 @@ def cliente(monkeypatch):
         "JWT_SECRET",
         "chave-ficticia-para-testes-de-conta-lettermusic-2026"
     )
-    monkeypatch.setattr(limites_login, "_falhas", {})
 
     motor = create_engine(
         "sqlite+pysqlite://",
@@ -132,7 +131,7 @@ def test_limite_de_tentativas_de_login(cliente):
     })
 
     assert bloqueio.status_code == 429
-    assert bloqueio.headers["Retry-After"] == "60"
+    assert 1 <= int(bloqueio.headers["Retry-After"]) <= 60
     assert "senha-incorreta" not in bloqueio.text
 
 

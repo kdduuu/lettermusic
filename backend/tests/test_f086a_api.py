@@ -5,7 +5,6 @@ from sqlalchemy import create_engine, event, select
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
-from backend.app import limites_login
 from backend.app import recuperacao_email as rec
 from backend.app.database import obter_sessao
 from backend.app.main import app
@@ -23,7 +22,6 @@ def ambiente(monkeypatch):
     )
     monkeypatch.setenv("EMAIL_REQUIRE_VERIFICATION", "false")
     monkeypatch.setattr(rec, "email_configurado", lambda: False)
-    monkeypatch.setattr(limites_login, "_falhas", {})
 
     motor = create_engine(
         "sqlite+pysqlite://",

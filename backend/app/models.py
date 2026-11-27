@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     CheckConstraint,
     DateTime,
@@ -328,3 +329,17 @@ class FavoritoPerfil(Base):
     obra_id: Mapped[int] = mapped_column(
         ForeignKey("obras.id", ondelete="CASCADE")
     )
+
+
+class LimiteRequisicao(Base):
+    """Contador compartilhado de uma janela de limitacao."""
+
+    __tablename__ = "limites_requisicoes"
+    __table_args__ = (
+        Index("ix_limites_requisicoes_expira_em", "expira_em"),
+        CheckConstraint("quantidade > 0", name="ck_limites_requisicoes_quantidade"),
+    )
+
+    chave: Mapped[str] = mapped_column(String(64), primary_key=True)
+    quantidade: Mapped[int] = mapped_column(Integer, nullable=False)
+    expira_em: Mapped[int] = mapped_column(BigInteger, nullable=False)

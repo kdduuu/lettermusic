@@ -267,3 +267,22 @@ def test_troca_manual_e_recuperacao_concorrentes(banco_postgresql):
         assert usuario.sessao_versao == versao + 1
         senha = "SenhaManual#2026" if "manual" in resultados else "SenhaRecuperada#2026"
         assert protetor_senhas.verify(senha, usuario.senha_hash)
+
+
+def test_limite_persistente_reserva_atomica(banco_postgresql):
+    from backend.app.limites_persistentes import LimiteExcedido, RegraLimite, reservar
+    from backend.app.models import LimiteRequisicao
+
+    regra = RegraLimite("a" * 64, 1, 60)
+
+    def tentar():
+        try:
+            reservar(banco_postgresql, [regra], agora=100)
+            return True
+        except LimiteExcedido:
+            return False
+
+    assert sorted(executar_simultaneamente(tentar)) == [False, True]
+    with Session(banco_postgresql) as sessao:
+        registro = sessao.get(LimiteRequisicao, regra.chave)
+        assert registro.quantidade == 1

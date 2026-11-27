@@ -8,11 +8,8 @@ import secrets
 import smtplib
 import ssl
 
-from collections import deque
 from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
-from threading import Lock
-from time import monotonic
 from urllib.parse import urlsplit
 
 from fastapi import HTTPException
@@ -20,18 +17,15 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from backend.app.models import TokenConta, Usuario
+from backend.app.limites_http import aplicar_limites
 from backend.app.usuarios import protetor_senhas
 
 
 LOGGER = logging.getLogger(__name__)
 
-JANELA = 900.0
+JANELA = 900
 LIMITE_EMAIL = 3
 LIMITE_IP = 15
-
-_lock = Lock()
-_eventos = {}
-_agora_limite = monotonic
 
 
 def agora_utc():
@@ -82,36 +76,16 @@ def verificacao_obrigatoria():
     ).lower() == "true"
 
 
-def limitar_solicitacao(ip, identificador):
+def limitar_solicitacao(motor, ip, identificador):
     """Limita envios, independentemente de a conta existir."""
-    chaves = [
-        ("email:" + digest(identificador.strip().casefold()), LIMITE_EMAIL),
-        ("ip:" + digest(ip), LIMITE_IP),
-    ]
-
-    agora = _agora_limite()
-
-    with _lock:
-        for chave, limite in chaves:
-            registros = _eventos.get(chave, deque())
-
-            while registros and registros[0] <= agora - JANELA:
-                registros.popleft()
-
-            if len(registros) >= limite:
-                raise HTTPException(
-                    status_code=429,
-                    detail="Aguarde antes de solicitar outro e-mail.",
-                    headers={"Retry-After": "900"},
-                )
-
-        for chave, _ in chaves:
-            registros = _eventos.setdefault(chave, deque())
-            registros.append(agora)
-
-        if len(_eventos) > 4096:
-            for chave in list(_eventos)[:1024]:
-                _eventos.pop(chave, None)
+    aplicar_limites(
+        motor,
+        [
+            ("email:origem", ip, LIMITE_IP, JANELA),
+            ("email:destino", identificador.strip().casefold(), LIMITE_EMAIL, JANELA),
+        ],
+        "Aguarde antes de solicitar outro e-mail.",
+    )
 
 
 def emitir_token(sessao: Session, usuario: Usuario, finalidade: str):
